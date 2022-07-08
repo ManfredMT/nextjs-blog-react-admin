@@ -1,0 +1,266 @@
+.select-header {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.select-list-box {
+    margin: 0 0.5rem;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border-radius: 1rem;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1rem auto 0rem auto;
+}
+
+.divider {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.item-select {
+    width: 10rem;
+    display: block;
+    margin: 0;
+    margin-left: 1rem;
+    margin-right: 0rem;
+}
+
+.list-item-wrap {
+    display: flex;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+.list-left-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: auto;
+}
+
+.grey-label {
+    color: rgb(169, 169, 169);
+    font-size: 0.7rem;
+}
+
+.post-title {
+    font-size: 1.05rem;
+    font-weight: 500;
+}
+
+.update-button {
+    align-self: center;
+    border: none;
+    border-radius: 1rem;
+    color: rgb(255, 255, 255);
+    margin-top: 1rem;
+    background-image: linear-gradient(to right, #457fca 0%, #145ebf 51%, #457fca 100%);
+    background-size: 200% auto;
+    padding: 0.25rem 0.75rem;
+    transition: 0.5s;
+    box-shadow: 0 0 20px #eee;
+    cursor: pointer;
+}
+
+
+.list-middle-box {
+    width: auto;
+    display: flex;
+    flex-wrap: nowrap;
+    margin-bottom: 0;
+}
+
+.list-middle-box-c {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.inline-items-box {
+    /* display: flex;
+    flex-wrap: wrap;  
+    align-content: space-between; */
+    margin-bottom: 0;
+}
+
+.inline-items-box>*+* {
+    margin-left: 0.5rem;
+}
+
+
+.middle-box-label {
+    white-space: nowrap;
+    margin-right: 0.5rem;
+}
+
+.tag-box {
+    display: inline-block;
+    border-radius: 1rem;
+    padding: 0.1rem 0.7rem;
+    margin-bottom: 0.3rem;
+    background-color: rgb(238, 238, 238);
+
+}
+
+.confirm-icon {
+    display: none;
+}
+
+
+.edit-item:focus {
+    background-color: transparent;
+    outline: none;
+}
+
+.tag-box:focus-within {
+    background-color: rgb(255, 255, 255);
+    outline: 2px solid skyblue;
+}
+
+
+.delete-icon {
+    display: inline;
+    margin-left: 0.5rem;
+    color: rgb(255, 0, 0);
+}
+
+
+.edit-item:focus+.confirm-icon {
+    display: inline;
+    cursor: pointer;
+    margin-left: 0.5rem;
+    /* font-size: 1rem; */
+    color: skyblue;
+}
+
+.edit-item:focus~.delete-icon {
+    display: none;
+}
+
+.add-button {
+    display: inline-block;
+    border-radius: 1rem;
+    padding: 0.1rem 0.5rem;
+    margin-bottom: 0.3rem;
+    background-color: rgb(238, 238, 238);
+    cursor: pointer;
+}
+
+.add-button:hover {
+    background-color: rgb(228, 228, 228);
+}
+
+.add-button:focus {
+    background-color: white;
+    outline: 2px solid skyblue;
+    min-width: 3rem;
+    cursor: text;
+}
+
+
+@media (min-width:1224px) {
+    /* .select-header {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    } */
+
+    .select-list-box {
+        margin: 0 2rem;
+        padding: 2rem;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: right;
+        flex-wrap: nowrap;
+        margin: 1rem 5rem 0rem auto;
+    }
+
+    /* .divider {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+    } */
+
+    .item-select {
+        width: 20rem;
+        margin-right: 5rem;
+    }
+
+    .list-item-wrap {
+        padding-left: 3rem;
+        padding-right: 3rem;
+        flex-direction: row;
+    }
+
+    .list-left-box {
+        width: 30rem;
+    }
+
+    .update-button:hover {
+        background-position: right center;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .list-middle-box {
+        width: 20rem;
+    }
+
+    .tag-box {
+        cursor: text;
+    }
+
+    .tag-box:hover {
+        background-color: rgb(228, 228, 228);
+        /* outline:2px solid skyblue; */
+    }
+
+    .edit-item:hover {
+        background-color: rgb(237, 237, 237);
+
+    }
+
+
+    .delete-icon {
+        display: none;
+    }
+
+    .tag-box:hover>.delete-icon {
+        display: inline;
+        cursor: pointer;
+        margin-left: 0.5rem;
+        /* font-size: 1rem; */
+        color: rgb(235, 135, 135);
+
+    }
+
+    .tag-box:focus-within {
+        background-color: rgb(255, 255, 255);
+        outline: 2px solid skyblue;
+    }
+
+    .edit-item:focus~.delete-icon {
+        display: none;
+    }
+
+    .tag-box:focus-within .edit-item {
+        background-color: #ffffff;
+    }
+
+
+
+
+
+
+
+}

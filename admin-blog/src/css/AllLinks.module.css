@@ -1,0 +1,40 @@
+.links-box {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 0.5rem;
+    margin: 0 0.5rem;
+}
+
+.card-body {
+    border: 1px solid red;
+}
+
+.card-action {
+    border: 1px solid purple;
+}
+
+.menu-button {
+    color: gray;
+    font-size: 22px;
+}
+
+.menu-button:hover {
+    color: black;
+}
+
+.spin-center {
+    width: 100%;
+    text-align: center;
+
+}
+
+
+@media (min-width:1224px) {
+    .links-box {
+        
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 1.5em;
+        margin: 0 2rem;
+    }
+
+}

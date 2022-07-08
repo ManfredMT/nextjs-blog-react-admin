@@ -1,0 +1,157 @@
+.comments-header {
+    display: block;
+}
+
+.post-comments-box {
+    margin: 0 0.5rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border-radius: 1rem;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1rem auto 0rem auto;
+
+}
+
+.comment-wrap {
+    /* display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-right: 0rem;
+    flex-wrap: wrap; */
+
+}
+
+.checkbox-group {
+    width: 100%;
+}
+
+
+
+.delete-selected-icon-button {
+    display: inline-block;
+    border: none;
+    color: red;
+    font-size: 1.1rem;
+    background-color: transparent;
+}
+
+.delete-selected-icon-button:disabled {
+    background-color: transparent;
+    color: lightgrey;
+}
+
+.comment-box {
+    margin-left: 0.5rem;
+}
+
+.divider {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.source-right {
+    display: block;
+    margin: 0rem;
+    margin-top: 1.5rem;
+    color: rgb(124, 124, 124);
+}
+
+.delete-comment-button-mobile {
+    display: block;
+    margin-left: auto;
+    margin-right: 1rem;
+    border: none;
+    border-radius: 1rem;
+    color: rgb(255, 255, 255);
+    background-image: linear-gradient(to right, #EB3349 0%, #F45C43 51%, #EB3349 100%);
+    background-size: 200% auto;
+    padding: 0.25rem 0.75rem;
+    transition: 0.5s;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+
+}
+
+.post-select {
+    display: block;
+    width: 15rem;
+    margin: 0rem 0.3rem 1rem auto;
+
+}
+
+@media (min-width:1224px) {
+    .comments-header {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        padding-right: 5rem;
+    }
+
+    .comments-header>*+* {
+        margin-left: 1rem;
+    }
+
+    .comments-header>.post-select {
+        margin-left: auto;
+    }
+
+    .post-comments-box {
+        margin: 0 2rem;
+        padding: 2rem;
+
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: right;
+        margin: 1rem 5rem 0rem auto;
+    }
+
+    .comment-wrap {
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        padding-right: 10rem;
+
+    }
+
+    /* .checkbox-group {
+        width: 100%;
+    } */
+
+    /* .comment-box {
+        margin-left: 0.5rem;
+    } */
+
+    /* .divider {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    } */
+
+    .source-right {
+        margin-left: auto;
+    }
+
+    .delete-comment-button {
+        align-self: end;
+        border: 0;
+        color: rgba(255, 66, 66, 0.708);
+        background-color: inherit;
+        cursor: pointer;
+    }
+
+    .delete-comment-button:hover {
+        color: red;
+    }
+
+    .post-select {
+        width: 20rem;
+        margin: 0;
+        display: inherit;
+    }
+}

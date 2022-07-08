@@ -1,0 +1,57 @@
+.new-link-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 40rem;
+    padding: 0 1rem;
+    margin: 0 auto;
+
+}
+
+.submit-button {
+    position: absolute;
+    left: 40%;
+}
+
+.submit-button-edit {
+    position: absolute;
+    left: 20%;
+}
+
+.cancel-button {
+    position: absolute;
+    left: 55%
+}
+
+.spin-center {
+    width: 100%;
+    text-align: center;
+
+}
+
+@media (min-width: 1224px) {
+    .new-link-form {
+
+        padding: 2rem 15rem 2rem 0;
+        width: auto;
+        margin: 0 2rem;
+        background-color: #ffffff;
+        border-radius: 1rem;
+        max-width: 100%;
+    }
+
+    .submit-button {
+        width: auto;
+        left: 40rem;
+    }
+
+    .submit-button-edit {
+        width: auto;
+        left: 35rem;
+    }
+
+    .cancel-button {
+        left: 45rem;
+    }
+
+}
