@@ -1,0 +1,28 @@
+.new-form-body {
+    margin:1rem 1.5rem 0 1.5rem;
+}
+
+.second-button {
+    margin-left: 1.5rem;
+}
+
+.link-top-box {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 2rem;
+    margin-right: 0;
+}
+
+@media (min-width:1224px) {
+    .new-form-body {
+        background-color: #fff;
+        border-radius: 1rem;
+        margin: 0 2rem;
+        padding: 2rem 5rem;
+    }
+
+    .link-top-box {
+        margin-right: 5rem;
+    }
+
+}

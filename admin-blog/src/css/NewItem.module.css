@@ -1,0 +1,31 @@
+.new-item-submit-button {
+    width: 100%;
+    text-align: center;
+}
+
+.add-field-button {
+    width: auto;
+    text-align: center;
+}
+
+.font-item-outlined {
+    font-size: 3rem;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+    color: green;
+}
+
+.input-box>* {
+    border-radius: 0px;
+}
+
+@media (min-width:1224px) {
+    .new-item-box {
+        background-color: #ffffff;
+        border-radius: 1rem;
+        margin: 0 2rem;
+        padding: 0 0 2rem 0;
+    }
+}

@@ -1,0 +1,274 @@
+.select-list-box {
+    /* border-radius: 1rem;
+    background-color: #fff;
+    margin:0 0.5rem;
+    padding:2rem 1.5rem; */
+}
+
+.spin-center {
+    width: 100%;
+    text-align: center;
+
+}
+
+.filter-header {
+    display: grid;
+    grid-template-columns: max-content 55%;
+    margin: 0 0.5rem;
+    column-gap: 1rem;
+    row-gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 1rem;
+    border-radius: 1rem;
+    background-color: #fff;
+    padding: 2rem 1.5rem;
+}
+
+.post-number {
+    color: #9f9f9f;
+    font-size: 0.5rem;
+    margin-left: 2rem;
+    margin-top: 1rem;
+
+}
+
+.filter-label {
+    text-align: right;
+}
+
+.title-filter-input {
+    border: 1px solid #d9d9d9;
+    border-radius: 1rem;
+    padding: 0.25rem 0.5rem;
+    outline: none;
+}
+
+.title-filter-input:focus {
+    border: 1px solid black;
+}
+
+.input-search input {
+    border-radius: 0;
+}
+
+.list-item-wrap {
+    border-radius: 1rem;
+    background-color: #fff;
+    margin: 0.5rem 0.5rem;
+    padding: 1rem;
+}
+
+.list-left-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-title {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.grey-label {
+    color: gray;
+    font-size: 0.7rem;
+}
+
+.list-middle-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.post-tags-box {
+    display: flex;
+    align-items: center;
+}
+
+.middle-box-label {
+    white-space: nowrap;
+    margin-right: 1rem;
+}
+
+.post-tags-box>.middle-box-label {
+    display: none;
+}
+
+.post-category-box {
+    display: flex;
+    align-items: center;
+}
+
+.post-category-box>.middle-box-label {
+    color: gray;
+    font-size: 0.7rem;
+    margin-right: 0.2rem;
+}
+
+.inline-items-box-c {
+    padding: 0px;
+}
+
+.inline-items-box {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.inline-items-box>*+* {
+    margin-left: 0.5rem;
+}
+
+.tag-box {
+    background-color: rgb(245, 245, 245);
+    padding: 0.15rem 0.75rem;
+    border-radius: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.post-category-box {
+    /* display: flex; */
+    margin-bottom: 1rem;
+}
+
+.buttons-box {
+    margin-top: 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap:0.5rem;
+}
+
+.preview-button,
+.edit-button,
+.download-md-file-button,
+.delete-button {
+    border: none;
+    border-radius: 1rem;
+    color: white;
+    background-image: linear-gradient(to right, #006ee3 0%, #0090e9 51%, #006de1 100%);
+    background-size: 200% auto;
+    box-shadow: 0 0 20px #eee;
+    padding: 0.25rem 0.75rem;
+    transition: 0.5s;
+    cursor: pointer;
+}
+
+
+
+.delete-button {
+    background-image: linear-gradient(to right, #e50000 0%, #ff3810 51%, #ff1212 100%);
+    background-size: 200% auto;
+    box-shadow: 0 0 20px #eee;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 1rem auto 0rem auto;
+}
+
+.draft-label {
+    color: #aaaaaa;
+    margin: 0;
+}
+
+.post-title-draft {
+    font-style: italic;
+    color: rgb(94, 94, 94);
+}
+
+
+.date-range-picker input {
+    border-radius: 0px;
+}
+
+@media (min-width:1224px) {
+    .filter-header {
+        grid-template-columns: max-content 30%;
+        margin: 0;
+        row-gap: 1rem;
+        padding: 0;
+        padding-left: 5rem;
+    }
+
+    .select-list-box {
+        border-radius: 1rem;
+        background-color: #fff;
+        margin: 0 2rem;
+        padding: 2rem 1.5rem;
+    }
+
+    .list-item-wrap {
+        margin: 0;
+        padding: 0 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+
+    .buttons-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-left: 8rem;
+
+    }
+
+    .list-item-wrap:hover .buttons-box {
+        /* display: flex; */
+    }
+
+    .buttons-box>*+* {
+        margin-top: 0.5rem;
+    }
+
+    .post-category-box>.middle-box-label {
+        color: grey;
+        font-size: 0.8rem;
+    }
+
+    .post-tags-box>.middle-box-label {
+        display: flex;
+        color: gray;
+        font-size: 0.8rem;
+    }
+
+    .tag-box {
+        margin-top: 0.5rem;
+    }
+
+    .preview-button,
+    .edit-button,
+    .download-md-file-button,
+    .delete-button {
+        border:none;
+        background-color: transparent;
+        background: none;
+        box-shadow: none;
+        color: rgb(0, 133, 235);
+    }
+
+    .delete-button {
+        color: rgb(237, 0, 0);
+    }
+
+
+    .preview-button:hover,
+    .edit-button:hover,
+    .download-md-file-button:hover {
+        color: rgb(0, 55, 219);
+    }
+
+    .delete-button:hover {
+        color: rgb(208, 0, 0);
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: right;
+        flex-wrap: nowrap;
+        margin: 1rem 5rem 0rem auto;
+    }
+
+}

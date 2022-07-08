@@ -1,0 +1,327 @@
+import { useSelector, useDispatch } from "react-redux";
+import { checkJWT } from "../features/auth/authSlice";
+import WordCloud from "./WordCloud";
+import style from "../css/BlogDashboard.module.css";
+import { Link } from "react-router-dom";
+import { Calendar } from "antd";
+import "moment/locale/zh-cn";
+import locale from "antd/es/date-picker/locale/zh_CN";
+import { useMediaQuery } from "react-responsive";
+
+let AllPosts = [];
+for (let j = 0; j <= 56; j++) {
+  const fakeTags = [...Array(5).keys()].map(
+    (i) => `标签tag-${parseInt((j + i + 1) % 12)}`
+  );
+  const dateObj = new Date();
+  dateObj.setDate(dateObj.getDate() - (j + 1));
+
+  const fakeAuthor = j >= 30 ? "author2" : "admin";
+  AllPosts.push({
+    id: `post_${j + 1}`,
+    title: `JavaScript 的关键功能，比如变量、字符串、数字、数组等(${j + 1})`,
+    date: dateObj,
+    // tags: [
+    //   `tag-${parseInt((j + 1) % 37)}`,
+    //   `tag-${parseInt((j + 2) % 37)}`,
+    //   `tag-${parseInt((j + 3) % 37)}`,
+    // ],
+    tags: fakeTags,
+    category: `category-${parseInt((j + 1) % 10)}`,
+    draft: parseInt(j % 10) === 0 ? true : false,
+    authors: [fakeAuthor],
+    images: undefined,
+  });
+}
+
+AllPosts = AllPosts.filter((post) => !post.draft);
+
+function getAllTags(posts) {
+  let AllTags = [];
+  posts.forEach(({ tags }) => {
+    tags.forEach((tag) => {
+      if (AllTags.includes(tag) === false) {
+        AllTags.push(tag);
+      }
+    });
+  });
+  return AllTags.sort();
+}
+
+function getAllCategories(posts) {
+  let AllCategories = [];
+  posts.forEach(({ category }) => {
+    if (!AllCategories.includes(category)) {
+      AllCategories.push(category);
+    }
+  });
+  return AllCategories.sort();
+}
+
+function getAllAuthors(posts) {
+  let AllAuthors = [];
+  posts.forEach(({ authors }) => {
+    authors.forEach((author) => {
+      if (AllAuthors.includes(author) === false) {
+        AllAuthors.push(author);
+      }
+    });
+  });
+  return AllAuthors.sort();
+}
+
+function getMonthArchive(posts) {
+  let monthArchive = [];
+  const timeSortPosts = posts.sort((a, b) => {
+    return b.date - a.date;
+  });
+  timeSortPosts.forEach(({ date }) => {
+    const postYear = date.getFullYear();
+    const postMonth = date.getMonth() + 1;
+    const postYMString = postYear + "-" + postMonth;
+    const monthList = monthArchive.map((archive) => archive.date);
+    if (monthList.includes(postYMString)) {
+      const mAIndex = monthArchive.findIndex(
+        (archive) => archive.date === postYMString
+      );
+      monthArchive[mAIndex].postNumber += 1;
+    } else {
+      monthArchive.push({ date: postYMString, postNumber: 1 });
+    }
+  });
+  return monthArchive;
+}
+
+function getDayArchive(posts) {
+  let dayArchive = [];
+  const timeSortPosts = posts.sort((a, b) => {
+    return b.date - a.date;
+  });
+  timeSortPosts.forEach(({ date }) => {
+    const postYear = date.getFullYear();
+    const postMonth = date.getMonth() + 1;
+    const postDay = date.getDate();
+    const postYMDString = postYear + "-" + postMonth + "-" + postDay;
+    const dayList = dayArchive.map((archive) => archive.date);
+    if (dayList.includes(postYMDString)) {
+      const dAIndex = dayArchive.findIndex(
+        (archive) => archive.date === postYMDString
+      );
+      dayArchive[dAIndex].postNumber += 1;
+    } else {
+      dayArchive.push({ date: postYMDString, postNumber: 1 });
+    }
+  });
+  return dayArchive;
+}
+
+const monthArchive = getMonthArchive(AllPosts);
+//console.log("month archive: ", monthArchive);
+const dayArchive = getDayArchive(AllPosts);
+//console.log("day archive: ", dayArchive);
+
+const AllTags = getAllTags(AllPosts);
+const AllCategories = getAllCategories(AllPosts);
+const AllAuthors = getAllAuthors(AllPosts);
+
+const comments = [
+  {
+    source: "post 1",
+    time: new Date().setDate(new Date().getDate() - 1),
+    commentContent: "comment 1",
+    author: "Tom",
+  },
+  {
+    source: "post 13",
+    time: new Date().setDate(new Date().getDate() - 2),
+    commentContent: "comment 2",
+    author: "Tom",
+  },
+  {
+    source: "post 1",
+    time: new Date().setDate(new Date().getDate() - 3),
+    commentContent: "comment 3",
+    author: "Tom",
+  },
+  {
+    source: "post 1",
+    time: new Date().setDate(new Date().getDate() - 4),
+    commentContent:
+      "An image cropper for Ant Design Upload. To prevent overwriting the custom styles to antd, antd-img-crop does not import the style files of components. Therefore, if your project configured babel-plugin-import, and not use Modal or Slider, you need to import the styles yourself:",
+    author: "Mark",
+  },
+  {
+    source: "post 12",
+    time: new Date().setDate(new Date().getDate() - 5),
+    commentContent: "comment 5",
+    author: "Mark",
+  },
+  {
+    source: "post 1",
+    time: new Date().setDate(new Date().getDate() - 6),
+    commentContent: "comment 6",
+    author: "Mark",
+  },
+  {
+    source: "post 11",
+    time: new Date().setDate(new Date().getDate() - 7),
+    commentContent: "comment 7",
+    author: "Mark",
+  },
+];
+
+for (let i = 0; i < comments.length; i++) {
+  const fakeDate = new Date();
+  fakeDate.setDate(fakeDate.getDate() - (i + 1));
+  comments[i].time = fakeDate;
+}
+
+function BlogDashboard() {
+  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
+  // const dispatch = useDispatch();
+
+  // const { user, isError, isSuccess, message } = useSelector(
+  //   (state) => state.auth
+  // );
+  // useEffect(()=>{
+  //   console.log('BlogDashboard|user before : ',user)
+  //   dispatch(checkJWT());
+  //   console.log('BlogDashboard|user after : ',user)
+  // },[])
+
+  const dateCellRender = (value) => {
+    //console.log(value);
+    const formatDate = value.format("YYYY-M-D");
+    const archiveIndex = dayArchive.findIndex(
+      (archive) => archive.date === formatDate
+    );
+    if (archiveIndex === -1) {
+      return null;
+    } else {
+      return (
+        <div
+          className={style["calendar-post-number"]}
+        >{`(${dayArchive[archiveIndex].postNumber})`}</div>
+      );
+    }
+  };
+
+  const monthCellRender = (value) => {
+    const formatDate = value.format("YYYY-M");
+    //console.log("月份: ",formatDate);
+    const archiveIndex = monthArchive.findIndex(
+      (archive) => archive.date === formatDate
+    );
+    if (archiveIndex === -1) {
+      return null;
+    } else {
+      return <div className={style["calendar-post-number"]}>{`(${monthArchive[archiveIndex].postNumber})`}</div>;
+    }
+  };
+
+  return (
+    <div className={style["dashboard-body"]}>
+      <div className={style["first-row"]}>
+        <div className={style["number-card-box"]}>
+          <p>文章数</p>
+          <p>{AllPosts.length}</p>
+        </div>
+        <div className={style["number-card-box"]}>
+          <p>标签数</p>
+          <p>{AllTags.length}</p>
+        </div>
+        <div className={style["number-card-box"]}>
+          <p>分类数</p>
+          <p>{AllCategories.length}</p>
+        </div>
+        <div className={style["number-card-box"]}>
+          <p>评论数</p>
+          <p>{comments.length}</p>
+        </div>
+      </div>
+
+      <div className={style["archive-cloud-row"]}>
+        <div className={style["word-cloud-box"]}>
+          <WordCloud words={AllTags} speed={10}/>
+        </div>
+        <div className={style["archive-card-body"]}>
+          <p className={style["card-title"]}>日历:</p>
+          <hr />
+          {isTabletOrMobile ? (
+            <ul>
+              {monthArchive.map((archive, i) => {
+                return (
+                  <li key={i} className={style["archive-list"]}>
+                    <span>{archive.date.replace("-", "年") + "月"}</span>
+                    <span
+                      className={style["archive-number"]}
+                    >{`(${archive.postNumber})`}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          ) : (
+            <Calendar
+              locale={locale}
+              fullscreen={false}
+              dateCellRender={dateCellRender}
+              monthCellRender={monthCellRender}
+            />
+          )}
+        </div>
+      </div>
+
+      <div className={style["recent-list-row"]}>
+        <div className={style["recent-post-body"]}>
+          <p className={style["card-title"]}>最新文章:</p>
+          <hr />
+          <ul>
+            {AllPosts.slice(0, 5)
+              .sort((a, b) => b.date - a.date)
+              .map((post, i) => {
+                //console.log(post.date);
+                return (
+                  <li key={i} className={style["recent-post-list"]}>
+                    <Link to={`/manage/post/all-posts?edit=${post.id}`}>
+                      <span>{post.title}</span>
+                      <span className={style["post-date"]}>
+                        {post.date.toLocaleDateString()}
+                      </span>
+                    </Link>
+                  </li>
+                );
+              })}
+          </ul>
+        </div>
+        <div className={style["recent-comment-body"]}>
+          <div className={style["card-header"]}>
+            <p className={style["card-title"]}>最新评论:</p>
+            <Link to="/manage/comment/recent-comments">
+              <p className={style["card-title-more"]}>{`更多 >`}</p>
+            </Link>
+          </div>
+          <hr />
+          <ul className={style["comment-ul-wrap"]}>
+            {comments
+              .slice(0, 5)
+              .sort((a, b) => b.time - a.time)
+              .map((comment, i) => {
+                return (
+                  <li key={i}>
+                    <div className={style["comment-list"]}>
+                      <p className={style["comment-text"]}>
+                        {comment.commentContent}
+                      </p>
+                      <p>{comment.time.toLocaleDateString()}</p>
+                    </div>
+                  </li>
+                );
+              })}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default BlogDashboard;

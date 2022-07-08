@@ -1,0 +1,53 @@
+.edit-button {
+    margin-right: 1rem;
+}
+
+
+.edit-button-desktop-box {
+    color: rgb(62, 159, 255);
+    padding: 0;
+    margin: 0;
+    display: inherit;
+}
+
+.edit-button-desktop-box:hover {
+    color: rgb(0, 128, 255);
+}
+
+.item-table {
+    margin: 0;
+    /* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; */
+}
+
+.no-style-button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    outline: inherit;
+    cursor: pointer;
+}
+
+.hover-blue:hover {
+    color: #6b9dd6;
+}
+
+@media (min-width: 1224px) {
+    .item-table {
+        margin: 0rem 2rem;
+    }
+}
+
+.delete-button-desktop {
+    margin-left: 2rem;
+    border-radius: 5px;
+    padding: 0.5rem;
+    color: white;
+    background-color: rgb(255, 96, 96);
+}
+
+.delete-button-desktop:hover {
+    color: white;
+    background-color: rgb(255, 57, 57);
+}
