@@ -190,7 +190,7 @@ const PostEdit = () => {
     const formValues = formRef.current.getFieldsValue(true);
     const postFormData = getFormDate(formValues, isImgValid);
     postFormData.append("postId", searchParams.get("edit"));
-    console.log("^^^^^^^^^^^^^^^^formDate: ", postFormData.get("tags"));
+    //console.log("^^^^^^^^^^^^^^^^formDate: ", postFormData.get("tags"));
     dispatch(updatePost(postFormData));
   };
 

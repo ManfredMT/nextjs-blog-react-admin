@@ -17,6 +17,7 @@
     "craco-less": "^2.0.0",
     "easymde": "^2.16.1",
     "github-markdown-css": "^5.1.0",
+    "js-file-download": "^0.4.12",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-full-screen": "^1.1.0",
