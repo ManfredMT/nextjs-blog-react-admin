@@ -5,9 +5,13 @@ import ReactDOMServer from "react-dom/server";
 import ReactMarkdown from "react-markdown";
 import SimpleMDE from "react-simplemde-editor";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { coy } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import remarkGfm from "remark-gfm";
 import style from "../css/MarkDownEditor.module.css";
+import remarkFootnotes from "remark-footnotes";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import 'katex/dist/katex.min.css';
 
 function MarkDownEditor({ value, onChange }) {
   const mdeOptions = useMemo(() => {
@@ -28,14 +32,19 @@ function MarkDownEditor({ value, onChange }) {
           <ReactMarkdown
             className={`${style["preview-body"]} markdown-body`}
             children={value}
-            remarkPlugins={[remarkGfm]}
+            remarkPlugins={[
+              remarkGfm,
+              [remarkFootnotes, { inlineNotes: true }],
+              remarkMath,
+            ]}
+            rehypePlugins={[rehypeKatex]}
             components={{
               code({ node, inline, className, children, ...props }) {
                 const match = /language-(\w+)/.exec(className || "");
                 return !inline && match ? (
                   <SyntaxHighlighter
                     children={String(children).replace(/\n$/, "")}
-                    style={coy}
+                    style={atomDark}
                     language={match[1]}
                     PreTag="div"
                     {...props}

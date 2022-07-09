@@ -832,6 +832,10 @@ function PostSearch() {
     setSearchParams({ edit: postId });
   };
 
+  const onClickPreview = ({postId},e)=>{
+    setSearchParams({preview: postId})
+  }
+
   const onClickDelete = ({ postId }, e) => {
     postIdRef.current = postId;
     setIsModalVisible(true);
@@ -958,7 +962,9 @@ tags:${tagsString}
 
                     <div className={style["buttons-box"]}>
                       {post.draft ? null : (
-                        <button className={style["preview-button"]}>
+                        <button 
+                        onClick={(e) => onClickPreview({ postId: post.id }, e)}
+                        className={style["preview-button"]}>
                           <EyeOutlined />
                           {" 预览"}
                         </button>

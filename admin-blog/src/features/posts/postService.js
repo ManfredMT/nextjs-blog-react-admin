@@ -92,6 +92,19 @@ const deleteTag = async (tagData, token)=>{
     return response.data
 }
 
+const getOnePost = async (postId, token)=>{
+    const config = {
+        headers: {
+            Authorization:`Bearer ${token}`
+        }
+    }
+
+    const response = await axios.get(API_URL+postId, config)
+
+    return response.data
+
+}
+
 
 
 const postService = {
@@ -102,6 +115,7 @@ const postService = {
     updateCategory,
     updateTag,
     deleteTag,
+    getOnePost,
 }
 
 export default postService;

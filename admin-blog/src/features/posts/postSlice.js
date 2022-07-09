@@ -7,6 +7,7 @@ const initialState = {
   isLoading: false,
   isSuccess: false,
   message: "",
+  singlePost: null,
 };
 
 export const createPost = createAsyncThunk(
@@ -51,6 +52,24 @@ export const deletePost = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.user.token;
       return await postService.deletePost(id, token);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const getSinglePost = createAsyncThunk(
+  "posts/getSingle",
+  async (id, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.user.token;
+      return await postService.getOnePost(id, token);
     } catch (error) {
       const message =
         (error.response &&
@@ -259,7 +278,22 @@ export const postSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload;
-      });
+      })
+      .addCase(getSinglePost.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getSinglePost.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.singlePost = action.payload
+        state.message = "成功加载文章";
+      })
+      .addCase(getSinglePost.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload;
+      })
 
   },
 });

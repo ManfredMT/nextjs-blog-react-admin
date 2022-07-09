@@ -10,6 +10,27 @@ const getPosts = asyncHandler(async (req, res) => {
   res.status(200).json(posts);
 });
 
+// @desc   Get one Post
+// @route  GET /api/posts/:id
+// @access Private
+const getAPost = asyncHandler(async (req, res) => {
+  const post = await Post.findById(req.params.id);
+  if (!post) {
+    res.status(400);
+    throw new Error("Post not found");
+  }
+  if (!req.user) {
+    res.status(401);
+    throw new Error("User not founded");
+  }
+  if (post.user.toString() !== req.user.id) {
+    res.status(401);
+    throw new Error("User not authorized");
+  }
+  post.image = undefined;
+  res.status(200).json(post);
+});
+
 // @desc   Set Posts
 // @route  POST /api/posts
 // @access Private
@@ -218,5 +239,6 @@ module.exports = {
   deletePost,
   updateCategory,
   updateTag,
-  deleteTag
+  deleteTag,
+  getAPost,
 };

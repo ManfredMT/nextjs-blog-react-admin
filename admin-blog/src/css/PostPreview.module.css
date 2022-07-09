@@ -1,0 +1,45 @@
+.preview-body {
+    background-color: transparent;
+    margin:0 2rem;
+    border-radius: 0.5rem;
+}
+
+.post-title {
+    text-align: center;
+    margin:2.5rem 0;
+    font-weight: 600;
+    font-size: 2rem;
+}
+
+.preview-post-body {
+    background-color: transparent;
+}
+
+.link-top-box {
+    display: flex;
+    justify-content: right;
+    margin-bottom: 2rem;
+    margin-right: 1rem;
+    margin-top: 1rem;
+}
+
+@media (min-width:1224px) {
+    .preview-body {
+        border-radius: 1rem;
+        background-color: #fff;
+    }
+
+    .preview-post-body {
+        padding: 1rem 5rem;
+    }
+
+    .post-title {
+        margin-top: 0;
+    }
+
+    .link-top-box {
+        margin-right: 8rem;
+        padding-top: 1rem;
+    }
+    
+}
