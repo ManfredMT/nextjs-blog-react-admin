@@ -177,7 +177,9 @@
     color: rgb(94, 94, 94);
 }
 
-
+.post-title-draft::before {
+    content: "(草稿)";
+}
 .date-range-picker input {
     border-radius: 0px;
 }

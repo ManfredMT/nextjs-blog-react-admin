@@ -73,6 +73,18 @@
     line-height: 0.7rem;
 }
 
+.post-title-draft {
+    font-style: italic;
+    color: rgb(94, 94, 94);
+    text-align: center;
+    margin:2.5rem 0 1rem 0;
+    font-size: 2rem;
+}
+
+.post-title-draft::before {
+    content: "(草稿)";
+}
+
 
 @media (min-width:1224px) {
     .preview-body {

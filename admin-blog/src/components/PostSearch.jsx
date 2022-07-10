@@ -22,7 +22,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
-import fileDownload from 'js-file-download'
+import fileDownload from "js-file-download";
 import { useSearchParams } from "react-router-dom";
 import style from "../css/PostSearch.module.css";
 import { deletePost, getPosts, reset } from "../features/posts/postSlice";
@@ -832,23 +832,22 @@ function PostSearch() {
     setSearchParams({ edit: postId });
   };
 
-  const onClickPreview = ({postId},e)=>{
-    setSearchParams({preview: postId})
-  }
+  const onClickPreview = ({ postId }, e) => {
+    setSearchParams({ preview: postId });
+  };
 
   const onClickDelete = ({ postId }, e) => {
     postIdRef.current = postId;
     setIsModalVisible(true);
   };
 
-  const downloadMD=({postId}, e)=>{
-    const currentPost = allPosts.find((post)=>post.id===postId);
-    let tagsString = '';
-    currentPost.tags.forEach(tag=>{
-      tagsString+='\n- '+tag;
-    })
-    const  frontMatter = 
-    `---
+  const downloadMD = ({ postId }, e) => {
+    const currentPost = allPosts.find((post) => post.id === postId);
+    let tagsString = "";
+    currentPost.tags.forEach((tag) => {
+      tagsString += "\n- " + tag;
+    });
+    const frontMatter = `---
 title: ${currentPost.title}
 date: ${currentPost.date}
 updated: ${new Date(currentPost.updatedAt).toLocaleString()}
@@ -858,13 +857,13 @@ category:
 tags:${tagsString}
 ---
 
-`
-    const content = currentPost.content??'';
+`;
+    const content = currentPost.content ?? "";
     const frontMatterLF = frontMatter.replace(/\r\n/g, "\n");
     const contentLF = content.replace(/\r\n/g, "\n");
-    const mdBlob = new Blob([frontMatterLF,contentLF], {type: 'text/plain'});
-    fileDownload(mdBlob, currentPost.title+".md");
-  }
+    const mdBlob = new Blob([frontMatterLF, contentLF], { type: "text/plain" });
+    fileDownload(mdBlob, currentPost.title + ".md");
+  };
 
   return !isLoading ? (
     <>
@@ -908,17 +907,10 @@ tags:${tagsString}
                           post.title
                         )}
                       </h1>
-                      {post.draft ? (
-                        <p className={style["draft-label"]}>草稿</p>
-                      ) : (
-                        <p>
-                          <span className={style["grey-label"]}>
-                            发布日期:{" "}
-                          </span>
-                          {post.date}
-                        </p>
-                      )}
-
+                      <p>
+                        <span className={style["grey-label"]}>发布日期: </span>
+                        {post.date}
+                      </p>
                       <p>
                         <span className={style["grey-label"]}>作者: </span>
                         {post.authors.map((author, i) => (
@@ -961,14 +953,13 @@ tags:${tagsString}
                     </div>
 
                     <div className={style["buttons-box"]}>
-                      {post.draft ? null : (
-                        <button 
+                      <button
                         onClick={(e) => onClickPreview({ postId: post.id }, e)}
-                        className={style["preview-button"]}>
-                          <EyeOutlined />
-                          {" 预览"}
-                        </button>
-                      )}
+                        className={style["preview-button"]}
+                      >
+                        <EyeOutlined />
+                        {" 预览"}
+                      </button>
                       <button
                         onClick={(e) => onClickEdit({ postId: post.id }, e)}
                         className={style["edit-button"]}
@@ -983,9 +974,10 @@ tags:${tagsString}
                         <DeleteOutlined />
                         {" 删除"}
                       </button>
-                      <button 
-                      onClick={(e)=>downloadMD({ postId: post.id }, e)}
-                      className={style["download-md-file-button"]}>
+                      <button
+                        onClick={(e) => downloadMD({ postId: post.id }, e)}
+                        className={style["download-md-file-button"]}
+                      >
                         <DownloadOutlined />
                         {" 下载.md文件"}
                       </button>

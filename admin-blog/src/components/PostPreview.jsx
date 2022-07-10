@@ -87,7 +87,7 @@ function PostPreview() {
         </Link>
       </div>
 
-      <h2 className={style["post-title"]}>{singlePost.title}</h2>
+      <h2 className={style[singlePost.draft ? "post-title-draft" : "post-title"]}>{singlePost.title}</h2>
       <div className={style["post-info-first-row"]}>
         <p>
           <span className={style["grey-label"]}>
