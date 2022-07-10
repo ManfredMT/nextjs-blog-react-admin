@@ -351,7 +351,7 @@ function AllCategories() {
                 className={style["delete-button-desktop"]}
                 okText="确认"
                 cancelText="取消"
-                title="未分类的文章会被归为无类别,确认删除分类?"
+                title="未分类的文章会被归为default(未分类),确认删除分类?"
                 onConfirm={() => handleDelete(record.key)}
               >
                 <button className={style["no-style-button"]}>

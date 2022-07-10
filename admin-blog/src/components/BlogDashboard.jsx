@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useRef, useMemo } from "react";
 import { checkJWT } from "../features/auth/authSlice";
 import WordCloud from "./WordCloud";
 import style from "../css/BlogDashboard.module.css";
@@ -7,34 +8,42 @@ import { Calendar } from "antd";
 import "moment/locale/zh-cn";
 import locale from "antd/es/date-picker/locale/zh_CN";
 import { useMediaQuery } from "react-responsive";
+import {
+  DatePicker,
+  Divider,
+  Empty,
+  Input,
+  message as antMessage,
+  Modal,
+  Pagination,
+  Radio,
+  Select,
+  Spin,
+} from "antd";
+import { deletePost, getPosts, reset } from "../features/posts/postSlice";
 
-let AllPosts = [];
-for (let j = 0; j <= 56; j++) {
-  const fakeTags = [...Array(5).keys()].map(
-    (i) => `标签tag-${parseInt((j + i + 1) % 12)}`
-  );
-  const dateObj = new Date();
-  dateObj.setDate(dateObj.getDate() - (j + 1));
+// let AllPosts = [];
+// for (let j = 0; j <= 56; j++) {
+//   const fakeTags = [...Array(5).keys()].map(
+//     (i) => `标签tag-${parseInt((j + i + 1) % 12)}`
+//   );
+//   const dateObj = new Date();
+//   dateObj.setDate(dateObj.getDate() - (j + 1));
 
-  const fakeAuthor = j >= 30 ? "author2" : "admin";
-  AllPosts.push({
-    id: `post_${j + 1}`,
-    title: `JavaScript 的关键功能，比如变量、字符串、数字、数组等(${j + 1})`,
-    date: dateObj,
-    // tags: [
-    //   `tag-${parseInt((j + 1) % 37)}`,
-    //   `tag-${parseInt((j + 2) % 37)}`,
-    //   `tag-${parseInt((j + 3) % 37)}`,
-    // ],
-    tags: fakeTags,
-    category: `category-${parseInt((j + 1) % 10)}`,
-    draft: parseInt(j % 10) === 0 ? true : false,
-    authors: [fakeAuthor],
-    images: undefined,
-  });
-}
+//   const fakeAuthor = j >= 30 ? "author2" : "admin";
+//   AllPosts.push({
+//     id: `post_${j + 1}`,
+//     title: `JavaScript 的关键功能，比如变量、字符串、数字、数组等(${j + 1})`,
+//     date: dateObj,
+//     tags: fakeTags,
+//     category: `category-${parseInt((j + 1) % 10)}`,
+//     draft: parseInt(j % 10) === 0 ? true : false,
+//     authors: [fakeAuthor],
+//     images: undefined,
+//   });
+// }
 
-AllPosts = AllPosts.filter((post) => !post.draft);
+// AllPosts = AllPosts.filter((post) => !post.draft);
 
 function getAllTags(posts) {
   let AllTags = [];
@@ -115,14 +124,12 @@ function getDayArchive(posts) {
   return dayArchive;
 }
 
-const monthArchive = getMonthArchive(AllPosts);
-//console.log("month archive: ", monthArchive);
-const dayArchive = getDayArchive(AllPosts);
-//console.log("day archive: ", dayArchive);
+// const monthArchive = getMonthArchive(AllPosts);
 
-const AllTags = getAllTags(AllPosts);
-const AllCategories = getAllCategories(AllPosts);
-const AllAuthors = getAllAuthors(AllPosts);
+// const dayArchive = getDayArchive(AllPosts);
+
+// const AllTags = getAllTags(AllPosts);
+// const AllCategories = getAllCategories(AllPosts);
 
 const comments = [
   {
@@ -178,16 +185,46 @@ for (let i = 0; i < comments.length; i++) {
 
 function BlogDashboard() {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
+  const { posts, isSuccess, isError, isLoading, message } = useSelector(
+    (state) => state.posts
+  );
+  useEffect(() => {
+    dispatch(getPosts());
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
 
-  // const { user, isError, isSuccess, message } = useSelector(
-  //   (state) => state.auth
-  // );
-  // useEffect(()=>{
-  //   console.log('BlogDashboard|user before : ',user)
-  //   dispatch(checkJWT());
-  //   console.log('BlogDashboard|user after : ',user)
-  // },[])
+  let isErrorReset = useRef(false);
+
+  useEffect(() => {
+    if (!isError) {
+      isErrorReset.current = true;
+    }
+    if (isErrorReset.current && isError) {
+      antMessage.error(message);
+    }
+  }, [isError, message]);
+
+  const allPosts = useMemo(
+    () =>
+      posts
+        .filter((p) => !p.draft)
+        .map((post) => {
+          return {
+            id: post._id,
+            date: new Date(post.createdAt),
+            ...post,
+          };
+        }),
+    [posts]
+  );
+
+  const monthArchive = getMonthArchive(allPosts);
+  const dayArchive = getDayArchive(allPosts);
+  const allTags = getAllTags(allPosts);
+  const allCategories = getAllCategories(allPosts);
 
   const dateCellRender = (value) => {
     //console.log(value);
@@ -215,7 +252,11 @@ function BlogDashboard() {
     if (archiveIndex === -1) {
       return null;
     } else {
-      return <div className={style["calendar-post-number"]}>{`(${monthArchive[archiveIndex].postNumber})`}</div>;
+      return (
+        <div
+          className={style["calendar-post-number"]}
+        >{`(${monthArchive[archiveIndex].postNumber})`}</div>
+      );
     }
   };
 
@@ -224,15 +265,15 @@ function BlogDashboard() {
       <div className={style["first-row"]}>
         <div className={style["number-card-box"]}>
           <p>文章数</p>
-          <p>{AllPosts.length}</p>
+          <p>{allPosts.length}</p>
         </div>
         <div className={style["number-card-box"]}>
           <p>标签数</p>
-          <p>{AllTags.length}</p>
+          <p>{allTags.length}</p>
         </div>
         <div className={style["number-card-box"]}>
           <p>分类数</p>
-          <p>{AllCategories.length}</p>
+          <p>{allCategories.length}</p>
         </div>
         <div className={style["number-card-box"]}>
           <p>评论数</p>
@@ -242,7 +283,7 @@ function BlogDashboard() {
 
       <div className={style["archive-cloud-row"]}>
         <div className={style["word-cloud-box"]}>
-          <WordCloud words={AllTags} speed={10}/>
+          <WordCloud words={allTags} speed={10} />
         </div>
         <div className={style["archive-card-body"]}>
           <p className={style["card-title"]}>日历:</p>
@@ -276,7 +317,7 @@ function BlogDashboard() {
           <p className={style["card-title"]}>最新文章:</p>
           <hr />
           <ul>
-            {AllPosts.slice(0, 5)
+            {allPosts.slice(0, 5)
               .sort((a, b) => b.date - a.date)
               .map((post, i) => {
                 //console.log(post.date);
