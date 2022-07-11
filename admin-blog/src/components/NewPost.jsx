@@ -56,7 +56,7 @@ function getAllAuthors(posts) {
   return AllAuthors.sort();
 }
 
-function getFormDate(values, isImgValid) {
+function getFormDate(values) {
   const postFormData = new FormData();
   postFormData.append("title", values.post.title);
   postFormData.append("category", values.post.category);
@@ -79,10 +79,7 @@ function getFormDate(values, isImgValid) {
   if (values.post.content) {
     postFormData.append("content", values.post.content);
   }
-  if (values.dragger && isImgValid) {
-    const imageFile = values.dragger[0].originFileObj;
-    postFormData.append("image", imageFile);
-  }
+  
   return postFormData;
 }
 
@@ -149,59 +146,25 @@ const NewPost = () => {
 
   const formRef = useRef(null);
 
-  let isImgValid = false;
+  
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
   const onClickPublish = (e) => {
     console.log("发布文章: ", formRef.current.getFieldsValue(true));
     const formValues = formRef.current.getFieldsValue(true);
-    const postFormData = getFormDate(formValues, isImgValid);
+    const postFormData = getFormDate(formValues);
     postFormData.append("draft", false);
     dispatch(createPost(postFormData));
   };
 
   const handleSaveDraft = (e) => {
     const formValues = formRef.current.getFieldsValue(true);
-    const postFormData = getFormDate(formValues, isImgValid);
+    const postFormData = getFormDate(formValues);
     postFormData.append("draft", true);
     dispatch(createPost(postFormData));
   };
 
-  const handleImageUpload = (e) => {
-    console.log("upload image: ", e);
-    const file = e.file;
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      isImgValid = false;
-      antMessage.error("只能上传jpeg或者png格式的图片,请重新选择!");
-      setTimeout(() => {
-        e.onError("file type error");
-      }, 0);
-    }
-    const isLt3M = file.size / 1024 / 1024 < 3;
-    if (!isLt3M) {
-      isImgValid = false;
-      antMessage.error("图片大小必须小于3MB,请重新选择!");
-      setTimeout(() => {
-        e.onError("file size error");
-      }, 0);
-    }
-    if (isJpgOrPng && isLt3M) {
-      isImgValid = true;
-      setTimeout(() => {
-        e.onSuccess("ok");
-      }, 0);
-    }
-  };
-
-  const normFile = (e) => {
-    console.log("Upload event:", e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e?.fileList;
-  };
 
   return (
     <Form
@@ -302,29 +265,7 @@ const NewPost = () => {
         <Input placeholder={isTabletOrMobile ? "标准链接(可选)" : null} />
       </Form.Item>
 
-      <Form.Item label="文章图片">
-        <Form.Item
-          name="dragger"
-          valuePropName="fileList"
-          getValueFromEvent={normFile}
-          noStyle
-        >
-          <Upload.Dragger
-            maxCount={1}
-            listType="picture"
-            name="files"
-            customRequest={handleImageUpload}
-          >
-            <p className="ant-upload-drag-icon">
-              <InboxOutlined />
-            </p>
-            <p className="ant-upload-text">点击或拖拽上传图片</p>
-            <p className="ant-upload-hint">
-              支持jpeg和png格式,文件大小上限为3M.
-            </p>
-          </Upload.Dragger>
-        </Form.Item>
-      </Form.Item>
+      
 
       <Form.Item
         name={["post", "content"]}
