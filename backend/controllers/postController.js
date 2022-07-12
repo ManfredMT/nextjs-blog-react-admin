@@ -13,7 +13,7 @@ const getPosts = asyncHandler(async (req, res) => {
 // @desc   Get one Post
 // @route  GET /api/posts/:id
 // @access Private
-const getAPost = asyncHandler(async (req, res) => {
+const getPostById = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
   if (!post) {
     res.status(400);
@@ -240,5 +240,5 @@ module.exports = {
   updateCategory,
   updateTag,
   deleteTag,
-  getAPost,
+  getPostById,
 };

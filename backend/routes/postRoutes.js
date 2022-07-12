@@ -8,7 +8,7 @@ const {
   updateCategory,
   updateTag,
   deleteTag,
-  getAPost,
+  getPostById,
 } = require("../controllers/postController");
 const { protect } = require("../middleware/authMiddleware");
 const multer = require("multer");
@@ -27,6 +27,6 @@ router
   .route("/:id")
   .put(protect, upload.single("image"), updatePost)
   .delete(protect, deletePost)
-  .get(protect, getAPost);
+  .get(protect, getPostById);
 
 module.exports = router;
