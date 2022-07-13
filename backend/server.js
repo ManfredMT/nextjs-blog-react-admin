@@ -44,7 +44,6 @@ app.post('/api/upload', upload.any(), (req, res, next) => {
 
 
 
-app.use("/api/goals", require("./routes/goalRoutes"));
 app.use("/api/users", limiter, require("./routes/userRoutes"));
 app.use("/api/links", require("./routes/linkRoutes"));
 app.use("/api/posts",require("./routes/postRoutes"));

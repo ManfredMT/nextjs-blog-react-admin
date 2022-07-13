@@ -1,3 +1,9 @@
+.image-placeholder {
+  width: 80px;
+  height: 80px;
+  background-color: lightgray;
+}
+
 .container {
   padding: 0 2rem;
 }
