@@ -1,4 +1,5 @@
-import {getAllCategories} from '../lib/posts'
+import {getAllCategories} from '../lib/posts';
+
 export default function Categories({allCategories}) {
     console.log("allCategories: ",allCategories)
     return <main><label>分类:</label><div>

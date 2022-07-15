@@ -64,14 +64,14 @@ export async function getAllCategories() {
       draft: false,
     }).select("category");
     let allCategories = [];
-    if(cFindResult) {
-      cFindResult.forEach((doc)=>{
-        if(!allCategories.includes(doc.category)) {
+    if (cFindResult) {
+      cFindResult.forEach((doc) => {
+        if (!allCategories.includes(doc.category)) {
           allCategories.push(doc.category);
         }
-      })
+      });
       return allCategories;
-    }else {
+    } else {
       return [];
     }
   }
