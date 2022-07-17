@@ -1,34 +1,23 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import usePrevious from "../hooks/usePrevious";
-import {
-  getProfile,
-  updateProfile,
-  reset,
-} from "../features/profile/profileSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useMediaQuery } from "react-responsive";
-import HCenterSpin from "./HCenterSpin";
+import { PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Divider,
   Form,
   Input,
-  InputNumber,
   message as antMessage,
-  Popconfirm,
-  Space,
-  Table,
-  Typography,
   Upload,
 } from "antd";
+import { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useMediaQuery } from "react-responsive";
+import style from "../css/BlogSetting.module.css";
 import {
-  InboxOutlined,
-  LoadingOutlined,
-  UploadOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import style from "../css/BlogSetting.module.css"
-
+  getProfile,
+  reset,
+  updateProfile,
+} from "../features/profile/profileSlice";
+import usePrevious from "../hooks/usePrevious";
+import HCenterSpin from "./HCenterSpin";
 
 const getBase64 = (img, callback) => {
   const reader = new FileReader();
@@ -116,9 +105,9 @@ function BlogSetting() {
     if (values.user.juejin !== null) {
       profileFormData.append("juejin", values.user.juejin);
     }
-    if(values.upload && isImgValid.current) {
+    if (values.upload && isImgValid.current) {
       const logoFile = values.upload[0].originFileObj;
-      //profileFormData.append("logo", logoFile);
+      profileFormData.append("logo", logoFile);
     }
     return profileFormData;
   }
@@ -137,7 +126,7 @@ function BlogSetting() {
     }
     return e?.fileList;
   };
-  //const [fileList, setFileList] = useState([]);
+  
   const [imageUrl, setImageUrl] = useState();
   const isImgValid = useRef(false);
 
@@ -167,24 +156,16 @@ function BlogSetting() {
 
   //console.log("debug fileList: ",fileList);
   const uploadProps = {
-    // onRemove: (file) => {
-    //   const index = fileList.indexOf(file);
-    //   const newFileList = fileList.slice();
-    //   newFileList.splice(index, 1);
-    //   setFileList(newFileList);
-    // },
     beforeUpload: (file) => {
-      //setFileList([...fileList, file]);
       return false;
     },
     //fileList,
-    maxCount:1,
+    maxCount: 1,
     name: "file",
     listType: "picture-card",
     showUploadList: false,
     onChange: handleChange,
 
-    //onChange:({ fileList: newFileList }) => setFileList(newFileList),
   };
 
   return profile[0] !== undefined ? (
@@ -254,7 +235,7 @@ function BlogSetting() {
               ) : (
                 uploadButton
               )}
-              {/* {fileList.length>=1?null:uploadButton} */}
+             
             </Upload>
           </Form.Item>
         </Form.Item>
