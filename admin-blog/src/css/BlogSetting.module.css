@@ -1,0 +1,13 @@
+.main-box {
+    margin:1rem 1.5rem 0 1.5rem;
+}
+
+@media (min-width:1224px) {
+    .main-box {
+        background-color: #fff;
+        border-radius: 1rem;
+        margin: 0 2rem;
+        padding: 2rem 5rem;
+    }
+
+}

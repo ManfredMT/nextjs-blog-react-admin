@@ -51,6 +51,27 @@ export async function getAllTags() {
   }
 }
 
+export async function getPostsByTag(tagName) {
+  await dbConnect();
+  const name = process.env.USER_NAME;
+  const user = await User.findOne({ name });
+  if (!user) {
+    console.log("用户不存在");
+    return [];
+  } else {
+    const tagsFindResult = await Post.find({
+      user: user.id,
+      draft: false,
+      tags: tagName,
+    }).select("-content -image");
+    if (tagsFindResult) {
+      return JSON.parse(JSON.stringify(tagsFindResult));
+    } else {
+      return [];
+    }
+  }
+}
+
 export async function getAllCategories() {
   await dbConnect();
   const name = process.env.USER_NAME;
@@ -75,4 +96,76 @@ export async function getAllCategories() {
       return [];
     }
   }
+}
+
+export async function getPostsByCategory(categoryName) {
+  await dbConnect();
+  const name = process.env.USER_NAME;
+  const user = await User.findOne({ name });
+  if (!user) {
+    console.log("用户不存在");
+    return [];
+  } else {
+    const cFindResult = await Post.find({
+      user: user.id,
+      draft: false,
+      category: categoryName,
+    }).select("-content -image");
+    if (cFindResult) {
+      return JSON.parse(JSON.stringify(cFindResult));
+    } else {
+      return [];
+    }
+  }
+}
+
+export async function getPostById(postId) {
+  await dbConnect();
+  const name = process.env.USER_NAME;
+  const user = await User.findOne({ name });
+  if (!user) {
+    console.log("用户不存在");
+    return [];
+  } else {
+    
+    const postsResult = await Post.find({ 
+      user: user.id, draft: false, _id:postId }).select(
+      "-image"
+    );
+    
+    if(postsResult) {
+      console.log("lib postsResult: ",postsResult);
+      return JSON.parse(JSON.stringify(postsResult));
+    }else {
+      return [];
+    }
+  }
+}
+
+export async function getAllPostIds() {
+  await dbConnect();
+  const name = process.env.USER_NAME;
+  const user = await User.findOne({ name });
+  if (!user) {
+    console.log("用户不存在");
+    return [];
+  } else {
+    const postsResult = await Post.find({ 
+      user: user.id, draft: false}).select(
+      "_id"
+    );
+    if(postsResult) {
+      const paths = postsResult.map((doc)=>{
+        return {
+          params:{
+            id: doc._id.toString()
+          }
+        }
+      })
+      return paths;
+    }else {
+      return null;
+    }
+  }
+
 }

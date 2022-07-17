@@ -1,6 +1,6 @@
 import { InboxOutlined } from "@ant-design/icons";
-import { Button, Form, Input, message as antMessage, Upload } from "antd";
-import { useEffect, useRef } from "react";
+import { Button, Form, Input, message as antMessage, Upload,Modal } from "antd";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import style from "../css/NewLink.module.css";
@@ -15,6 +15,14 @@ const validateMessages = {
     range: "${label} must be between ${min} and ${max}",
   },
 };
+
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 const NewLink = () => {
   const dispatch = useDispatch();
@@ -93,6 +101,19 @@ const NewLink = () => {
     return e?.fileList;
   };
 
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
+  const [previewTitle, setPreviewTitle] = useState('');
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
+  };
+
   return (
     <Form
       ref={formRef}
@@ -161,6 +182,7 @@ const NewLink = () => {
             name="files"
             //action="/upload.do"
             customRequest={handleImageUpload}
+            onPreview={handlePreview}
             //beforeUpload={beforeUpload}
           >
             <p className="ant-upload-drag-icon">
@@ -173,6 +195,20 @@ const NewLink = () => {
           </Upload.Dragger>
         </Form.Item>
       </Form.Item>
+      <Modal
+        visible={previewVisible}
+        title={previewTitle}
+        footer={null}
+        onCancel={() => setPreviewVisible(false)}
+      >
+        <img
+          alt="link_image"
+          style={{
+            width: "100%",
+          }}
+          src={previewImage}
+        />
+      </Modal>
 
       <Form.Item className={style["submit-button-box"]}>
         <Button

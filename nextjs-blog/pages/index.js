@@ -42,7 +42,7 @@ export default function Home({allPostsData}) {
         {allPostsData.map((post)=>{
           return <article key={post._id}>
             <header>
-              <h2>{post.title}</h2>
+              <h2><Link href={`/posts/${post._id}`}>{post.title}</Link></h2>
               <p>{post.createdAt}</p>
               {post.tags.length>0?<div>
               {post.tags.map((tag)=>{

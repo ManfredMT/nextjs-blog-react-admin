@@ -1,6 +1,6 @@
 import {
   BarChartOutlined,
-  BgColorsOutlined, DownOutlined,
+  SettingOutlined, DownOutlined,
   EditOutlined, GroupOutlined,
   LinkOutlined,
   MenuFoldOutlined,
@@ -113,8 +113,8 @@ function AdminPanel() {
       case "seo":
         navigate("seo");
         break;
-      case "theme":
-        navigate("theme");
+      case "setting":
+        navigate("setting");
         break;
       default:
         navigate("/manage");
@@ -221,9 +221,9 @@ function AdminPanel() {
       icon: <SearchOutlined />,
     },
     {
-      label: "博客主题",
-      key: "theme",
-      icon: <BgColorsOutlined />,
+      label: "博客设置",
+      key: "setting",
+      icon: <SettingOutlined />,
     },
   ];
 
@@ -329,7 +329,7 @@ function AdminPanel() {
     }
   };
 
-  const handle = useFullScreenHandle();
+
 
   //用户下拉菜单
   const userMenu = (

@@ -24,7 +24,7 @@ import RecentComments from "./components/RecentComments";
 import RequireAuth from "./components/RequireAuth.jsx";
 import SEOSetting from "./components/SEOSetting";
 import TagNav from "./components/TagNav";
-import ThemeSetting from "./components/ThemeSetting";
+import BlogSetting from "./components/BlogSetting";
 import Loading from "./pages/Loading";
 
 const Login = lazy(() => import("./pages/Login"));
@@ -69,13 +69,13 @@ function App() {
                 <Route path="post-comments" element={<PostComments />} />
               </Route>
               <Route path="seo" element={<SEOSetting />} />
-              <Route path="theme" element={<ThemeSetting />} />
+              <Route path="setting" element={<BlogSetting />} />
               <Route path="change-password" element={<ChangePassword />} />
               <Route
                 path="*"
                 element={
                   <main style={{ padding: "2rem" }}>
-                    <p>页面不存在!</p>
+                    <p>404页面不存在</p>
                   </main>
                 }
               />

@@ -2,7 +2,7 @@ const express = require("express");
 const http = require("http");
 const dotenv = require("dotenv").config();
 const port = process.env.PORT || 5000;
-const {connectDB, setDefaultPasswd} = require("./config/db");
+const {connectDB, setDefaultPasswd, setDefaultProfile} = require("./config/db");
 const { errorHandler } = require("./middleware/errorMiddleware");
 const cors = require("cors");
 const rateLimit = require('express-rate-limit');
@@ -10,8 +10,10 @@ const rateLimit = require('express-rate-limit');
 
 connectDB();
 
+
 //设置管理员默认账号
 setDefaultPasswd();
+setDefaultProfile();
 
 
 const app = express();
@@ -47,6 +49,7 @@ app.post('/api/upload', upload.any(), (req, res, next) => {
 app.use("/api/users", limiter, require("./routes/userRoutes"));
 app.use("/api/links", require("./routes/linkRoutes"));
 app.use("/api/posts",require("./routes/postRoutes"));
+app.use("/api/profile", require("./routes/profileRoutes"));
 //app.use("/api/upload", require("./routes/uploadRoutes"));
 
 app.use(errorHandler);

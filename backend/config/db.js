@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
+const Profile = require("../models/profileModel");
 const dbName = "blog";
 
 const connectDB = async () => {
@@ -17,11 +18,11 @@ const connectDB = async () => {
 
 //设置管理员默认账号
 const setDefaultPasswd = async () => {
-  const name = "admin";
+  const name = process.env.USER_NAME;
   const userExists = await User.findOne({ name });
 
   if (!userExists) {
-    const password = "admin";
+    const password = process.env.USER_PASSWORD;
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const user = await User.create({
@@ -36,4 +37,22 @@ const setDefaultPasswd = async () => {
   }
 };
 
-module.exports = { connectDB, setDefaultPasswd };
+const setDefaultProfile = async ()=>{
+  const userName = process.env.USER_NAME;
+  const userExists = await User.findOne({ name: userName });
+  const profileExists = await Profile.findOne({user: userExists.id});
+  if(!profileExists) {
+    const profileObj = {
+    user: userExists.id,
+    name: `${userName}的个人博客`
+  }
+  try {
+    await Profile.create(profileObj);
+  }catch(error) {
+    throw new Error(error);
+  }
+  }
+  
+}
+
+module.exports = { connectDB, setDefaultPasswd, setDefaultProfile };

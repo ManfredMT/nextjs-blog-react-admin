@@ -1,6 +1,14 @@
 import { InboxOutlined, LoadingOutlined } from "@ant-design/icons";
-import { Button, Form, Input, message as antMessage, Spin, Upload } from "antd";
-import { useEffect, useRef } from "react";
+import {
+  Button,
+  Form,
+  Input,
+  message as antMessage,
+  Spin,
+  Upload,
+  Modal,
+} from "antd";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
@@ -16,6 +24,14 @@ const validateMessages = {
     range: "${label} must be between ${min} and ${max}",
   },
 };
+
+const getBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 
 const EditLink = () => {
   const dispatch = useDispatch();
@@ -136,6 +152,44 @@ const EditLink = () => {
       }
     : {};
 
+  const getDefaultImg = () => {
+    if (!currentLink) {
+      return null;
+    }
+    if (currentLink.picture) {
+      const imgArrayBuffer = new Uint8Array(currentLink.picture.data).buffer;
+      const imgBlob = new Blob([imgArrayBuffer], {
+        // type: "image/jpeg"
+      });
+      const imgUrl = URL.createObjectURL(imgBlob);
+      return [
+        {
+          uid: "-1",
+          name: "link_picture.png",
+          status: "done",
+          url: imgUrl,
+        },
+      ];
+    } else {
+      return null;
+    }
+  };
+
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [previewImage, setPreviewImage] = useState("");
+  const [previewTitle, setPreviewTitle] = useState("");
+
+  const handlePreview = async (file) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setPreviewImage(file.url || file.preview);
+    setPreviewVisible(true);
+    setPreviewTitle(
+      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
+    );
+  };
+
   const renderForm = (
     <Form
       ref={formRef}
@@ -205,6 +259,8 @@ const EditLink = () => {
             name="files"
             //action="/upload.do"
             customRequest={handleImageUpload}
+            defaultFileList={getDefaultImg}
+            onPreview={handlePreview}
           >
             <p className="ant-upload-drag-icon">
               <InboxOutlined />
@@ -216,6 +272,20 @@ const EditLink = () => {
           </Upload.Dragger>
         </Form.Item>
       </Form.Item>
+      <Modal
+        visible={previewVisible}
+        title={previewTitle}
+        footer={null}
+        onCancel={() => setPreviewVisible(false)}
+      >
+        <img
+          alt="link_image"
+          style={{
+            width: "100%",
+          }}
+          src={previewImage}
+        />
+      </Modal>
 
       <Form.Item className={style["submit-button-box"]}>
         <Button
