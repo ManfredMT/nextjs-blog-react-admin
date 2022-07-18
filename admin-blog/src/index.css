@@ -13,8 +13,13 @@ code {
 }
 
 [data="highlight"] {
+  background-color: #353b45;
   background-color: black;
-  width: max-content;
-  border: 1px solid red;
+  background-color: #282c34;
+  display: block; 
+  position: relative;
+  left:-5px;
+  border-left: 5px solid skyblue;
+  
 
 }

@@ -70,10 +70,13 @@ function MarkDownEditor({
                     return {};
                   }
                 };
-                return !inline && match ? (
+                if (!inline && match) {
+              return (
+                <div className={style["code-box"]}>              
                   <SyntaxHighlighter
                     children={String(children).replace(/\n$/, "")}
                     style={atomDark}
+                    className={style["syntax-highlighter"]}
                     wrapLines={true}
                     showLineNumbers={true}
                     useInlineStyles={true}
@@ -82,18 +85,36 @@ function MarkDownEditor({
                     PreTag="div"
                     {...props}
                   />
-                ) : (
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                );
+                </div>
+              );
+            } else if (!inline) {
+              return (
+                <SyntaxHighlighter
+                  children={String(children).replace(/\n$/, "")}
+                  style={atomDark}
+                  wrapLines={true}// span {display:block}
+                  showLineNumbers={true}
+                  useInlineStyles={true}
+                  lineProps={applyHighlights}
+                  language={"text"}
+                  PreTag="div"
+                  {...props}
+                />
+              );
+            } else {
+              return (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            }              
               },
             }}
           />
         );
       },
     };
-  }, []);
+  }, [autoSave,id]);
   return (
     <SimpleMDE id={id} options={mdeOptions} value={value} onChange={onChange} />
   );
