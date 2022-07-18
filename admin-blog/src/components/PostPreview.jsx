@@ -8,12 +8,12 @@ import { message as antMessage } from "antd";
 import "easymde/dist/easymde.min.css";
 import "github-markdown-css";
 import "katex/dist/katex.min.css";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { atomDark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { atomDark, dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import rehypeKatex from "rehype-katex";
 import remarkFootnotes from "remark-footnotes";
 import remarkGfm from "remark-gfm";
@@ -21,6 +21,9 @@ import remarkMath from "remark-math";
 import style from "../css/PostPreview.module.css";
 import { getSinglePost, reset } from "../features/posts/postSlice";
 import HCenterSpin from "./HCenterSpin";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import rangeParser from "parse-numeric-range";
+import copySvg from "./images/copy-svgrepo-com.svg";
 
 function PostPreview() {
   const dispatch = useDispatch();
@@ -29,6 +32,8 @@ function PostPreview() {
   );
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     dispatch(getSinglePost(searchParams.get("preview")));
@@ -60,24 +65,85 @@ function PostPreview() {
         components={{
           code({ node, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || "");
-            return !inline && match ? (
-              <SyntaxHighlighter
-                children={String(children).replace(/\n$/, "")}
-                style={atomDark}
-                language={match[1]}
-                PreTag="div"
-                {...props}
-              />
-            ) : (
-              <code className={className} {...props}>
-                {children}
-              </code>
-            );
+            const hasMeta = node?.data?.meta;
+            const applyHighlights = (applyHighlights) => {
+              if (hasMeta) {
+                const RE = /{([\d,-]+)}/;
+                const metadata = node.data.meta?.replace(/\s/g, "");
+                const strlineNumbers = RE?.test(metadata)
+                  ? RE?.exec(metadata)[1]
+                  : "0";
+                const highlightLines = rangeParser(strlineNumbers);
+                const highlight = highlightLines;
+                const data = highlight.includes(applyHighlights)
+                  ? "highlight"
+                  : null;
+                return { data };
+              } else {
+                return {};
+              }
+            };
+            if (!inline && match) {
+              return (
+                <div className={style["code-box"]}>
+                  {/* <div className={style["code-header"]}>
+                  <span className={style["code-language"]}>{match[1]}</span>
+                  <CopyToClipboard
+                    text={String(children)}
+                    onCopy={(text, result) => {
+                      console.log("copy text: ", text, result);
+                      if (result) {
+                        setCopied(true);
+                      }
+                    }}
+                  >
+                    {copied ? (
+                      <span className={style["copied"]}>复制成功</span>
+                    ) : (
+                      <span className={style["copy-button"]}>复制</span>
+                    )}
+                  </CopyToClipboard>
+                </div> */}
+                  <SyntaxHighlighter
+                    children={String(children).replace(/\n$/, "")}
+                    style={atomDark}
+                    className={style["syntax-highlighter"]}
+                    wrapLines={true}
+                    showLineNumbers={true}
+                    useInlineStyles={true}
+                    lineProps={applyHighlights}
+                    language={match[1]}
+                    PreTag="div"
+                    {...props}
+                  />
+                </div>
+              );
+            } else if (!inline) {
+              return (
+                <SyntaxHighlighter
+                  children={String(children).replace(/\n$/, "")}
+                  style={atomDark}
+                  wrapLines={true}
+                  showLineNumbers={true}
+                  useInlineStyles={true}
+                  lineProps={applyHighlights}
+                  language={"text"}
+                  PreTag="div"
+                  {...props}
+                />
+              );
+            } else {
+              return (
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              );
+            }
           },
         }}
       />
     );
-  }, [singlePost]);
+  }, [singlePost, copied]);
 
   return singlePost ? (
     <div className={style["preview-body"]}>
@@ -87,7 +153,11 @@ function PostPreview() {
         </Link>
       </div>
 
-      <h2 className={style[singlePost.draft ? "post-title-draft" : "post-title"]}>{singlePost.title}</h2>
+      <h2
+        className={style[singlePost.draft ? "post-title-draft" : "post-title"]}
+      >
+        {singlePost.title}
+      </h2>
       <div className={style["post-info-first-row"]}>
         <p>
           <span className={style["grey-label"]}>

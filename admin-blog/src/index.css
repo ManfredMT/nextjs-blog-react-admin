@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+[data="highlight"] {
+  background-color: black;
+  width: max-content;
+  border: 1px solid red;
+
+}

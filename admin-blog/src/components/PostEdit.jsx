@@ -68,7 +68,7 @@ function getAllAuthors(posts) {
   return AllAuthors.sort();
 }
 
-function getFormDate(values) {
+function getUFormDate(values, currentPost) {
   console.log("values: ", values);
   const postFormData = new FormData();
   postFormData.append("title", values.post.title);
@@ -86,12 +86,21 @@ function getFormDate(values) {
   }
   if (values.post.summary) {
     postFormData.append("summary", values.post.summary);
+  } else if (currentPost.summary !== "" && values.post.summary === "") {
+    postFormData.append("summary", "");
   }
   if (values.post.canonicalUrl) {
     postFormData.append("canonicalUrl", values.post.canonicalUrl);
+  } else if (
+    currentPost.canonicalUrl !== "" &&
+    values.post.canonicalUrl === ""
+  ) {
+    postFormData.append("canonicalUrl", "");
   }
   if (values.post.content) {
     postFormData.append("content", values.post.content);
+  } else if (currentPost.content !== "" && values.post.content === "") {
+    postFormData.append("content", "");
   }
 
   return postFormData;
@@ -181,15 +190,12 @@ const PostEdit = () => {
     }
   }, [allPosts, navigate, searchParams, setSearchParams]);
 
-  const handleUpdatePost = (e) => {
-    const formValues = formRef.current.getFieldsValue(true);
-    const postFormData = getFormDate(formValues);
+  const onFinishUpdate = (values) => {
+    const formValues = values;
+    const postFormData = getUFormDate(formValues, currentPost);
     postFormData.append("postId", searchParams.get("edit"));
-    //console.log("^^^^^^^^^^^^^^^^formDate: ", postFormData.get("tags"));
     dispatch(updatePost(postFormData));
   };
-
-  
 
   return currentPost ? (
     <div className={style["new-form-body"]}>
@@ -217,6 +223,7 @@ const PostEdit = () => {
         layout={isTabletOrMobile ? "vertical" : null}
         name="nest-messages"
         validateMessages={validateMessages}
+        onFinish={onFinishUpdate}
       >
         <Form.Item
           name={["post", "title"]}
@@ -228,7 +235,13 @@ const PostEdit = () => {
           ]}
           initialValue={currentPost ? currentPost.title : null}
         >
-          <Input placeholder={isTabletOrMobile ? "文章标题(必填)" : null} />
+          <Input
+            onPressEnter={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            placeholder={isTabletOrMobile ? "文章标题(必填)" : null}
+          />
         </Form.Item>
 
         <Form.Item
@@ -319,7 +332,13 @@ const PostEdit = () => {
           ]}
           tooltip="表示该博客唯一的标准规范URL,用于搜索引擎优化"
         >
-          <Input placeholder={isTabletOrMobile ? "标准链接(可选)" : null} />
+          <Input
+            onPressEnter={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            placeholder={isTabletOrMobile ? "标准链接(可选)" : null}
+          />
         </Form.Item>
 
         <Form.Item
@@ -328,7 +347,10 @@ const PostEdit = () => {
           label={isTabletOrMobile ? null : "文章内容"}
           tooltip="MarkDown编辑器, 支持GFM、Katex公式、脚注、代码高亮"
         >
-          <MarkDownEditor value={blogContent} onChange={onChangeContent} />
+          <MarkDownEditor
+          //value={blogContent}
+          //onChange={onChangeContent}
+          />
         </Form.Item>
 
         <Form.Item
@@ -343,7 +365,7 @@ const PostEdit = () => {
             className={style["submit-button"]}
             type="primary"
             htmlType="submit"
-            onClick={handleUpdatePost}
+            //onClick={handleUpdatePost}
           >
             确认修改
           </Button>

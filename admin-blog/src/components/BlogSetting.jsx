@@ -126,7 +126,7 @@ function BlogSetting() {
     }
     return e?.fileList;
   };
-  
+
   const [imageUrl, setImageUrl] = useState();
   const isImgValid = useRef(false);
 
@@ -165,7 +165,6 @@ function BlogSetting() {
     listType: "picture-card",
     showUploadList: false,
     onChange: handleChange,
-
   };
 
   return profile[0] !== undefined ? (
@@ -235,7 +234,6 @@ function BlogSetting() {
               ) : (
                 uploadButton
               )}
-             
             </Upload>
           </Form.Item>
         </Form.Item>

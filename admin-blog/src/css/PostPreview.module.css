@@ -1,12 +1,12 @@
 .preview-body {
     background-color: transparent;
-    margin:0 2rem;
+    margin: 0 2rem;
     border-radius: 0.5rem;
 }
 
 .post-title {
     text-align: center;
-    margin:2.5rem 0 1rem 0;
+    margin: 2.5rem 0 1rem 0;
     font-weight: 600;
     font-size: 2rem;
 }
@@ -32,8 +32,9 @@
 .v-divider {
     display: none;
 }
+
 .grey-label {
-    color:grey;
+    color: grey;
     font-size: 0.8rem;
 }
 
@@ -44,10 +45,11 @@
 
 .post-category-label {
     color: grey;
-    font-size:0.8rem;
+    font-size: 0.8rem;
 }
+
 .post-category {
-    text-decoration:underline
+    text-decoration: underline
 }
 
 .post-tag-box {
@@ -58,18 +60,19 @@
     margin-bottom: 2rem;
 }
 
-.post-tag-box > *+* {
-    margin-left:1rem
+.post-tag-box>*+* {
+    margin-left: 1rem
 }
 
 .tag-box {
     background-color: rgb(231, 231, 231);
-    padding:0.25rem 0.75rem;
+    padding: 0.25rem 0.75rem;
     border-radius: 1rem;
-    
+
 }
 
-.post-info-first-row,.post-category-box {
+.post-info-first-row,
+.post-category-box {
     line-height: 0.7rem;
 }
 
@@ -77,13 +80,57 @@
     font-style: italic;
     color: rgb(94, 94, 94);
     text-align: center;
-    margin:2.5rem 0 1rem 0;
+    margin: 2.5rem 0 1rem 0;
     font-size: 2rem;
 }
 
 .post-title-draft::before {
     content: "(草稿)";
 }
+
+.code-header {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    align-items: center;
+}
+
+.code-language {
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+.preview-post-body pre {
+    background-color: #ffffff;
+}
+
+
+
+.copy-button {
+    display: none;
+}
+
+
+
+.code-box:hover .copy-button {
+    display: flex;
+    cursor: pointer;
+    padding: 0.25rem 1.5rem;
+    border-radius: 0.5rem;
+}
+
+
+.copy-button:hover {
+    background-color: #e7e6e6;
+}
+
+.copied {
+    padding: 0.25rem 1.5rem;
+    border-radius: 0.5rem;
+}
+
+
 
 
 @media (min-width:1224px) {
@@ -104,20 +151,23 @@
         margin-right: 8rem;
         padding-top: 1rem;
     }
+
     .post-info-first-row {
         display: flex;
         justify-content: center;
         flex-direction: row;
         align-items: baseline;
     }
-    .post-info-first-row > *+* {
+
+    .post-info-first-row>*+* {
         margin-left: 0.5rem;
     }
+
     .grey-label {
-        color:grey;
+        color: grey;
         font-size: 0.8rem;
     }
-    
+
     .v-divider {
         color: lightgray;
         display: flex;

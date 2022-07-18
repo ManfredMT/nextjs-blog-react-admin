@@ -56,7 +56,7 @@ function getAllAuthors(posts) {
   return AllAuthors.sort();
 }
 
-function getFormDate(values) {
+function getFormDate(values, blogContent) {
   const postFormData = new FormData();
   postFormData.append("title", values.post.title);
   postFormData.append("category", values.post.category);
@@ -76,15 +76,19 @@ function getFormDate(values) {
   if (values.post.canonicalUrl) {
     postFormData.append("canonicalUrl", values.post.canonicalUrl);
   }
-  if (values.post.content) {
-    postFormData.append("content", values.post.content);
+  if (blogContent) {
+    postFormData.append("content", blogContent);
   }
-  
+
   return postFormData;
 }
 
 const NewPost = () => {
-  const [blogContent, setBlogContent] = useState("");
+  const mdeId = "blog";
+
+  const autosavedValue = localStorage.getItem(`smde_${mdeId}`) || "";
+  const [blogContent, setBlogContent] = useState(autosavedValue);
+
   const onChangeContent = (value) => {
     setBlogContent(value);
   };
@@ -146,25 +150,24 @@ const NewPost = () => {
 
   const formRef = useRef(null);
 
-  
-
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
+  const isDraft = useRef(true);
   const onClickPublish = (e) => {
-    console.log("发布文章: ", formRef.current.getFieldsValue(true));
-    const formValues = formRef.current.getFieldsValue(true);
-    const postFormData = getFormDate(formValues);
-    postFormData.append("draft", false);
-    dispatch(createPost(postFormData));
+    isDraft.current = false;
   };
 
   const handleSaveDraft = (e) => {
-    const formValues = formRef.current.getFieldsValue(true);
-    const postFormData = getFormDate(formValues);
-    postFormData.append("draft", true);
-    dispatch(createPost(postFormData));
+    isDraft.current = true;
   };
 
+  const onFinishNewPost = (values) => {
+    console.log("onFinishNewPost: ", values);
+    const formValues = values;
+    const postFormData = getFormDate(formValues, blogContent);
+    postFormData.append("draft", isDraft.current);
+    dispatch(createPost(postFormData));
+  };
 
   return (
     <Form
@@ -187,6 +190,7 @@ const NewPost = () => {
       layout={isTabletOrMobile ? "vertical" : null}
       name="nest-messages"
       validateMessages={validateMessages}
+      onFinish={onFinishNewPost}
     >
       <Form.Item
         name={["post", "title"]}
@@ -197,7 +201,13 @@ const NewPost = () => {
           },
         ]}
       >
-        <Input placeholder={isTabletOrMobile ? "文章标题(必填)" : null} />
+        <Input
+          onPressEnter={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          placeholder={isTabletOrMobile ? "文章标题(必填)" : null}
+        />
       </Form.Item>
 
       <Form.Item
@@ -262,16 +272,27 @@ const NewPost = () => {
         ]}
         tooltip="表示该博客唯一的标准规范URL,用于搜索引擎优化"
       >
-        <Input placeholder={isTabletOrMobile ? "标准链接(可选)" : null} />
+        <Input
+          onPressEnter={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
+          placeholder={isTabletOrMobile ? "标准链接(可选)" : null}
+        />
       </Form.Item>
 
-      
-
       <Form.Item
-        name={["post", "content"]}
+        //name={["post", "content"]}
         label={isTabletOrMobile ? null : "文章内容"}
+        //initialValue={autosavedValue}
       >
-        <MarkDownEditor value={blogContent} onChange={onChangeContent} />
+        <MarkDownEditor
+          id={mdeId}
+          autoSave={true}
+          value={blogContent}
+          //value={autosavedValue}
+          onChange={onChangeContent}
+        />
       </Form.Item>
 
       <Form.Item
