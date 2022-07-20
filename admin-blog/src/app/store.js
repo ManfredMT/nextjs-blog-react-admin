@@ -3,6 +3,7 @@ import authReducer from '../features/auth/authSlice'
 import linkReducer from '../features/links/linkSlice'
 import postReducer from '../features/posts/postSlice'
 import profileReducer from '../features/profile/profileSlice'
+import commentReducer from '../features/comments/commentSlice'
 
 
 export const store = configureStore({
@@ -10,7 +11,8 @@ export const store = configureStore({
     auth: authReducer,
     links:linkReducer,
     posts:postReducer,
-    profile:profileReducer
+    profile:profileReducer,
+    comments:commentReducer
   },
 });
 

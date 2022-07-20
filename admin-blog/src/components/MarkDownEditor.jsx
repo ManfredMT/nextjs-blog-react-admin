@@ -89,17 +89,20 @@ function MarkDownEditor({
               );
             } else if (!inline) {
               return (
-                <SyntaxHighlighter
-                  children={String(children).replace(/\n$/, "")}
-                  style={atomDark}
-                  wrapLines={true}// span {display:block}
-                  showLineNumbers={true}
-                  useInlineStyles={true}
-                  lineProps={applyHighlights}
-                  language={"text"}
-                  PreTag="div"
-                  {...props}
-                />
+                <div className={style["code-box"]}>              
+                  <SyntaxHighlighter
+                    children={String(children).replace(/\n$/, "")}
+                    style={atomDark}
+                    className={style["syntax-highlighter"]}
+                    wrapLines={true}
+                    showLineNumbers={true}
+                    useInlineStyles={true}
+                    //lineProps={applyHighlights}
+                    language={'text'}
+                    PreTag="div"
+                    {...props}
+                  />
+                </div>
               );
             } else {
               return (

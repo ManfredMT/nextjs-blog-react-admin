@@ -29,6 +29,8 @@
     margin-top: 0rem;
 }
 
+
+
 @media (min-width:1224px) {
     .recent-comment-box {
         display: grid;
@@ -91,5 +93,13 @@
     
     .divider {
         margin-top: 0rem;
+    }
+
+    .delete-button {
+        display: none;
+    }
+
+    .card-box:hover .delete-button {
+        display: flex;
     }
 }

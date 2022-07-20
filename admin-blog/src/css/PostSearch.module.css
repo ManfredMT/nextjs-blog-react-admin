@@ -135,6 +135,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap:0.5rem;
+    
 }
 
 .preview-button,
@@ -144,6 +145,7 @@
     border: none;
     border-radius: 1rem;
     color: white;
+    
     background-image: linear-gradient(to right, #006ee3 0%, #0090e9 51%, #006de1 100%);
     background-size: 200% auto;
     box-shadow: 0 0 20px #eee;

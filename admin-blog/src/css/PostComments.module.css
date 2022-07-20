@@ -154,4 +154,12 @@
         margin: 0;
         display: inherit;
     }
+
+    .delete-comment-button {
+        display: none;
+    }
+
+    .comment-wrap:hover .delete-comment-button {
+        display:flex
+    }
 }

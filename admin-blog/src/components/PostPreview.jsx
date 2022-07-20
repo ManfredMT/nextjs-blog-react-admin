@@ -109,17 +109,26 @@ function PostPreview() {
               );
             } else if (!inline) {
               return (
-                <SyntaxHighlighter
-                  children={String(children).replace(/\n$/, "")}
-                  style={atomDark}
-                  wrapLines={true}
-                  showLineNumbers={true}
-                  useInlineStyles={true}
-                  lineProps={applyHighlights}
-                  language={"text"}
-                  PreTag="div"
-                  {...props}
-                />
+                <div className={style["code-box"]}>
+                  <div className={style["code-header"]}>
+                 <CopyButton 
+                 classCopied={style["copied"]}
+                 classCopy={style["copy-button"]}
+                 text={String(children)}  />
+                </div>
+                  <SyntaxHighlighter
+                    children={String(children).replace(/\n$/, "")}
+                    style={atomDark}
+                    className={style["syntax-highlighter"]}
+                    wrapLines={true}
+                    showLineNumbers={true}
+                    useInlineStyles={true}
+                    lineProps={applyHighlights}
+                    language={'text'}
+                    PreTag="div"
+                    {...props}
+                  />
+                </div>
               );
             } else {
               return (

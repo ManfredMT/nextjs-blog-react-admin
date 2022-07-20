@@ -68,7 +68,7 @@
     background-color: rgb(231, 231, 231);
     padding: 0.25rem 0.75rem;
     border-radius: 1rem;
-
+    margin-bottom: 0.5rem;
 }
 
 .post-info-first-row,
@@ -89,36 +89,27 @@
 }
 
 .preview-post-body pre {
-    background-color: #ffffff;
+    background-color: #f0f2f5;
+   
 }
 
 .code-header {
     display: flex;
     justify-content: right;
-    margin-right: 1.5rem;
+    margin-right: 0.3rem;
     height: 2rem;
     position: relative;
-    top: 3rem;
+    top: 2.5rem;
     z-index: 100;
     
 }
 
 .code-header .copy-button {
-    display: none;
     cursor: pointer;
     background-color: transparent;
-    width: 1.5rem;
-    height: 1.5rem;
-
-}
-
-
-.code-box:hover .copy-button {
-    display: flex;
-}
-
-.copy-button:hover {
-    filter: brightness(0) saturate(100%) invert(69%) sepia(63%) saturate(523%) hue-rotate(179deg) brightness(101%) contrast(104%);
+    width: 1rem;
+    height: 1rem;
+    filter: brightness(0.65);
 }
 
 .code-header .copied {
@@ -128,7 +119,13 @@
     filter: brightness(0) saturate(100%) invert(86%) sepia(32%) saturate(714%) hue-rotate(68deg) brightness(99%) contrast(97%);
 }
 
-
+@media (max-width:1224px) {
+    .preview-post-body pre {
+        
+        font-size: 0.6rem;
+    }
+    
+}
 
 
 @media (min-width:1224px) {
@@ -169,5 +166,33 @@
     .v-divider {
         color: lightgray;
         display: flex;
+    }
+
+    .preview-post-body pre {
+        background-color: #ffffff;
+    }
+
+    
+
+    .code-header .copy-button {
+        display: none;
+        cursor: pointer;
+        background-color: transparent;
+        width: 1.5rem;
+        height: 1.5rem;
+        filter: brightness(0.9);
+    }
+
+    .copy-button:hover {
+        filter: brightness(0) saturate(100%) invert(69%) sepia(63%) saturate(523%) hue-rotate(179deg) brightness(101%) contrast(104%);
+    }
+    
+    .code-box:hover .copy-button {
+        display: flex;
+    }
+
+    .code-header {
+        margin-right: 1.5rem;
+        top: 3rem; 
     }
 }

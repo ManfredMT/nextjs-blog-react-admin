@@ -22,6 +22,13 @@ import {
 } from "antd";
 import { deletePost, getPosts, reset } from "../features/posts/postSlice";
 
+import HCenterSpin from "./HCenterSpin";
+import usePrevious from "../hooks/usePrevious";
+import {
+  reset as resetComments,
+  getComments,
+} from "../features/comments/commentSlice";
+
 // let AllPosts = [];
 // for (let j = 0; j <= 56; j++) {
 //   const fakeTags = [...Array(5).keys()].map(
@@ -65,18 +72,6 @@ function getAllCategories(posts) {
     }
   });
   return AllCategories.sort();
-}
-
-function getAllAuthors(posts) {
-  let AllAuthors = [];
-  posts.forEach(({ authors }) => {
-    authors.forEach((author) => {
-      if (AllAuthors.includes(author) === false) {
-        AllAuthors.push(author);
-      }
-    });
-  });
-  return AllAuthors.sort();
 }
 
 function getMonthArchive(posts) {
@@ -131,64 +126,54 @@ function getDayArchive(posts) {
 // const AllTags = getAllTags(AllPosts);
 // const AllCategories = getAllCategories(AllPosts);
 
-const comments = [
-  {
-    source: "post 1",
-    time: new Date().setDate(new Date().getDate() - 1),
-    commentContent: "comment 1",
-    author: "Tom",
-  },
-  {
-    source: "post 13",
-    time: new Date().setDate(new Date().getDate() - 2),
-    commentContent: "comment 2",
-    author: "Tom",
-  },
-  {
-    source: "post 1",
-    time: new Date().setDate(new Date().getDate() - 3),
-    commentContent: "comment 3",
-    author: "Tom",
-  },
-  {
-    source: "post 1",
-    time: new Date().setDate(new Date().getDate() - 4),
-    commentContent:
-      "An image cropper for Ant Design Upload. To prevent overwriting the custom styles to antd, antd-img-crop does not import the style files of components. Therefore, if your project configured babel-plugin-import, and not use Modal or Slider, you need to import the styles yourself:",
-    author: "Mark",
-  },
-  {
-    source: "post 12",
-    time: new Date().setDate(new Date().getDate() - 5),
-    commentContent: "comment 5",
-    author: "Mark",
-  },
-  {
-    source: "post 1",
-    time: new Date().setDate(new Date().getDate() - 6),
-    commentContent: "comment 6",
-    author: "Mark",
-  },
-  {
-    source: "post 11",
-    time: new Date().setDate(new Date().getDate() - 7),
-    commentContent: "comment 7",
-    author: "Mark",
-  },
-];
 
-for (let i = 0; i < comments.length; i++) {
-  const fakeDate = new Date();
-  fakeDate.setDate(fakeDate.getDate() - (i + 1));
-  comments[i].time = fakeDate;
-}
 
 function BlogDashboard() {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const dispatch = useDispatch();
+
+  const {
+    comments: commentData,
+    isSuccess: isSuccessCom,
+    isError: isErrorCom,
+    message: messageCom,
+  } = useSelector((state) => state.comments);
+
+  useEffect(() => {
+    dispatch(getComments());
+    return () => {
+      dispatch(resetComments());
+    };
+  }, []);
+
+  let isErrorResetCom = useRef(false);
+  useEffect(() => {
+    if (!isErrorCom) {
+      isErrorResetCom.current = true;
+    }
+    if (isErrorResetCom.current && isErrorCom) {
+      antMessage.error(messageCom);
+    }
+  }, [isErrorCom, messageCom]);
+
+  const comments = useMemo(
+    () =>
+      commentData.map((c) => {
+        return {
+          id: c._id,
+          source: c.source,
+          time: new Date(c.createdAt),
+          author: c.username,
+          commentContent: c.comment,
+        };
+      }),
+    [commentData]
+  );
+
   const { posts, isSuccess, isError, isLoading, message } = useSelector(
     (state) => state.posts
   );
+
   useEffect(() => {
     dispatch(getPosts());
     return () => {
@@ -260,7 +245,10 @@ function BlogDashboard() {
     }
   };
 
-  return (
+  const preIsSuccess = usePrevious(isSuccess);
+  const preIsSucCom = usePrevious(isSuccessCom);
+
+  return isSuccess && preIsSuccess && isSuccessCom && preIsSucCom ? (
     <div className={style["dashboard-body"]}>
       <div className={style["first-row"]}>
         <div className={style["number-card-box"]}>
@@ -317,13 +305,14 @@ function BlogDashboard() {
           <p className={style["card-title"]}>最新文章:</p>
           <hr />
           <ul>
-            {allPosts.slice(0, 5)
+            {allPosts
+              .slice(0, 5)
               .sort((a, b) => b.date - a.date)
               .map((post, i) => {
                 //console.log(post.date);
                 return (
                   <li key={i} className={style["recent-post-list"]}>
-                    <Link to={`/manage/post/all-posts?edit=${post.id}`}>
+                    <Link to={`/manage/post/all-posts?preview=${post.id}`}>
                       <span>{post.title}</span>
                       <span className={style["post-date"]}>
                         {post.date.toLocaleDateString()}
@@ -362,6 +351,8 @@ function BlogDashboard() {
         </div>
       </div>
     </div>
+  ) : (
+    <HCenterSpin />
   );
 }
 

@@ -25,7 +25,14 @@ app.use(cors());
 
 const limiter = rateLimit({
 	windowMs: 10 * 60 * 1000, // 15 minutes
-	max: 5000, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+	max: 5000, // Limit each IP to 100 requests per `window` 
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
+
+const limiterComment = rateLimit({
+	windowMs: 20 * 60 * 1000, // 15 minutes
+	max: 60, // Limit each IP to 100 requests per `window` 
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 })
@@ -50,7 +57,7 @@ app.use("/api/users", limiter, require("./routes/userRoutes"));
 app.use("/api/links", require("./routes/linkRoutes"));
 app.use("/api/posts",require("./routes/postRoutes"));
 app.use("/api/profile", require("./routes/profileRoutes"));
-app.use("/api/comments", require("./routes/commentRoutes"));
+app.use("/api/comments",limiterComment, require("./routes/commentRoutes"));
 //app.use("/api/upload", require("./routes/uploadRoutes"));
 
 app.use(errorHandler);

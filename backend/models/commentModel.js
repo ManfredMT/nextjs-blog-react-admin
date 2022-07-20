@@ -11,6 +11,10 @@ const commentSchema = mongoose.Schema({
         required:true,
         ref: 'Post'
     },
+    source:{
+        type:String,
+        required:true,
+    },
     username: {
         type: String,
         required: [true, 'Please add a username to the comment']

@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 
 const Post = require("../models/postModel");
+const Comment = require("../models/commentModel");
 
 // @desc   Get Posts
 // @route  GET /api/posts
@@ -147,7 +148,9 @@ const deletePost = asyncHandler(async (req, res) => {
     throw new Error("User not authorized");
   }
 
+  await Comment.deleteMany({post: req.params.id});
   await post.remove();
+
 
   res.status(200).json({ id: req.params.id });
 });

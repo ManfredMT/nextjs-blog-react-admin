@@ -7,7 +7,9 @@ const Post = require("../models/postModel");
 // @route  GET /api/comments/:postId
 // @access Public
 const getComments = asyncHandler(async (req, res) => {
-  const comments = await Comment.find({ post: req.params.postId }).select("-email -adminUser");//with unpublished comments
+  const comments = await Comment.find({ post: req.params.postId }).select(
+    "-email -adminUser"
+  ); //with unpublished comments
   res.status(200).json(comments);
 });
 
@@ -15,9 +17,9 @@ const getComments = asyncHandler(async (req, res) => {
 // @route  GET /api/comments/all
 // @access Private
 const getAllComments = asyncHandler(async (req, res) => {
-  const comments = await Comment.find({adminUser: req.user.id});
+  const comments = await Comment.find({ adminUser: req.user.id });
   res.status(200).json(comments);
-})
+});
 
 // @desc   Set comments
 // @route  POST /api/comments
@@ -42,7 +44,7 @@ const setComments = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.body.postId);
 
   const userExists = await Comment.findOne({ username: req.body.username });
-  
+
   if (userExists && userExists.email !== req.body.email) {
     res.status(400);
     throw new Error("User already exists");
@@ -50,6 +52,7 @@ const setComments = asyncHandler(async (req, res) => {
   try {
     const comment = await Comment.create({
       adminUser: post.user,
+      source: post.title,
       post: req.body.postId,
       username: req.body.username,
       email: req.body.email,
@@ -82,7 +85,7 @@ const updateComment = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("User not founded");
   }
-  
+
   if (comment.adminUser.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
@@ -93,8 +96,6 @@ const updateComment = asyncHandler(async (req, res) => {
     { new: true }
   );
   res.status(200).json(updatedComment);
-
-  
 });
 
 // @desc   Delete comments
@@ -114,8 +115,6 @@ const deleteComment = asyncHandler(async (req, res) => {
     throw new Error("User not founded");
   }
 
-  
-  
   if (comment.adminUser.toString() !== req.user.id) {
     res.status(401);
     throw new Error("User not authorized");
