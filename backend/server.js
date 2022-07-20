@@ -50,6 +50,7 @@ app.use("/api/users", limiter, require("./routes/userRoutes"));
 app.use("/api/links", require("./routes/linkRoutes"));
 app.use("/api/posts",require("./routes/postRoutes"));
 app.use("/api/profile", require("./routes/profileRoutes"));
+app.use("/api/comments", require("./routes/commentRoutes"));
 //app.use("/api/upload", require("./routes/uploadRoutes"));
 
 app.use(errorHandler);

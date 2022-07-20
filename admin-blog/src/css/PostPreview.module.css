@@ -88,46 +88,44 @@
     content: "(草稿)";
 }
 
-.code-header {
-    display: flex;
-    justify-content: space-between;
-    margin-left: 1rem;
-    margin-right: 1rem;
-    align-items: center;
-}
-
-.code-language {
-    font-size: 1.2rem;
-    font-weight: 600;
-}
-
 .preview-post-body pre {
     background-color: #ffffff;
 }
 
-
-
-.copy-button {
-    display: none;
+.code-header {
+    display: flex;
+    justify-content: right;
+    margin-right: 1.5rem;
+    height: 2rem;
+    position: relative;
+    top: 3rem;
+    z-index: 100;
+    
 }
 
+.code-header .copy-button {
+    display: none;
+    cursor: pointer;
+    background-color: transparent;
+    width: 1.5rem;
+    height: 1.5rem;
+
+}
 
 
 .code-box:hover .copy-button {
     display: flex;
-    cursor: pointer;
-    padding: 0.25rem 1.5rem;
-    border-radius: 0.5rem;
 }
-
 
 .copy-button:hover {
-    background-color: #e7e6e6;
+    filter: brightness(0) saturate(100%) invert(69%) sepia(63%) saturate(523%) hue-rotate(179deg) brightness(101%) contrast(104%);
 }
 
-.copied {
-    padding: 0.25rem 1.5rem;
-    border-radius: 0.5rem;
+.code-header .copied {
+    background-color: transparent;
+    width: 1.5rem;
+    height: 1.5rem;
+    filter: brightness(0) saturate(100%) invert(86%) sepia(32%) saturate(714%) hue-rotate(68deg) brightness(99%) contrast(97%);
 }
 
 

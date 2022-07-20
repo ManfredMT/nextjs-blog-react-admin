@@ -23,6 +23,7 @@ import { getSinglePost, reset } from "../features/posts/postSlice";
 import HCenterSpin from "./HCenterSpin";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import rangeParser from "parse-numeric-range";
+import CopyButton from "./CopyButton";
 import copySvg from "./images/copy-svgrepo-com.svg";
 
 function PostPreview() {
@@ -86,24 +87,12 @@ function PostPreview() {
             if (!inline && match) {
               return (
                 <div className={style["code-box"]}>
-                  {/* <div className={style["code-header"]}>
-                  <span className={style["code-language"]}>{match[1]}</span>
-                  <CopyToClipboard
-                    text={String(children)}
-                    onCopy={(text, result) => {
-                      console.log("copy text: ", text, result);
-                      if (result) {
-                        setCopied(true);
-                      }
-                    }}
-                  >
-                    {copied ? (
-                      <span className={style["copied"]}>复制成功</span>
-                    ) : (
-                      <span className={style["copy-button"]}>复制</span>
-                    )}
-                  </CopyToClipboard>
-                </div> */}
+                  <div className={style["code-header"]}>
+                 <CopyButton 
+                 classCopied={style["copied"]}
+                 classCopy={style["copy-button"]}
+                 text={String(children)}  />
+                </div>
                   <SyntaxHighlighter
                     children={String(children).replace(/\n$/, "")}
                     style={atomDark}
