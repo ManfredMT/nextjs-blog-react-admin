@@ -126,6 +126,8 @@ function PostComments() {
     }
   }, [isErrorPost, messagePost]);
 
+
+
   const allPosts = useMemo(
     () =>
       posts.map((post) => {
@@ -253,16 +255,18 @@ function PostComments() {
     commentsId.current = [cId];
   };
 
+  //isSuccess为true时,currentPageComments数据为得到,需等待下一帧.
   const preIsSuccess = usePrevious(isSuccess);
   const preIsSucPost = usePrevious(isSuccessPost);
-  // console.log("isSuccess: ", isSuccess);
-  // console.log("isSuccessPost: ", isSuccessPost);
-  // console.log("preIsSuccess: ", preIsSuccess);
-  // console.log("preIsSucPost: ", preIsSucPost);
-  // console.log("allPost: ", allPosts);
-  // console.log("allComments: ", allComments);
+  console.log("isSuccess: ", isSuccess);
+  console.log("isSuccessPost: ", isSuccessPost);
+  console.log("preIsSuccess: ", preIsSuccess);
+  console.log("preIsSucPost: ", preIsSucPost);
+  console.log("allPost: ", allPosts);
+  console.log("allComments: ", allComments);
+  console.log("paginationTotal: ",paginationTotal)
 
-  return preIsSuccess && isSuccess && preIsSucPost && isSuccessPost ? (
+  return preIsSuccess && isSuccess && isSuccessPost ? (
     <>
       <div className={style["post-comments-box"]}>
         <div className={style["comments-header"]}>

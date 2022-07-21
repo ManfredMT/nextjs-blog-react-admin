@@ -108,10 +108,7 @@ function getUFormDate(values, currentPost) {
 
 const PostEdit = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [blogContent, setBlogContent] = useState("Initial value");
-  const onChangeContent = (value) => {
-    setBlogContent(value);
-  };
+  
 
   const formRef = useRef(null);
 

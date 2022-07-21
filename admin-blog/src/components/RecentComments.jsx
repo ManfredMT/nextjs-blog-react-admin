@@ -108,9 +108,13 @@ function RecentComments() {
     setIsModalVisible(true);
   };
 
-  const preIsSuccess = usePrevious(isSuccess);
 
-  return preIsSuccess && isSuccess ? (
+  const preIsSuccess = usePrevious(isSuccess);
+  console.log("isSuccess: ", isSuccess);
+  console.log("preIsSuccess: ", preIsSuccess);
+  console.log("allComments: ", allComments);
+
+  return isSuccess ? (
     <>
       <div className={style["recent-comment-box"]}>
         {allComments.map(

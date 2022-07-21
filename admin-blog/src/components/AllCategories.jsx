@@ -126,11 +126,12 @@ function AllCategories() {
 
   const originData = getCategoryCount(allPosts);
 
-  useEffect(() => {
-    setData(originData);
-  }, [allPosts]);
+  // useEffect(() => {
+  //   setData(originData);
+  // }, [allPosts]);
 
-  const [data, setData] = useState(originData);
+  // const [data, setData] = useState(originData);
+  const data = useMemo(()=>originData,[originData]);
 
   const [editingKey, setEditingKey] = useState("");
 
@@ -381,8 +382,15 @@ function AllCategories() {
     };
   });
   const preIsSuccess = usePrevious(isSuccess);
+  // console.log("isSuccess: ", isSuccess);
+  // console.log("preIsSuccess: ", preIsSuccess);
+  // console.log("allPosts: ",allPosts);
+  // console.log("originData: ",originData);
+  // console.log("data: ",data)
 
-  return preIsSuccess && isSuccess ? (
+
+
+  return isSuccess ? (
     <Form form={form} component={false}>
       <Table
         className={style["item-table"]}

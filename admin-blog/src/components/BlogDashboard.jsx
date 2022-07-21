@@ -119,13 +119,6 @@ function getDayArchive(posts) {
   return dayArchive;
 }
 
-// const monthArchive = getMonthArchive(AllPosts);
-
-// const dayArchive = getDayArchive(AllPosts);
-
-// const AllTags = getAllTags(AllPosts);
-// const AllCategories = getAllCategories(AllPosts);
-
 
 
 function BlogDashboard() {
@@ -247,8 +240,15 @@ function BlogDashboard() {
 
   const preIsSuccess = usePrevious(isSuccess);
   const preIsSucCom = usePrevious(isSuccessCom);
+  console.log("isSuccess: ", isSuccess);
+  console.log("isSuccessCom: ", isSuccessCom);
+  console.log("preIsSuccess: ", preIsSuccess);
+  console.log("preIsSucCom: ", preIsSucCom);
+  console.log("allPosts: ",allPosts);
+  console.log("comments: ",comments)
 
-  return isSuccess && preIsSuccess && isSuccessCom && preIsSucCom ? (
+
+  return isSuccess&&isSuccessCom ? (
     <div className={style["dashboard-body"]}>
       <div className={style["first-row"]}>
         <div className={style["number-card-box"]}>

@@ -34,7 +34,7 @@ function PostPreview() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [copied, setCopied] = useState(false);
+  
 
   useEffect(() => {
     dispatch(getSinglePost(searchParams.get("preview")));
@@ -141,7 +141,7 @@ function PostPreview() {
         }}
       />
     );
-  }, [singlePost, copied]);
+  }, [singlePost]);
 
   return singlePost ? (
     <div className={style["preview-body"]}>

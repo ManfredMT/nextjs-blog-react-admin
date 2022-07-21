@@ -126,11 +126,7 @@ function AllTags() {
 
   const originData = getTagCount(allPosts);
 
-  useEffect(() => {
-    setData(originData);
-  }, [allPosts]);
-
-  const [data, setData] = useState(originData);
+  const data = useMemo(()=>originData,[originData])
   const [editingKey, setEditingKey] = useState("");
 
   const isEditing = (record) => record.key === editingKey;
@@ -378,7 +374,7 @@ function AllTags() {
   });
   const preIsSuccess = usePrevious(isSuccess);
 
-  return preIsSuccess && isSuccess ? (
+  return isSuccess ? (
     <Form form={form} component={false}>
       <Table
         className={style["item-table"]}
