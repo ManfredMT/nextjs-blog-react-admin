@@ -284,6 +284,7 @@ const NewPost = () => {
       <Form.Item
         //name={["post", "content"]}
         label={isTabletOrMobile ? null : "文章内容"}
+        tooltip="MarkDown编辑器, 支持GFM、Katex公式、脚注、代码高亮"
         //initialValue={autosavedValue}
       >
         <MarkDownEditor
