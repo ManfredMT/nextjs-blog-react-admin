@@ -149,6 +149,12 @@ hr {
   margin:0;
 }
 
+@media (max-width:1224px) {
+  .archive-card-body {
+    height: 20rem;
+  }
+}
+
 @media (min-width:1224px) {
   .dashboard-body {
     margin: 0 2rem;
@@ -171,7 +177,8 @@ hr {
   }
 
   .archive-card-body {
-    flex:1;
+    flex: 1;
+
   }
 
   /* .recent-post-body {
