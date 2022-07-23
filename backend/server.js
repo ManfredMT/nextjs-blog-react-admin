@@ -32,7 +32,7 @@ const limiter = rateLimit({
 
 const limiterComment = rateLimit({
 	windowMs: 20 * 60 * 1000, // 15 minutes
-	max: 60, // Limit each IP to 100 requests per `window` 
+	max: 500, // Limit each IP to 100 requests per `window` 
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 })

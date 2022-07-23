@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 
 const Link = require("../models/linkModel");
+const sharp = require('sharp');
 
 // @desc   Get links
 // @route  GET /api/links
@@ -38,13 +39,18 @@ const setLinks = asyncHandler(async (req, res) => {
     linkObj.description = req.body.description;
   }
   if (req.file) {
-    //linkObj.picture = req.body.picture;
-    console.log(
-      "picture and type: ",
-      req.file,
-      typeof req.file
-    );
-    linkObj.picture = req.file.buffer;
+    
+    // console.log(
+    //   "picture and type: ",
+    //   req.file,
+    //   typeof req.file
+    // );
+    const outputWebp = await sharp(req.file.buffer)
+        .resize(160,160)
+        .webp({quality:70})
+        .toBuffer();
+    //console.log("webp output: ",outputWebp);
+    linkObj.picture = outputWebp;
   }
   try {
     const link = await Link.create(linkObj);
@@ -78,7 +84,11 @@ const updateLink = asyncHandler(async (req, res) => {
   }
   let newLinkData = req.body;
   if(req.file) {
-    newLinkData.picture = req.file.buffer;
+    const outputWebp = await sharp(req.file.buffer)
+        .resize(160,160)
+        .webp({quality:70})
+        .toBuffer();
+    newLinkData.picture = outputWebp;
   }
   const updatedLink = await Link.findByIdAndUpdate(req.params.id, newLinkData, {
     new: true,
