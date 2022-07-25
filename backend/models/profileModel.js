@@ -8,7 +8,34 @@ const profileSchema = mongoose.Schema({
     },
     name:{
         type: String,
-        required: [true, 'Please add a name to the blog']
+        required: [true, 'Please add a title to the blog logo']
+    },
+    title:{
+        type: String,
+        required: [true, 'Please add a html title']
+    },
+    author:{
+        type:String,
+        required: [true, 'Please add a site author']
+    },
+    language:{
+        type:String,
+        required:true
+    },
+    siteUrl:{
+        type:String,
+        required:true
+    },
+    siteRepo:{
+        type:String,
+        required:true
+    },
+    locale:{
+        type:String,
+        required:true
+    },
+    keywords: {
+        type: [String],
     },
     email:{
         type: String,
@@ -30,7 +57,14 @@ const profileSchema = mongoose.Schema({
     },
     logo:{
         type: Buffer,
+    },
+    avatar:{
+        type: Buffer,
+    },
+    socialBanner:{
+        type: Buffer,
     }
+
 })
 
 module.exports = mongoose.model('Profile', profileSchema)

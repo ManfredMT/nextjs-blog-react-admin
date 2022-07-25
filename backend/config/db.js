@@ -44,7 +44,13 @@ const setDefaultProfile = async ()=>{
   if(!profileExists) {
     const profileObj = {
     user: userExists.id,
-    name: `${userName}的个人博客`
+    name: `${userName}的个人博客`,
+    title: `${userName}的个人网站`,
+    author: 'Doe',
+    language: 'zh-CN',
+    siteUrl: 'http://localhost:3000',
+    siteRepo: 'https://github.com',
+    locale: 'zh-CN',
   }
   try {
     await Profile.create(profileObj);

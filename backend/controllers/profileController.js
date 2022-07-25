@@ -30,9 +30,16 @@ const updateProfile = asyncHandler(async (req, res) => {
     throw new Error("User not authorized");
   }
   let newProfileData = req.body;
-  if (req.file) {
-    newProfileData.logo = req.file.buffer;
+  if (req.files['logo'][0]) {
+    newProfileData.logo = req.files['logo'][0].buffer;
   }
+  if (req.files['avatar'][0]) {
+    newProfileData.avatar = req.files['avatar'][0].buffer;
+  }
+  if (req.files['socialBanner'][0]) {
+    newProfileData.socialBanner = req.files['socialBanner'][0].buffer;
+  }
+  
   const updatedProfile = await Profile.findByIdAndUpdate(
     req.params.id,
     newProfileData,
@@ -41,6 +48,8 @@ const updateProfile = asyncHandler(async (req, res) => {
     }
   );
   updatedProfile.logo = undefined;
+  updatedProfile.avatar = undefined;
+  updatedProfile.socialBanner = undefined;
   res.status(200).json(updatedProfile);
 });
 
