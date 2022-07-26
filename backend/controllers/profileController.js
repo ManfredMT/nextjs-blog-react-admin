@@ -10,7 +10,6 @@ const getProfile = asyncHandler(async (req, res) => {
   res.status(200).json(profile);
 });
 
-
 // @desc   Update profile
 // @route  PUT /api/profile/:id
 // @access Private
@@ -30,16 +29,30 @@ const updateProfile = asyncHandler(async (req, res) => {
     throw new Error("User not authorized");
   }
   let newProfileData = req.body;
-  if (req.files['logo'][0]) {
-    newProfileData.logo = req.files['logo'][0].buffer;
+  //console.log('req.files: ',req.files);
+
+  if (req?.files?.logo && req?.files?.logo[0]) {
+    if (req?.files?.logo[0].size > 300000) {
+      res.status(400);
+      throw new Error("image is too large");
+    }
+    newProfileData.logo = req.files["logo"][0].buffer;
   }
-  if (req.files['avatar'][0]) {
-    newProfileData.avatar = req.files['avatar'][0].buffer;
+  if (req?.files?.avatar && req?.files?.avatar[0]) {
+    if (req?.files?.avatar[0].size > 300000) {
+      res.status(400);
+      throw new Error("image is too large");
+    }
+    newProfileData.avatar = req.files["avatar"][0].buffer;
   }
-  if (req.files['socialBanner'][0]) {
-    newProfileData.socialBanner = req.files['socialBanner'][0].buffer;
+  if (req?.files?.socialBanner && req?.files?.socialBanner[0]) {
+    if (req?.files?.socialBanner[0].size > 300000) {
+      res.status(400);
+      throw new Error("image is too large");
+    }
+    newProfileData.socialBanner = req.files["socialBanner"][0].buffer;
   }
-  
+
   const updatedProfile = await Profile.findByIdAndUpdate(
     req.params.id,
     newProfileData,
@@ -52,8 +65,6 @@ const updateProfile = asyncHandler(async (req, res) => {
   updatedProfile.socialBanner = undefined;
   res.status(200).json(updatedProfile);
 });
-
-
 
 module.exports = {
   getProfile,
