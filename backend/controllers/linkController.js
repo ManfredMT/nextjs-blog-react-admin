@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 
 const Link = require("../models/linkModel");
-const sharp = require('sharp');
+const sharp = require("sharp");
 
 // @desc   Get links
 // @route  GET /api/links
@@ -39,16 +39,22 @@ const setLinks = asyncHandler(async (req, res) => {
     linkObj.description = req.body.description;
   }
   if (req.file) {
-    
     // console.log(
     //   "picture and type: ",
     //   req.file,
     //   typeof req.file
     // );
+    if (
+      req.file.mimetype !== "image/jpeg" ||
+      req.file.mimetype !== "image/png"
+    ) {
+      res.status(400);
+      throw new Error("Image type error");
+    }
     const outputWebp = await sharp(req.file.buffer)
-        .resize(160,160)
-        .webp({quality:70})
-        .toBuffer();
+      .resize(160, 160)
+      .webp({ quality: 70 })
+      .toBuffer();
     //console.log("webp output: ",outputWebp);
     linkObj.picture = outputWebp;
   }
@@ -56,12 +62,10 @@ const setLinks = asyncHandler(async (req, res) => {
     const link = await Link.create(linkObj);
     link.picture = undefined;
     res.status(200).json(link);
-  }catch(error) {
+  } catch (error) {
     res.status(400);
     throw new Error(error);
   }
-
-  
 });
 
 // @desc   Update links
@@ -83,11 +87,18 @@ const updateLink = asyncHandler(async (req, res) => {
     throw new Error("User not authorized");
   }
   let newLinkData = req.body;
-  if(req.file) {
+  if (req.file) {
+    if (
+      req.file.mimetype !== "image/jpeg" ||
+      req.file.mimetype !== "image/png"
+    ) {
+      res.status(400);
+      throw new Error("Image type error");
+    }
     const outputWebp = await sharp(req.file.buffer)
-        .resize(160,160)
-        .webp({quality:70})
-        .toBuffer();
+      .resize(160, 160)
+      .webp({ quality: 70 })
+      .toBuffer();
     newLinkData.picture = outputWebp;
   }
   const updatedLink = await Link.findByIdAndUpdate(req.params.id, newLinkData, {

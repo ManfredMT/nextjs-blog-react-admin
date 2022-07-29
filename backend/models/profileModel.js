@@ -58,11 +58,20 @@ const profileSchema = mongoose.Schema({
     logo:{
         type: Buffer,
     },
+    logoType:{
+        type:String,
+    },
     avatar:{
         type: Buffer,
     },
+    avatarType:{
+        type:String,
+    },
     socialBanner:{
         type: Buffer,
+    },
+    socialBannerType:{
+        type:String,
     }
 
 })

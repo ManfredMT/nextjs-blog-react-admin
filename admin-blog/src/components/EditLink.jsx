@@ -165,7 +165,7 @@ const EditLink = () => {
       return [
         {
           uid: "-1",
-          name: "link_picture.png",
+          name: "友链图标",
           status: "done",
           url: imgUrl,
         },

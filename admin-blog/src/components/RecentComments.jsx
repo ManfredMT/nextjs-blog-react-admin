@@ -81,6 +81,7 @@ function RecentComments() {
           time: new Date(c.createdAt),
           commentContent: c.comment,
           author: c.username,
+          email:c.email,
         };
       }),
     [comments]
@@ -118,7 +119,7 @@ function RecentComments() {
     <>
       <div className={style["recent-comment-box"]}>
         {allComments.map(
-          ({ id, source, time, commentContent, author }, index) => {
+          ({ id, source, time, commentContent, author,email }, index) => {
             return (
               <Card
                 key={id}
@@ -128,15 +129,17 @@ function RecentComments() {
                   className={style["comment-box"]}
                   author={author}
                   avatar={
+                    <Tooltip title={email}>
                     <Avatar
                       style={{
                         color: "#457fca",
                         backgroundColor: "#d7e9ff",
                       }}
                       alt={author}
+                     
                     >
                       {author.charAt(0).toUpperCase()}
-                    </Avatar>
+                    </Avatar></Tooltip>
                   }
                   content={
                     <p className={style["comment-content"]}>{commentContent}</p>
