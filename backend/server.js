@@ -7,9 +7,7 @@ const { errorHandler } = require("./middleware/errorMiddleware");
 const cors = require("cors");
 const rateLimit = require('express-rate-limit');
 
-
 connectDB();
-
 
 //设置管理员默认账号
 setDefaultPasswd();
@@ -24,15 +22,15 @@ app.use(cors());
 
 
 const limiter = rateLimit({
-	windowMs: 10 * 60 * 1000, // 15 minutes
-	max: 5000, // Limit each IP to 100 requests per `window` 
+	windowMs: 10 * 60 * 1000, 
+	max: 5000, 
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 })
 
 const limiterComment = rateLimit({
-	windowMs: 20 * 60 * 1000, // 15 minutes
-	max: 500, // Limit each IP to 100 requests per `window` 
+	windowMs: 20 * 60 * 1000, // ms
+	max: 500, // Limit each IP to xx requests per `window` 
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 })
@@ -62,7 +60,15 @@ app.use("/api/comments",limiterComment, require("./routes/commentRoutes"));
 
 app.use(errorHandler);
 
-
+//Serving static image files
+const limiterStatic = rateLimit({
+	windowMs: 10 * 60 * 1000, // 1 minutes
+	max: 1000, // Limit each IP to 100 requests per `window` 
+	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+})
+const path = require('path')
+app.use('/api/image', limiterStatic, express.static(path.join(__dirname, 'uploads/image')));
 
 // app.listen(port, () => {
 //   console.log(`Server started on port ${port}`);

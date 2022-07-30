@@ -8,7 +8,8 @@ const {
 } = require('../controllers/linkController')
 const {protect}=require('../middleware/authMiddleware')
 const multer  = require('multer')
-const upload = multer()
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
 
 
 router.route('/').get(protect, getLinks).post(protect,upload.single('picture'), setLinks)

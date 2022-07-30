@@ -225,49 +225,16 @@ function BlogSetting() {
   };
 
   useEffect(() => {
+    console.log("profile: ", profile);
     if (profile[0]) {
       if (profile[0].logo) {
-        const imgArrayBuffer = new Uint8Array(profile[0].logo.data).buffer;
-        const blobOptions = profile[0]?.logoType
-          ? { type: profile[0].logoType }
-          : {};
-        const imgBlob = new Blob([imgArrayBuffer], blobOptions);
-        // const reader = new FileReader();
-        // reader.readAsDataURL(imgBlob);
-        // reader.onloadend = () => {
-        //   setImageUrl(reader.result);
-        // };
-        const imgUrl = URL.createObjectURL(imgBlob);
-        setImageUrl(imgUrl);
+        setImageUrl(profile[0].logo);
       }
       if (profile[0].avatar) {
-        const imgArrayBuffer = new Uint8Array(profile[0].avatar.data).buffer;
-        const blobOptions = profile[0]?.avatarType
-          ? { type: profile[0].avatarType }
-          : {};
-        const imgBlob = new Blob([imgArrayBuffer], blobOptions);
-        // const reader = new FileReader();
-        // reader.readAsDataURL(imgBlob);
-        // reader.onloadend = () => {
-        //   setImageUrl(reader.result);
-        // };
-        const imgUrl = URL.createObjectURL(imgBlob);
-        setImageAvatarUrl(imgUrl);
+        setImageAvatarUrl(profile[0].avatar);
       }
       if (profile[0].socialBanner) {
-        const imgArrayBuffer = new Uint8Array(profile[0].socialBanner.data)
-          .buffer;
-        const blobOptions = profile[0]?.socialBannerType
-          ? { type: profile[0].socialBannerType }
-          : {};
-        const imgBlob = new Blob([imgArrayBuffer], blobOptions);
-        // const reader = new FileReader();
-        // reader.readAsDataURL(imgBlob);
-        // reader.onloadend = () => {
-        //   setImageUrl(reader.result);
-        // };
-        const imgUrl = URL.createObjectURL(imgBlob);
-        setImageBannerUrl(imgUrl);
+        setImageBannerUrl(profile[0].socialBanner);
       }
     }
   }, [profile]);
@@ -288,11 +255,8 @@ function BlogSetting() {
       defaultImage = profile[0].socialBanner;
     }
     if (defaultImage) {
-      const imgArrayBuffer = new Uint8Array(defaultImage.data).buffer;
-      const imgBlob = new Blob([imgArrayBuffer], {
-        // type: "image/jpeg"
-      });
-      const imgUrl = URL.createObjectURL(imgBlob);
+      
+      const imgUrl = defaultImage;
       // if(type==='logo') {
       //   setImageUrl(imgUrl);
       // }
@@ -442,7 +406,7 @@ function BlogSetting() {
           >
             <Upload
               {...uploadProps}
-              defaultFileList={() => getDefaultImg("banner")}
+              //defaultFileList={() => getDefaultImg("banner")}
               onChange={(info) => handleChange("banner", info)}
             >
               {imageBannerUrl ? (
@@ -500,7 +464,7 @@ function BlogSetting() {
             <Upload
               {...uploadProps}
               onChange={(info) => handleChange("logo", info)}
-              defaultFileList={() => getDefaultImg("logo")}
+              //defaultFileList={() => getDefaultImg("logo")}
             >
               {imageUrl ? (
                 <img
@@ -526,7 +490,7 @@ function BlogSetting() {
           >
             <Upload
               {...uploadProps}
-              defaultFileList={() => getDefaultImg("avatar")}
+              //defaultFileList={() => getDefaultImg("avatar")}
               onChange={(info) => handleChange("avatar", info)}
             >
               {imageAvatarUrl ? (

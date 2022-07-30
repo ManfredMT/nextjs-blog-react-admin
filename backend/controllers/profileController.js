@@ -35,28 +35,31 @@ const updateProfile = asyncHandler(async (req, res) => {
   }
 
   if (req?.files?.logo && req?.files?.logo[0]) {
-    if (req?.files?.logo[0].size > 300*1024) {
-      res.status(400);
-      throw new Error("image is too large");
-    }
-    newProfileData.logo = req.files["logo"][0].buffer;
+    // if (req?.files?.logo[0].size > 300*1024) {
+    //   res.status(400);
+    //   throw new Error("image is too large");
+    // }
+    newProfileData.logo = '/api/image/'+req.files["logo"][0].filename;
     newProfileData.logoType = req.files["logo"][0].mimetype;
     //console.log("req.files.logo[0]: ",req.files["logo"][0]);
   }
   if (req?.files?.avatar && req?.files?.avatar[0]) {
-    if (req?.files?.avatar[0].size > 300*1024) {
-      res.status(400);
-      throw new Error("image is too large");
-    }
-    newProfileData.avatar = req.files["avatar"][0].buffer;
+    // if (req?.files?.avatar[0].size > 300*1024) {
+    //   res.status(400);
+    //   throw new Error("image is too large");
+    // }
+    newProfileData.avatar = '/api/image/'+req.files["avatar"][0].filename;
     newProfileData.avatarType = req.files["avatar"][0].mimetype;
   }
   if (req?.files?.socialBanner && req?.files?.socialBanner[0]) {
-    if (req?.files?.socialBanner[0].size > 300*1024) {
-      res.status(400);
-      throw new Error("image is too large");
-    }
-    newProfileData.socialBanner = req.files["socialBanner"][0].buffer;
+    //console.log("banner image:",req?.files?.socialBanner[0]);
+    // if (req?.files?.socialBanner[0].size > 300*1024) {
+    //   res.status(400);
+    //   throw new Error("image is too large");
+    // }
+
+    newProfileData.socialBanner = '/api/image/'+req.files["socialBanner"][0].filename;
+    //newProfileData.socialBanner = req.files["socialBanner"][0].buffer;
     newProfileData.socialBannerType = req.files["socialBanner"][0].mimetype;
   }
 
