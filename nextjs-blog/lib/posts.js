@@ -218,3 +218,36 @@ export async function getPostByTitle(title) {
     }
   }
 }
+
+export async function getPostRelatedPath() {
+  await dbConnect();
+  const name = process.env.USER_NAME;
+  const user = await User.findOne({ name });
+  if (!user) {
+    console.log("用户不存在");
+    return [];
+  } else {
+    const posts = await Post.find({ user: user.id, draft: false }).select(
+      "-content -image"
+    );
+    let postRelatedPath = ["/timeline","/categories","/tags","/"];
+    let categories = [];
+    let tags = [];
+    posts.forEach((doc)=>{
+      if(!categories.includes(doc.category)) {
+        postRelatedPath.push(`/categories/${doc.category}`);
+        categories.push(doc.category);
+      }
+      doc.tags.forEach((tag)=>{
+        if(!tags.includes(tag)) {
+          postRelatedPath.push(`/tags/${tag}`);
+          tags.push(tag);
+        }
+      })
+      postRelatedPath.push(`/posts/${doc.title}`);
+    })
+    return postRelatedPath;
+
+  }
+
+}

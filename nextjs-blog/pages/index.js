@@ -2,7 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "../styles/Home.module.css";
-import { getAllPostsData } from "../lib/posts";
+import { getAllPostsData, getPostRelatedPath } from "../lib/posts";
 import { getSiteMetadata } from "../lib/siteData";
 import { PageSEO } from "../components/SEO";
 import generateRss from "../lib/generate-rss";
@@ -132,6 +132,11 @@ export async function getStaticProps() {
     fs.writeFileSync(rssPath, rss);
     //fs.writeFileSync("./public/feed.xml", rss);
   }
+
+  //debug
+  const postRelatedPath = await getPostRelatedPath();
+  console.log("postRelatedPath: ",postRelatedPath);
+
 
   return {
     props: {
