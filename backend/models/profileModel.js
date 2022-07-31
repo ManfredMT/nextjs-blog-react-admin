@@ -39,6 +39,7 @@ const profileSchema = mongoose.Schema({
   },
   email: {
     type: String,
+    required: true,
   },
   github: {
     type: String,
@@ -54,21 +55,25 @@ const profileSchema = mongoose.Schema({
   },
   description: {
     type: String,
+    required: true,
   },
   logo: {
     type: String,
+    required: true,
   },
   logoType: {
     type: String,
   },
   avatar: {
     type: String,
+    required: true,
   },
   avatarType: {
     type: String,
   },
   socialBanner: {
     type: String,
+    required: true,
   },
   socialBannerType: {
     type: String,

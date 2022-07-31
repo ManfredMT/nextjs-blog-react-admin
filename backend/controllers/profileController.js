@@ -1,4 +1,6 @@
 const asyncHandler = require("express-async-handler");
+const fetch = (...args) =>
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 const Profile = require("../models/profileModel");
 
@@ -30,7 +32,7 @@ const updateProfile = asyncHandler(async (req, res) => {
   }
   let newProfileData = req.body;
   //console.log('req.files: ',req.files);
-  if(req.body.keywords === "") {
+  if (req.body.keywords === "") {
     newProfileData.keywords = [];
   }
 
@@ -39,7 +41,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     //   res.status(400);
     //   throw new Error("image is too large");
     // }
-    newProfileData.logo = '/api/image/'+req.files["logo"][0].filename;
+    newProfileData.logo = "/api/image/" + req.files["logo"][0].filename;
     newProfileData.logoType = req.files["logo"][0].mimetype;
     //console.log("req.files.logo[0]: ",req.files["logo"][0]);
   }
@@ -48,7 +50,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     //   res.status(400);
     //   throw new Error("image is too large");
     // }
-    newProfileData.avatar = '/api/image/'+req.files["avatar"][0].filename;
+    newProfileData.avatar = "/api/image/" + req.files["avatar"][0].filename;
     newProfileData.avatarType = req.files["avatar"][0].mimetype;
   }
   if (req?.files?.socialBanner && req?.files?.socialBanner[0]) {
@@ -58,22 +60,33 @@ const updateProfile = asyncHandler(async (req, res) => {
     //   throw new Error("image is too large");
     // }
 
-    newProfileData.socialBanner = '/api/image/'+req.files["socialBanner"][0].filename;
+    newProfileData.socialBanner =
+      "/api/image/" + req.files["socialBanner"][0].filename;
     //newProfileData.socialBanner = req.files["socialBanner"][0].buffer;
     newProfileData.socialBannerType = req.files["socialBanner"][0].mimetype;
   }
 
-  const updatedProfile = await Profile.findByIdAndUpdate(
-    req.params.id,
-    newProfileData,
-    {
-      new: true,
-    }
-  );
-  updatedProfile.logo = undefined;
-  updatedProfile.avatar = undefined;
-  updatedProfile.socialBanner = undefined;
-  res.status(200).json(updatedProfile);
+  let revalidateUrl = 
+  `http://localhost:3001/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=post`;
+
+  try {
+    const updatedProfile = await Profile.findByIdAndUpdate(
+      req.params.id,
+      newProfileData,
+      {
+        new: true,
+      }
+    );
+    //   revalidateUrl =
+    // `${updatedProfile.siteUrl}/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=post`;
+    
+    res.status(200).json(updatedProfile);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  } finally {
+    await fetch(revalidateUrl);
+  }
 });
 
 module.exports = {

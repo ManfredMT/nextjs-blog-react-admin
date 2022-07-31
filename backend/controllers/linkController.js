@@ -1,4 +1,9 @@
 const asyncHandler = require("express-async-handler");
+const fetch = (...args) =>
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
+
+let revalidateUrl = 
+  `http://localhost:3001/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=link`;
 
 const Link = require("../models/linkModel");
 const sharp = require("sharp");
@@ -65,6 +70,8 @@ const setLinks = asyncHandler(async (req, res) => {
   } catch (error) {
     res.status(400);
     throw new Error(error);
+  }finally {
+    await fetch(revalidateUrl);
   }
 });
 
@@ -101,11 +108,19 @@ const updateLink = asyncHandler(async (req, res) => {
       .toBuffer();
     newLinkData.picture = outputWebp;
   }
-  const updatedLink = await Link.findByIdAndUpdate(req.params.id, newLinkData, {
+  try {
+    const updatedLink = await Link.findByIdAndUpdate(req.params.id, newLinkData, {
     new: true,
   });
   updatedLink.picture = undefined;
   res.status(200).json(updatedLink);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }finally {
+    await fetch(revalidateUrl);
+  }
+  
 });
 
 // @desc   Delete links
@@ -129,10 +144,16 @@ const deleteLink = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("User not authorized");
   }
-
-  await link.remove();
-
+  try {
+    await link.remove();
   res.status(200).json({ id: req.params.id });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  }finally {
+    await fetch(revalidateUrl);
+  }
+  
 });
 
 module.exports = {

@@ -2,6 +2,10 @@ const asyncHandler = require("express-async-handler");
 
 const Post = require("../models/postModel");
 const Comment = require("../models/commentModel");
+const fetch = (...args) =>
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
+
+let revalidateUrl = `http://localhost:3001/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=post`;
 
 // @desc   Get Posts
 // @route  GET /api/posts
@@ -89,6 +93,8 @@ const setPosts = asyncHandler(async (req, res) => {
   } catch (error) {
     res.status(400);
     throw new Error(error);
+  } finally {
+    await fetch(revalidateUrl);
   }
 });
 
@@ -119,11 +125,22 @@ const updatePost = asyncHandler(async (req, res) => {
     //console.log("set empty array to tags")
     newPostData.tags = [];
   }
-  const updatedPost = await Post.findByIdAndUpdate(req.params.id, newPostData, {
-    new: true,
-  });
-  updatedPost.image = undefined;
-  res.status(200).json(updatedPost);
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      newPostData,
+      {
+        new: true,
+      }
+    );
+    updatedPost.image = undefined;
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  } finally {
+    await fetch(revalidateUrl);
+  }
 });
 
 // @desc   Delete Posts
@@ -147,12 +164,16 @@ const deletePost = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("User not authorized");
   }
-
-  await Comment.deleteMany({post: req.params.id});
-  await post.remove();
-
-
-  res.status(200).json({ id: req.params.id });
+  try {
+    await Comment.deleteMany({ post: req.params.id });
+    await post.remove();
+    res.status(200).json({ id: req.params.id });
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  } finally {
+    await fetch(revalidateUrl);
+  }
 });
 
 // @desc   Update category
@@ -172,18 +193,28 @@ const updateCategory = asyncHandler(async (req, res) => {
     throw new Error("Please set a new category");
   }
   const oldCategory = req.body.oldCategory;
-  if(oldCategory === 'default') {
+  if (oldCategory === "default") {
     res.status(400);
     throw new Error("Can not change default category");
   }
   const newCategory = req.body.newCategory;
-  const updateManyCategory = await Post.updateMany({
-    user: req.user.id,
-    category: oldCategory,
-  },{
-    category: newCategory
-  });
-  res.status(200).json(updateManyCategory);
+  try {
+    const updateManyCategory = await Post.updateMany(
+      {
+        user: req.user.id,
+        category: oldCategory,
+      },
+      {
+        category: newCategory,
+      }
+    );
+    res.status(200).json(updateManyCategory);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  } finally {
+    await fetch(revalidateUrl);
+  }
 });
 
 // @desc   Update tag
@@ -204,13 +235,23 @@ const updateTag = asyncHandler(async (req, res) => {
   }
   const oldTag = req.body.oldTag;
   const newTag = req.body.newTag;
-  const updateManyTag = await Post.updateMany({
-    user: req.user.id,
-    tags: oldTag,
-  },{
-    'tags.$': newTag
-  });
-  res.status(200).json(updateManyTag);
+  try {
+    const updateManyTag = await Post.updateMany(
+      {
+        user: req.user.id,
+        tags: oldTag,
+      },
+      {
+        "tags.$": newTag,
+      }
+    );
+    res.status(200).json(updateManyTag);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  } finally {
+    await fetch(revalidateUrl);
+  }
 });
 
 // @desc   Delete tag
@@ -226,13 +267,23 @@ const deleteTag = asyncHandler(async (req, res) => {
     throw new Error("Please set the tag that needs to be deleted");
   }
   const tag = req.body.tag;
-  const updateManyTag = await Post.updateMany({
-    user: req.user.id,
-    tags: tag
-  },{
-    $pull: {tags: tag}
-  });
-  res.status(200).json(updateManyTag);
+  try {
+    const updateManyTag = await Post.updateMany(
+      {
+        user: req.user.id,
+        tags: tag,
+      },
+      {
+        $pull: { tags: tag },
+      }
+    );
+    res.status(200).json(updateManyTag);
+  } catch (error) {
+    res.status(400);
+    throw new Error(error);
+  } finally {
+    await fetch(revalidateUrl);
+  }
 });
 
 module.exports = {

@@ -48,9 +48,15 @@ const setDefaultProfile = async ()=>{
     title: `${userName}的个人网站`,
     author: 'Doe',
     language: 'zh-CN',
-    siteUrl: 'http://localhost:3000',
+    siteUrl: 'http://localhost:3001',
     siteRepo: 'https://github.com',
     locale: 'zh-CN',
+    email: 'name@site.com',
+    description: '个人博客',
+    logo: '/api/image/1659167330676.svg',
+    avatar: '/api/image/1659167172806.ico',
+    socialBanner: '/api/image/1659167085907.ico',
+
   }
   try {
     await Profile.create(profileObj);
