@@ -36,8 +36,8 @@ export async function getAllTags() {
     if (tagsFindResult) {
       tagsFindResult.forEach((doc) => {
         doc.tags.forEach((tag) => {
-          if (allTags.includes(tag)) {
-            const index = allTags.findIndex((t) => t.tagName === tag);
+          const index = allTags.findIndex((t) => t.tagName === tag);
+          if (index !== -1) {
             allTags[index].value += 1;
           } else {
             allTags.push({ tagName: tag, value: 1 });
@@ -168,4 +168,53 @@ export async function getAllPostIds() {
     }
   }
 
+}
+
+export async function getAllPostTitles() {
+  await dbConnect();
+  const name = process.env.USER_NAME;
+  const user = await User.findOne({ name });
+  if (!user) {
+    console.log("用户不存在");
+    return [];
+  } else {
+    const postsResult = await Post.find({ 
+      user: user.id, draft: false}).select(
+      "title"
+    );
+    if(postsResult) {
+      const paths = postsResult.map((doc)=>{
+        return {
+          params:{
+            slug: doc.title
+          }
+        }
+      })
+      return paths;
+    }else {
+      return null;
+    }
+  }
+
+}
+
+export async function getPostByTitle(title) {
+  await dbConnect();
+  const name = process.env.USER_NAME;
+  const user = await User.findOne({ name });
+  if (!user) {
+    console.log("用户不存在");
+    return [];
+  } else {
+    const postsResult = await Post.find({ 
+      user: user.id, draft: false, title:title }).select(
+      "-image"
+    );
+    
+    if(postsResult) {
+      return JSON.parse(JSON.stringify(postsResult));
+    }else {
+      return [];
+    }
+  }
 }

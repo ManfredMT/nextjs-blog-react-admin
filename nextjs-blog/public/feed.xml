@@ -1,0 +1,94 @@
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>admin的个人网站</title>
+    <link>http://localhost:3001</link>
+    <description>个人博客</description>
+    <language>zh-CN</language>
+    <managingEditor>name@site.com (Doe)</managingEditor>
+    <webMaster>name@site.com (Doe)</webMaster>
+    <lastBuildDate>Fri, 22 Jul 2022 07:24:09 GMT</lastBuildDate>
+    <atom:link href="http://localhost:3001/feed.xml" rel="self" type="application/rss+xml"/>
+    
+  <item>
+    <guid>http://localhost:3001/posts/堆叠图测试</guid>
+    <title>堆叠图测试</title>
+    <link>http://localhost:3001/posts/堆叠图测试</link>
+    
+    <pubDate>Fri, 22 Jul 2022 07:24:09 GMT</pubDate>
+    <author>name@site.com (Doe)</author>
+    <category>echarts</category><category>stack</category>
+  </item>
+
+  <item>
+    <guid>http://localhost:3001/posts/验证表单test</guid>
+    <title>验证表单test</title>
+    <link>http://localhost:3001/posts/验证表单test</link>
+    
+    <pubDate>Mon, 18 Jul 2022 04:01:51 GMT</pubDate>
+    <author>name@site.com (Doe)</author>
+    
+  </item>
+
+  <item>
+    <guid>http://localhost:3001/posts/自动存储MarkDown编辑器</guid>
+    <title>自动存储MarkDown编辑器</title>
+    <link>http://localhost:3001/posts/自动存储MarkDown编辑器</link>
+    
+    <pubDate>Mon, 18 Jul 2022 02:57:21 GMT</pubDate>
+    <author>name@site.com (Doe)</author>
+    <category>js</category>
+  </item>
+
+  <item>
+    <guid>http://localhost:3001/posts/文章768ggsf</guid>
+    <title>文章768ggsf</title>
+    <link>http://localhost:3001/posts/文章768ggsf</link>
+    
+    <pubDate>Sat, 02 Jul 2022 07:45:37 GMT</pubDate>
+    <author>name@site.com (Doe)</author>
+    <category>日常</category><category>学习</category>
+  </item>
+
+  <item>
+    <guid>http://localhost:3001/posts/文章09880</guid>
+    <title>文章09880</title>
+    <link>http://localhost:3001/posts/文章09880</link>
+    
+    <pubDate>Sat, 02 Jul 2022 07:21:03 GMT</pubDate>
+    <author>name@site.com (Doe)</author>
+    
+  </item>
+
+  <item>
+    <guid>http://localhost:3001/posts/文章123</guid>
+    <title>文章123</title>
+    <link>http://localhost:3001/posts/文章123</link>
+    
+    <pubDate>Sat, 02 Jul 2022 03:25:09 GMT</pubDate>
+    <author>name@site.com (Doe)</author>
+    <category>java</category>
+  </item>
+
+  <item>
+    <guid>http://localhost:3001/posts/post3</guid>
+    <title>post3</title>
+    <link>http://localhost:3001/posts/post3</link>
+    
+    <pubDate>Fri, 01 Jul 2022 03:07:46 GMT</pubDate>
+    <author>name@site.com (Doe)</author>
+    <category>tag1</category>
+  </item>
+
+  <item>
+    <guid>http://localhost:3001/posts/post2</guid>
+    <title>post2</title>
+    <link>http://localhost:3001/posts/post2</link>
+    
+    <pubDate>Fri, 01 Jul 2022 03:07:25 GMT</pubDate>
+    <author>name@site.com (Doe)</author>
+    <category>tag6</category><category>html</category><category>css</category><category>js</category><category>tag7</category><category>tag8</category><category>tag9</category><category>标签10</category>
+  </item>
+
+  </channel>
+</rss>
