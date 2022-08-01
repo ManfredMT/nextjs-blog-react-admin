@@ -1,14 +1,15 @@
-import React from 'react';
-import { Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
-import style from '../css/Loading.module.css'
+import React from "react";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import style from "../css/Loading.module.css";
 
 function Loading() {
-    const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
   return (
-    <div className={style['horizontal-vertical-center']}>
-    <Spin indicator={antIcon} /></div>
-  )
+    <div className={style["horizontal-vertical-center"]}>
+      <Spin indicator={antIcon} />
+    </div>
+  );
 }
 
-export default Loading
+export default Loading;

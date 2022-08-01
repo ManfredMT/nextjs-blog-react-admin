@@ -68,7 +68,7 @@ function App() {
                 <Route path="recent-comments" element={<RecentComments />} />
                 <Route path="post-comments" element={<PostComments />} />
               </Route>
-              <Route path="seo" element={<SEOSetting />} />
+              
               <Route path="setting" element={<BlogSetting />} />
               <Route path="change-password" element={<ChangePassword />} />
               <Route

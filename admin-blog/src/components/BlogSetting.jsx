@@ -445,9 +445,14 @@ function BlogSetting() {
           initialValue={profile[0]?.description ?? null}
           name={["blog", "description"]}
           label="博客简介"
+          rules={[
+            {
+              required: true,
+            },
+          ]}
         >
           <Input.TextArea
-            placeholder={isTabletOrMobile ? "博客简介(可选)" : null}
+            placeholder={isTabletOrMobile ? "博客简介(必填)" : null}
             autoSize={{ minRows: 2 }}
             showCount
             maxLength={200}
@@ -517,12 +522,13 @@ function BlogSetting() {
           label="邮箱"
           rules={[
             {
+              required: true,
               type: "email",
             },
           ]}
           initialValue={profile[0]?.email ?? null}
         >
-          <Input placeholder={isTabletOrMobile ? "邮箱(可选)" : null} />
+          <Input placeholder={isTabletOrMobile ? "邮箱(必填)" : null} />
         </Form.Item>
 
         <Form.Item
