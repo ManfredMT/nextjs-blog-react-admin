@@ -110,9 +110,7 @@ function AdminPanel() {
       case "post-comments":
         navigate("comment/post-comments");
         break;
-      case "seo":
-        navigate("seo");
-        break;
+      
       case "setting":
         navigate("setting");
         break;
@@ -215,11 +213,7 @@ function AdminPanel() {
         { label: "查看文章评论", key: "post-comments" },
       ],
     },
-    {
-      label: "SEO",
-      key: "seo",
-      icon: <SearchOutlined />,
-    },
+    
     {
       label: "博客设置",
       key: "setting",
