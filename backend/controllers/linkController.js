@@ -2,8 +2,7 @@ const asyncHandler = require("express-async-handler");
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
-let revalidateUrl = 
-  `http://localhost:3001/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=link`;
+let revalidateUrl = `http://localhost:3001/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=link`;
 
 const Link = require("../models/linkModel");
 const sharp = require("sharp");
@@ -50,8 +49,7 @@ const setLinks = asyncHandler(async (req, res) => {
     //   typeof req.file
     // );
     if (
-      req.file.mimetype !== "image/jpeg" ||
-      req.file.mimetype !== "image/png"
+      !(req.file.mimetype === "image/jpeg" || req.file.mimetype === "image/png")
     ) {
       res.status(400);
       throw new Error("Image type error");
@@ -70,7 +68,7 @@ const setLinks = asyncHandler(async (req, res) => {
   } catch (error) {
     res.status(400);
     throw new Error(error);
-  }finally {
+  } finally {
     await fetch(revalidateUrl);
   }
 });
@@ -96,8 +94,7 @@ const updateLink = asyncHandler(async (req, res) => {
   let newLinkData = req.body;
   if (req.file) {
     if (
-      req.file.mimetype !== "image/jpeg" ||
-      req.file.mimetype !== "image/png"
+      !(req.file.mimetype === "image/jpeg" || req.file.mimetype === "image/png")
     ) {
       res.status(400);
       throw new Error("Image type error");
@@ -109,18 +106,21 @@ const updateLink = asyncHandler(async (req, res) => {
     newLinkData.picture = outputWebp;
   }
   try {
-    const updatedLink = await Link.findByIdAndUpdate(req.params.id, newLinkData, {
-    new: true,
-  });
-  updatedLink.picture = undefined;
-  res.status(200).json(updatedLink);
+    const updatedLink = await Link.findByIdAndUpdate(
+      req.params.id,
+      newLinkData,
+      {
+        new: true,
+      }
+    );
+    updatedLink.picture = undefined;
+    res.status(200).json(updatedLink);
   } catch (error) {
     res.status(400);
     throw new Error(error);
-  }finally {
+  } finally {
     await fetch(revalidateUrl);
   }
-  
 });
 
 // @desc   Delete links
@@ -146,14 +146,13 @@ const deleteLink = asyncHandler(async (req, res) => {
   }
   try {
     await link.remove();
-  res.status(200).json({ id: req.params.id });
+    res.status(200).json({ id: req.params.id });
   } catch (error) {
     res.status(400);
     throw new Error(error);
-  }finally {
+  } finally {
     await fetch(revalidateUrl);
   }
-  
 });
 
 module.exports = {
