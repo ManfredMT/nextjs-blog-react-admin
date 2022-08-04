@@ -34,3 +34,4 @@ yarn-error.log*
 # rss
 /public/tags
 /public/categories
+/public/feed.xml
