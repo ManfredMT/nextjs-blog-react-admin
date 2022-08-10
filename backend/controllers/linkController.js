@@ -54,12 +54,12 @@ const setLinks = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error("Image type error");
     }
-    const outputWebp = await sharp(req.file.buffer)
-      .resize(160, 160)
-      .webp({ quality: 70 })
-      .toBuffer();
+    // const outputWebp = await sharp(req.file.buffer)
+    //   .resize(160, 160)
+    //   .webp({ quality: 70 })
+    //   .toBuffer();
     //console.log("webp output: ",outputWebp);
-    linkObj.picture = outputWebp;
+    linkObj.picture = "/api/image/" + req.file.filename;
   }
   try {
     const link = await Link.create(linkObj);
@@ -99,11 +99,11 @@ const updateLink = asyncHandler(async (req, res) => {
       res.status(400);
       throw new Error("Image type error");
     }
-    const outputWebp = await sharp(req.file.buffer)
-      .resize(160, 160)
-      .webp({ quality: 70 })
-      .toBuffer();
-    newLinkData.picture = outputWebp;
+    // const outputWebp = await sharp(req.file.buffer)
+    //   .resize(160, 160)
+    //   .webp({ quality: 70 })
+    //   .toBuffer();
+    newLinkData.picture = "/api/image/" + req.file.filename;
   }
   try {
     const updatedLink = await Link.findByIdAndUpdate(
