@@ -4,8 +4,13 @@ import { CategorySEO } from "../../components/SEO";
 import generateRss from "../../lib/generate-rss";
 import fs from "fs";
 import path from "path";
+import PostList from "../../components/PostList";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import styles from "../../styles/CategoryPage.module.css";
 
 const root = process.cwd();
+const DISPLAY_POST_NUMBER = 5;
 
 export default function PostByCategory({
   postsByCategory,
@@ -22,7 +27,16 @@ export default function PostByCategory({
         siteName={siteMetadata.name}
         socialBanner={siteMetadata.socialBanner}
       />
-      <main>{category}</main>
+      <Header siteMetadata={siteMetadata} nav="categories" />
+      <main>
+        <h3 className={styles["category-page-title"]}>{`分类 : ${
+          category !== "default" ? category : "未分类"
+        }`}</h3>
+        <div className={styles["post-list-wrap"]}>
+          <PostList posts={postsByCategory} displayN={DISPLAY_POST_NUMBER} />
+        </div>
+      </main>
+      <Footer siteMetadata={siteMetadata} />
     </>
   );
 }
@@ -59,7 +73,7 @@ export async function getStaticProps({ params }) {
   });
 
   // rss
-  console.log("filteredPosts: ",filteredPosts);
+  console.log("filteredPosts: ", filteredPosts);
   if (filteredPosts.length > 0) {
     const rss = generateRss(
       filteredPosts,
@@ -68,7 +82,7 @@ export async function getStaticProps({ params }) {
     );
     console.log("rss: ", rss);
     const rssPath = path.join(root, "public", "categories", params.category);
-    console.log("rssPath: ",rssPath);
+    console.log("rssPath: ", rssPath);
     fs.mkdirSync(rssPath, { recursive: true });
     fs.writeFileSync(path.join(rssPath, "feed.xml"), rss);
   }

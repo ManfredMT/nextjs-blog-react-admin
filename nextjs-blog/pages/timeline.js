@@ -1,6 +1,8 @@
 import { getAllPostsData } from "../lib/posts";
 import { getSiteMetadata } from "../lib/siteData";
 import { PageSEO } from "../components/SEO";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function TimeLine({ allPostsData, siteMetadata }) {
   return (
@@ -12,6 +14,7 @@ export default function TimeLine({ allPostsData, siteMetadata }) {
         siteName={siteMetadata.name}
         socialBanner={siteMetadata.socialBanner}
       />
+      <Header siteMetadata={siteMetadata} nav="timeline" />
       <main>
         {allPostsData.map((post) => {
           return (
@@ -31,6 +34,7 @@ export default function TimeLine({ allPostsData, siteMetadata }) {
           );
         })}
       </main>
+      <Footer siteMetadata={siteMetadata} />
     </>
   );
 }

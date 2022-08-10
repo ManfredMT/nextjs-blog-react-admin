@@ -18,7 +18,7 @@ const linkSchema = mongoose.Schema({
         type: String, 
     },
     picture:{
-        type: Buffer,
+        type: String,
     }
 })
 

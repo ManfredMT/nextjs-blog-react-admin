@@ -1,0 +1,30 @@
+
+
+.total-num-label {
+    display: block;
+    text-align: center;
+    font-size: 1.6rem;
+}
+
+.all-category-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3rem;
+}
+
+
+
+.category {
+    font-size: 1.2rem;
+    text-decoration: underline;
+    text-underline-offset: 0.2rem;
+    margin: 0.5rem 0;
+    color:rgb(0, 109, 153);
+}
+
+
+
+.category:hover {
+    color:dodgerblue;
+}

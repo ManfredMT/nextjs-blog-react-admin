@@ -8,15 +8,19 @@ import { PageSEO } from "../components/SEO";
 import generateRss from "../lib/generate-rss";
 import fs from "fs";
 import path from "path";
+import Header from "../components/Header";
+import SearchBar from "../components/SearchBar";
+import PostList from "../components/PostList";
+import Footer from "../components/Footer";
 
 const root = process.cwd();
-
+const STATIC_FILE_SERVER_URL = "http://localhost:5000";
 
 const DISPLAY_POST_NUMBER = 5;
 
 export default function Home({ allPostsData, siteMetadata }) {
   console.log("allPostsData: ", allPostsData);
-  console.log("metadata: ",siteMetadata);
+  console.log("metadata: ", siteMetadata);
   return (
     <>
       <PageSEO
@@ -26,45 +30,31 @@ export default function Home({ allPostsData, siteMetadata }) {
         siteName={siteMetadata.name}
         socialBanner={siteMetadata.socialBanner}
       />
-      <div className={styles.container}>
+      <div className={styles["container"]}>
         <Head>
           <link rel="icon" href="/favicon.ico" />
         </Head>
+        <Header siteMetadata={siteMetadata} nav="home" />
 
-        <header>
-          <div>
-            <div className={styles["image-placeholder"]}></div>
-            <h1>博客主页</h1>
+        <main className={styles["main"]}>
+          <SearchBar className={styles["search-bar-wrap"]} />
+
+          {/* <div className={styles["search-box-wrap"]}>
+            <input 
+            placeholder="搜索文章标题..."
+            type="search" 
+            id="title-search" 
+            name="title-search"></input>
+            <button>搜索</button>
+
+          </div> */}
+
+          <hr className={styles["search-post-hr"]} />
+
+          <div className={styles["post-list-wrap"]}>
+            <PostList posts={allPostsData} displayN={DISPLAY_POST_NUMBER} />
           </div>
-          <nav>
-            <ul>
-              <li>
-                <Link href="/">主页</Link>
-              </li>
-              <li>
-                <Link href="/tags">标签</Link>
-              </li>
-              <li>
-                <Link href="/categories">分类</Link>
-              </li>
-              <li>
-                <Link href="/timeline">归档</Link>
-              </li>
-              <li>
-                <Link href="/links">友链</Link>
-              </li>
-            </ul>
-          </nav>
-        </header>
-
-        <main className={styles.main}>
-          <div>
-            <input type="search"></input>
-          </div>
-
-          <hr />
-
-          {allPostsData.map((post) => {
+          {/* {allPostsData.map((post) => {
             return (
               <article key={post._id}>
                 <header>
@@ -82,17 +72,19 @@ export default function Home({ allPostsData, siteMetadata }) {
                 </header>
               </article>
             );
-          })}
+          })} */}
         </main>
 
-        <footer className={styles.footer}>
+        <Footer siteMetadata={siteMetadata} />
+
+        {/* <footer className={styles["footer"]}>
           <a
             href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
             target="_blank"
             rel="noopener noreferrer"
           >
             Powered by{" "}
-            <span className={styles.logo}>
+            <span className={styles["logo"]}>
               <Image
                 src="/vercel.svg"
                 alt="Vercel Logo"
@@ -101,7 +93,7 @@ export default function Home({ allPostsData, siteMetadata }) {
               />
             </span>
           </a>
-        </footer>
+        </footer> */}
       </div>
     </>
   );
@@ -111,19 +103,18 @@ export async function getStaticProps() {
   const allPostsData = await getAllPostsData();
   const siteMetadata = await getSiteMetadata();
 
- 
   const sortedPosts = allPostsData.sort(
     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
   );
-  const allPosts = sortedPosts.map((post)=>{
+  const allPosts = sortedPosts.map((post) => {
     return {
       date: post.createdAt,
       title: post.title,
-      summary: post.summary??'',
-      tags:post.tags,
-      category:post.category
-    }
-  })
+      summary: post.summary ?? "",
+      tags: post.tags,
+      category: post.category,
+    };
+  });
 
   // rss
   if (allPosts.length > 0) {
@@ -135,8 +126,7 @@ export async function getStaticProps() {
 
   //debug
   const postRelatedPath = await getPostRelatedPath();
-  console.log("postRelatedPath: ",postRelatedPath);
-
+  console.log("postRelatedPath: ", postRelatedPath);
 
   return {
     props: {

@@ -1,0 +1,48 @@
+.logo-h1 {
+  /* border: 1px solid blue; */
+  cursor: pointer;
+  margin-left: 5rem;
+  margin-top: 2rem;
+}
+
+
+.header {
+  display: flex;
+  align-items: center;
+   
+} 
+
+.header-nav {
+  margin-left: 30vw;
+  /* margin-right: auto; */
+}
+
+.nav-ul {
+  display: flex;
+  list-style-type: none;
+}
+
+.nav-ul>*+* {
+  margin-left: 3rem;
+}
+
+.nav-ul>li {
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+.ul-li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 4rem;
+}
+.ul-li:hover > a:hover {
+  color: skyblue;
+}
+.menu-bottom-bar {
+  margin-top: 0.5rem;
+  height: 0.3rem;
+  background-color:lightgray;
+  border-radius: 0.5rem;
+  width: 4rem;
+}

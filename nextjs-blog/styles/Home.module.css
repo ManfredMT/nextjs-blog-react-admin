@@ -1,4 +1,4 @@
-.image-placeholder {
+/* .image-placeholder {
   width: 80px;
   height: 80px;
   background-color: lightgray;
@@ -107,16 +107,42 @@
   margin: 0;
   font-size: 1.25rem;
   line-height: 1.5;
+} */
+
+/* .logo-box {
+  cursor: pointer;
+  margin-left: 2rem;
+  margin-top: 2rem;
+  height: 3rem;
+  border: 1px solid red;
+} */
+
+
+
+.search-post-hr {
+  border: 0;
+  height: 1px;
+  background-color: #eaeaea;
+  width: 90vw;
+  margin: 1.5rem auto;
 }
 
-.logo {
-  height: 1em;
-  margin-left: 0.5rem;
+.search-bar-wrap {
+  margin-left: 10vw;
+  margin-top:2rem;
+}
+
+.post-list-wrap {
+  /* display: flex;
+  flex-direction: column;
+  align-items: center;  */
+  margin:0 auto;
+  width: max-content;
 }
 
 @media (max-width: 600px) {
-  .grid {
+  /* .grid {
     width: 100%;
     flex-direction: column;
-  }
+  } */
 }

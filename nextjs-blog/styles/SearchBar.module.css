@@ -1,0 +1,43 @@
+.search-box-wrap {
+    border: 1px solid rgb(222, 222, 222);
+    width: max-content;
+    border-radius: 0.5rem;
+    padding: 0.2rem 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.search-box-wrap:hover {
+    border: 1px solid rgb(108, 108, 108);
+}
+.search-box-wrap:focus-within {
+    border: 1px solid black;
+}
+.search-input {
+    border: none;
+    outline: none;
+    width: 20rem;
+    font-size: 1.1rem;
+}
+
+.search-button {
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+}
+
+.search-button > svg {
+    fill: rgb(222, 222, 222);
+}
+
+.search-button:hover > svg {
+    fill: gray;
+}
+
+.search-button:active > svg {
+    transform: scale(0.95);
+}
+
+.search-input::placeholder {
+    color:rgb(222, 222, 222);
+}

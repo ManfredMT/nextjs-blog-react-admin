@@ -21,7 +21,7 @@ export async function getAllLinksData() {
             linkObj.description = doc.description;
         }
         if(doc.picture) {
-            linkObj.picture = Array.from(doc.picture);
+            linkObj.picture = doc.picture;
         }
         
         allLinks.push(linkObj);

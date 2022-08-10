@@ -1,0 +1,104 @@
+.post-list-li + .post-list-li {
+   margin-top: 4rem;
+   max-width: 760px;
+}
+
+.post-list-ul {
+    list-style: none;
+}
+
+.post-title {
+    position: relative;
+}
+
+.post-title::before {
+    position: absolute;
+    top:16px;
+    left:-35px;
+    width: 6px;
+    height: 6px;
+    content: '';
+    transition: border 0.2s ease-out, background 0.2s ease-out;
+    border: 6px solid #f2f6fa;
+    border-radius: 12px;
+    background-color: #d2dbe5;
+}
+
+.post-title:hover::before {
+    border-color: #f3daff;
+    background-color: #8000af;
+}
+
+
+.post-title {
+    font-size: 2rem;
+    font-weight: 500;
+    max-width: 760px;
+}
+
+.post-date {
+    color:#596177;
+    font-weight: 500;
+    font-size: 1rem;
+    margin-left: 0.5rem;
+    margin-top: 0;
+
+}
+
+.post-title:hover > *,
+.post-title:active > * {
+    text-decoration: underline;
+    text-decoration-color: lightgray;
+    text-underline-offset: 0.5rem;
+}
+
+.post-tag {
+    background-color: whitesmoke;
+    padding: 0.25rem 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    margin: 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+}
+
+.tags-box {
+    display: flex;
+    flex-wrap: wrap;
+    width: 360px;
+}
+
+.btn {
+    width: 180px;
+    height: 60px;
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid #91C9FF;
+    outline: none;
+    transition: 1s ease-in-out;
+  }
+  
+  .btn-svg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    fill: none;
+    stroke: #fff;
+    stroke-dasharray: 150 480;
+    stroke-dashoffset: 150;
+    transition: 1s ease-in-out;
+  }
+  
+  .btn:hover {
+    transition: 1s ease-in-out;
+    background: #4F95DA;
+  }
+  
+  .btn:hover .btn-svg {
+    stroke-dashoffset: -480;
+  }
+  
+  .btn span {
+    color: white;
+    font-size: 18px;
+    font-weight: 100;
+  }

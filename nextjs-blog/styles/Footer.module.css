@@ -1,0 +1,76 @@
+.footer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10rem;
+    margin-bottom: 3rem;
+}
+
+.copyright-box {
+    font-size: 1rem;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+    color: #80808a;
+    font-weight: 500;
+}
+
+.copyright-support {
+    color: grey;
+}
+
+.social-info-box>*+* {
+    margin-left: 1.5rem;
+}
+
+.social-info-box {
+    margin-bottom: 2rem;
+}
+
+.svg-logo {
+    height: 2rem;
+    width: 2rem;
+    padding: 0.2rem;
+    background-color: grey;
+    fill: white;
+    border-radius: 0.5rem;
+
+}
+
+.svg-logo:hover {
+    background-color: skyblue;
+}
+
+.wx-icon-box {
+    position: relative;
+}
+
+.wx-tooltip {}
+
+.icon-box {
+    position: relative;
+}
+
+.tooltip {
+    visibility: hidden;
+    opacity:0;
+    background-color: rgba(0, 0, 0, 0.856);
+    color: white;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    position: absolute;
+
+    /* 移动到上面的中间 */
+    bottom: 2.5rem;
+    left: 50%;
+    transform:translateX(-50%);
+
+    transition:visibility 0.8s, opacity 0.8s; 
+
+}
+
+.icon-box:hover .tooltip {
+    visibility: visible;
+    opacity:1;
+    
+}

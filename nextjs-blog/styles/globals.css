@@ -14,3 +14,30 @@ a {
 * {
   box-sizing: border-box;
 }
+
+:root {
+  font-size: calc(0.8em + 0.2vw);
+  }
+
+  body::-webkit-scrollbar {
+    width: 0.6rem;
+    height: 0.6rem;
+    background-color: transparent;
+}
+
+body::-webkit-scrollbar-track {
+    border-radius: 1rem;
+    background-color: #e7e7e7;
+}
+
+body::-webkit-scrollbar-thumb {
+    border-radius: 1rem;
+    background-color: rgb(175, 175, 175);
+}
+
+body::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(145, 145, 145);
+}
+
+
+  

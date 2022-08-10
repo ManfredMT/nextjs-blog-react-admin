@@ -2,6 +2,9 @@ import { getAllCategories } from "../lib/posts";
 import Link from "next/link";
 import { getSiteMetadata } from "../lib/siteData";
 import { PageSEO } from "../components/SEO";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import styles from "../styles/Categories.module.css";
 
 export default function Categories({ allCategories, siteMetadata }) {
   console.log("allCategories: ", allCategories);
@@ -14,20 +17,26 @@ export default function Categories({ allCategories, siteMetadata }) {
         siteName={siteMetadata.name}
         socialBanner={siteMetadata.socialBanner}
       />
-      <main>
-        <label>分类:</label>
-        <div>
+      <Header siteMetadata={siteMetadata} nav="categories" />
+
+      <main className={styles["categories-page-main"]}>
+        <label
+          className={styles["total-num-label"]}
+        >{`共${allCategories.length}个分类`}</label>
+        <div className={styles["all-category-box"]}>
           {allCategories.map((category) => {
             return (
-              <p key={category}>
+              <p key={category} className={styles["category"]}>
                 <Link href={`/categories/${category}`}>
-                  {category === "default" ? "未分类" : category}
+                  {`\u00A0\u00A0/ ${category === "default" ? "未分类" : category}`}
                 </Link>
               </p>
             );
           })}
         </div>
       </main>
+
+      <Footer siteMetadata={siteMetadata} />
     </>
   );
 }

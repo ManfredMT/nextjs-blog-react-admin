@@ -1,0 +1,13 @@
+.post-list-wrap {
+    width: max-content;
+    margin: 0 auto;
+}
+
+.category-page-title {
+    text-align: center;
+    border-bottom: 1px solid lightgray;
+    padding-bottom: 2rem;
+    width: 70vw;
+    margin: 0 auto 3rem auto;
+    font-size: 2rem;
+}

@@ -2,6 +2,9 @@ import Link from "next/link";
 import { getAllTags } from "../lib/posts";
 import { getSiteMetadata } from "../lib/siteData";
 import { PageSEO } from "../components/SEO";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import styles from "../styles/Tags.module.css";
 
 export default function Tags({ allTags, siteMetadata }) {
   console.log("allTags: ", allTags);
@@ -14,16 +17,21 @@ export default function Tags({ allTags, siteMetadata }) {
         siteName={siteMetadata.name}
         socialBanner={siteMetadata.socialBanner}
       />
-      <main>
-        <label>标签:</label>
+      <Header siteMetadata={siteMetadata} nav="tags" />
+      <main className={styles["tags-page-main"]}>
+        <label className={styles["tag-label"]}>{`标签 : `}</label>
+        <div className={styles["tags-box"]}>
         {allTags.map((tag) => {
           return (
-            <span key={tag.tagName}>
-              <Link href={`/tags/${tag.tagName}`}>{tag.tagName}</Link>
-            </span>
+            <Link key={tag.tagName} href={`/tags/${tag.tagName}`}>
+              <span  className={styles["tag"]}>
+                {tag.tagName}<span className={styles["post-number"]}>{tag.value}</span>
+              </span>
+            </Link>
           );
-        })}
+        })}</div>
       </main>
+      <Footer siteMetadata={siteMetadata} />
     </>
   );
 }
