@@ -1,0 +1,16 @@
+.copy-button {
+    font-size: 1.5rem;
+    color:lightgray;
+    cursor: pointer;
+    position: relative;
+    z-index: 101;
+}
+
+.copy-button:hover {
+    color: dodgerblue;
+}
+
+.copied {
+    font-size: 1.5rem;
+    color:lawngreen;
+}

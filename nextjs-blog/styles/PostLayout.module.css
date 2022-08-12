@@ -1,0 +1,132 @@
+.article-and-next {
+    width: 80vw;
+    margin: 2rem auto;
+    /* border: 1px solid blue; */
+}
+
+.authors-box {
+    display: flex;
+    /* border: 1px solid red; */
+    justify-content: center;
+
+}
+
+.article-and-next header {
+    margin-bottom: 5rem;
+}
+
+.time {
+    display: block;
+    text-align: center;
+    color: rgb(72, 72, 72);
+    margin: 0.5rem 0;
+    font-weight: 400;
+}
+
+.post-category {
+    margin: 0.5rem 0;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.post-category>span {
+    font-size: 20px;
+    color: cornflowerblue;
+    margin-right: 0.5rem;
+
+}
+
+.authors-box>p+p {
+    margin-left: 2.5rem;
+}
+
+.authors-box p {
+    margin: 0.5rem 0;
+}
+
+.author>span {
+    font-size: 20px;
+    margin-right: 0.3rem;
+    color: rgba(153, 50, 204, 0.519);
+
+}
+
+.default-author-avatar {
+    margin-right: 0.3rem;
+    border-radius: 10px;
+}
+
+
+.tags-box {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.post-tag {
+    background-color: whitesmoke;
+    padding: 0.25rem 1rem;
+    border-radius: 1rem;
+    text-align: center;
+    margin: 0.5rem;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+    cursor: pointer;
+}
+.post-tag:hover {
+    background-color: dodgerblue;
+    color: white;
+}
+
+.post-category:hover {
+    color: blueviolet;
+    cursor: pointer;
+
+}
+
+
+.post-title {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.last-post-box,
+.next-post-box {
+    
+    display: inline-block;
+    width: 20vw;
+    margin-top: 3rem;
+    /* border: 1px solid red; */
+    vertical-align: top;
+}
+
+.next-post-box {
+    text-align: right;
+    margin-left: 33vw;
+    cursor: pointer;
+    transition: all 0.3s;
+    
+    
+}
+
+.next-post-box:hover {
+    transform: scale(1.05);
+}
+
+
+.next-post-box:hover .post-nav-title {
+    color: darkblue;
+}
+
+.last-post-box {
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-left: 3vw;
+}
+
+.last-post-box:hover {
+    transform: scale(1.05);
+}
+
+.last-post-box:hover .post-nav-title {
+    color: darkblue;
+}

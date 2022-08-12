@@ -127,16 +127,16 @@ export async function getPostById(postId) {
     console.log("用户不存在");
     return [];
   } else {
-    
-    const postsResult = await Post.find({ 
-      user: user.id, draft: false, _id:postId }).select(
-      "-image"
-    );
-    
-    if(postsResult) {
-      console.log("lib postsResult: ",postsResult);
+    const postsResult = await Post.find({
+      user: user.id,
+      draft: false,
+      _id: postId,
+    }).select("-image");
+
+    if (postsResult) {
+      console.log("lib postsResult: ", postsResult);
       return JSON.parse(JSON.stringify(postsResult));
-    }else {
+    } else {
       return [];
     }
   }
@@ -150,24 +150,23 @@ export async function getAllPostIds() {
     console.log("用户不存在");
     return [];
   } else {
-    const postsResult = await Post.find({ 
-      user: user.id, draft: false}).select(
-      "_id"
-    );
-    if(postsResult) {
-      const paths = postsResult.map((doc)=>{
+    const postsResult = await Post.find({
+      user: user.id,
+      draft: false,
+    }).select("_id");
+    if (postsResult) {
+      const paths = postsResult.map((doc) => {
         return {
-          params:{
-            id: doc._id.toString()
-          }
-        }
-      })
+          params: {
+            id: doc._id.toString(),
+          },
+        };
+      });
       return paths;
-    }else {
+    } else {
       return null;
     }
   }
-
 }
 
 export async function getAllPostTitles() {
@@ -178,24 +177,23 @@ export async function getAllPostTitles() {
     console.log("用户不存在");
     return [];
   } else {
-    const postsResult = await Post.find({ 
-      user: user.id, draft: false}).select(
-      "title"
-    );
-    if(postsResult) {
-      const paths = postsResult.map((doc)=>{
+    const postsResult = await Post.find({
+      user: user.id,
+      draft: false,
+    }).select("title");
+    if (postsResult) {
+      const paths = postsResult.map((doc) => {
         return {
-          params:{
-            slug: doc.title
-          }
-        }
-      })
+          params: {
+            slug: doc.title,
+          },
+        };
+      });
       return paths;
-    }else {
+    } else {
       return null;
     }
   }
-
 }
 
 export async function getPostByTitle(title) {
@@ -206,14 +204,28 @@ export async function getPostByTitle(title) {
     console.log("用户不存在");
     return [];
   } else {
-    const postsResult = await Post.find({ 
-      user: user.id, draft: false, title:title }).select(
-      "-image"
-    );
-    
-    if(postsResult) {
-      return JSON.parse(JSON.stringify(postsResult));
-    }else {
+    const postsResult = await Post.find({
+      user: user.id,
+      draft: false,
+      title: title,
+    }).select("-image");
+    const allPostTitle = await Post.find({
+      user: user.id,
+      draft: false,
+    }).select("title createdAt");
+
+    if (postsResult && allPostTitle) {
+      const allPostTitleObj = JSON.parse(JSON.stringify(allPostTitle));
+      const sortedTitles = allPostTitleObj.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      const sortTIndex = sortedTitles.findIndex((p) => p.title === title);
+      const postsObj = JSON.parse(JSON.stringify(postsResult));
+      postsObj[0].nextPost = sortedTitles[sortTIndex + 1]?.title??null;
+      postsObj[0].lastPost = sortedTitles[sortTIndex - 1]?.title??null;
+      console.log("getPostByTitle: ", postsObj);
+      return postsObj;
+    } else {
       return [];
     }
   }
@@ -230,24 +242,22 @@ export async function getPostRelatedPath() {
     const posts = await Post.find({ user: user.id, draft: false }).select(
       "-content -image"
     );
-    let postRelatedPath = ["/timeline","/categories","/tags","/"];
+    let postRelatedPath = ["/timeline", "/categories", "/tags", "/"];
     let categories = [];
     let tags = [];
-    posts.forEach((doc)=>{
-      if(!categories.includes(doc.category)) {
+    posts.forEach((doc) => {
+      if (!categories.includes(doc.category)) {
         postRelatedPath.push(`/categories/${doc.category}`);
         categories.push(doc.category);
       }
-      doc.tags.forEach((tag)=>{
-        if(!tags.includes(tag)) {
+      doc.tags.forEach((tag) => {
+        if (!tags.includes(tag)) {
           postRelatedPath.push(`/tags/${tag}`);
           tags.push(tag);
         }
-      })
+      });
       postRelatedPath.push(`/posts/${doc.title}`);
-    })
+    });
     return postRelatedPath;
-
   }
-
 }

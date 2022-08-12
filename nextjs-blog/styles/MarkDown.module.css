@@ -1,0 +1,20 @@
+.preview-post-body pre {
+    background-color: #ffffff;
+}
+
+.code-header {
+    display: block;
+    width: 2rem;
+    margin-right: 1rem;
+    margin-left: auto;
+    position: relative;
+    height: 2rem;
+    top: 3.2rem;
+    visibility: hidden;
+    margin-top: -3rem;
+}
+
+.code-box:hover .code-header {
+    visibility: visible;
+}
+

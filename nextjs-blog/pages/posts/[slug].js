@@ -3,6 +3,9 @@ import Comment from "../../components/Comments";
 import CommentForm from "../../components/CommentForm";
 import { getSiteMetadata } from "../../lib/siteData";
 import { BlogSEO } from "../../components/SEO";
+import PostLayout from "../../components/PostLayout";
+import ShrinkHeader from "../../components/ShrinkHeader";
+import Footer from "../../components/Footer"
 
 export default function Post({ post, siteMetadata }) {
   console.log("post: ", post);
@@ -11,6 +14,7 @@ export default function Post({ post, siteMetadata }) {
     const name = author==='default'?siteMetadata.author:author;
     return {name};
   }):null;
+  const postTitle = post.title.length > 32?post.title.substr(0,32)+"...":post.title;
   return (
     <>
       <BlogSEO
@@ -29,10 +33,13 @@ export default function Post({ post, siteMetadata }) {
         author={siteMetadata.author}
         siteLogo={siteMetadata.logo}
       />
+      <ShrinkHeader siteMetadata={siteMetadata} postTitle={postTitle} />
       <main>
-        <Comment postId={post._id} />
+        <PostLayout post={post} siteMetadata={siteMetadata} />
         <CommentForm postId={post._id} />
+        <Comment postId={post._id} />
       </main>
+      <Footer siteMetadata={siteMetadata} />
     </>
   );
 }

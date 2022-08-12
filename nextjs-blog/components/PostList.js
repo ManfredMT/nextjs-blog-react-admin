@@ -33,7 +33,7 @@ export default function PostList({ posts, displayN }) {
                   <h2 className={styles["post-title"]}>
                     <Link href={`/posts/${post.title}`}>{post.title}</Link>
                   </h2>
-                  <p className={styles["post-date"]}>{formatDate}</p>
+                  <time className={styles["post-date"]}>{formatDate}</time>
                   {post.tags.length > 0 ? (
                     <div className={styles["tags-box"]}>
                       {post.tags.map((tag) => {

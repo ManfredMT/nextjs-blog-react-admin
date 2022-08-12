@@ -40,4 +40,11 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 
+[data="highlight"] {
+  background-color: #282c34;
+  display: block; 
+  position: relative;
+  left:-3px;
+  border-left: 3px solid rgb(197, 135, 235);
+}
   

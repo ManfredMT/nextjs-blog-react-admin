@@ -1,0 +1,43 @@
+.comments-box {
+    width: 50rem;
+    margin: 2rem auto 0 auto;
+}
+.comment-user {
+    display: inline-block;
+    margin-right: 2rem;
+}
+.comment-wrap {
+    padding: 0.5rem;
+    border-top: 1px solid lightgray;
+}
+.comment-user {
+    font-weight: 600;
+    font-size: large;
+
+}
+.comment-date {
+    font-size: 0.9rem;
+    color:gray;
+}
+.comment {
+    padding: 1.5rem;
+    font-weight: 400;
+   
+    color:rgb(7, 0, 53);
+}
+.comment-label {
+    font-size: 1.5rem;
+    position: relative;
+}
+
+.comment-label::before {
+    content: "";
+    position: absolute;
+    left: 5%;
+    bottom: -0.1rem;
+    width: 4rem;
+    height: 0.6rem;
+    transform: skew(12deg) translateX(-50%);
+    background: rgba(155, 87, 238, 0.3);
+    
+  }

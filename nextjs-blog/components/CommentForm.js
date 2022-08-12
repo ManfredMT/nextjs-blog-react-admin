@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from "react";
+import styles from "../styles/CommentForm.module.css";
 
 export default function CommentForm({ postId }) {
   const [comment, setComment] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+  const [showNotice, setShowNotice] = useState(false);
   const form = {
     postId,
     username,
@@ -16,19 +19,53 @@ export default function CommentForm({ postId }) {
       const response = await fetch("http://localhost:5000/api/comments", {
         method: "POST",
         headers: {
-            "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-          },
+          "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
+        },
         body: new URLSearchParams(form),
       });
       const json = await response.json();
+      return json;
     };
-    postData().catch(console.error);
+    postData()
+      .then((data) => {
+        console.log("response data: ", data);
+        setMessage("评论已发送");
+        setShowNotice(true);
+      })
+      .catch((error) => {
+        console.error("error: ", error);
+        setMessage("发送失败");
+        setShowNotice(true);
+      })
+      .finally(() => {
+        setComment("");
+        setUsername("");
+        setEmail("");
+      });
+
+    // try {
+    //   postData();
+    // } catch (error) {
+    //   console.error(error);
+    // } finally {
+    //   setComment("");
+    //   setUsername("");
+    //   setEmail("");
+    // }
   };
+  useEffect(() => {
+    if (showNotice) {
+      setTimeout(() => {
+        setShowNotice(false);
+      }, 3000);
+    }
+  }, [showNotice]);
 
   return (
-    <div>
+    <div className={styles["comment-form-box"]}>
       <form onSubmit={onSubmit}>
         <textarea
+          className={styles["comment-textarea"]}
           required
           name="comment"
           maxLength={1000}
@@ -37,25 +74,36 @@ export default function CommentForm({ postId }) {
           onChange={(e) => setComment(e.target.value)}
         />
         <input type="hidden" name="postId" value={postId} />
+        <div className={styles["user-info-wrap"]}>
+          <input
+            className={styles["username-input"]}
+            required
+            type="text"
+            name="username"
+            maxLength={100}
+            placeholder="用户名"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <input
+            className={styles["email-input"]}
+            required
+            type="email"
+            name="email"
+            placeholder="邮箱"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </div>
         <input
-          required
-          type="text"
-          name="username"
-          maxLength={100}
-          placeholder="用户名"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          className={styles["submit-button"]}
+          type="submit"
+          value="发送评论"
         />
-        <input
-          required
-          type="email"
-          name="email"
-          placeholder="邮箱"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input type="submit" value="发送评论" />
       </form>
+      {showNotice ? (
+        <div className={styles["notification"]}>{message}</div>
+      ) : null}
     </div>
   );
 }
