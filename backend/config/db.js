@@ -2,7 +2,8 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const User = require("../models/userModel");
 const Profile = require("../models/profileModel");
-const dbName = "blog";
+const dbName = process.env.DB_NAME;
+const nextJsPort = process.env.NEXTJS_PORT;
 
 const connectDB = async () => {
   try {
@@ -48,14 +49,14 @@ const setDefaultProfile = async ()=>{
     title: `${userName}的个人网站`,
     author: 'Doe',
     language: 'zh-CN',
-    siteUrl: 'http://localhost:3001',
+    siteUrl: `http://localhost:${nextJsPort}`,
     siteRepo: 'https://github.com',
     locale: 'zh-CN',
     email: 'name@site.com',
     description: '个人博客',
-    logo: '/api/image/1659167330676.svg',
-    avatar: '/api/image/1659167172806.ico',
-    socialBanner: '/api/image/1659167085907.ico',
+    logo: '/api/image/logo.png',
+    avatar: '/api/image/avatar.ico',
+    socialBanner: '/api/image/og-image.png',
 
   }
   try {

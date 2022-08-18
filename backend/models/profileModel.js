@@ -34,9 +34,6 @@ const profileSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  keywords: {
-    type: [String],
-  },
   email: {
     type: String,
     required: true,

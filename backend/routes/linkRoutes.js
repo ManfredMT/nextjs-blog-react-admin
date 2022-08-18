@@ -9,14 +9,11 @@ const {
 } = require("../controllers/linkController");
 const { protect } = require("../middleware/authMiddleware");
 const multer = require("multer");
-// const storage = multer.memoryStorage()
-// const upload = multer({ storage: storage })
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./uploads/image");
   },
   filename: function (req, file, cb) {
-    //console.log("filename file: ", file);
     cb(null, Date.now() + path.extname(file.originalname));
   },
 });
