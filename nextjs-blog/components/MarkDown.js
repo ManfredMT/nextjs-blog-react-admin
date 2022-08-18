@@ -11,15 +11,6 @@ import "github-markdown-css";
 import "katex/dist/katex.min.css";
 import styles from "../styles/MarkDown.module.css";
 
-// reactMDClass={`${style["preview-post-body"]} markdown-body`}
-// mdChildren={singlePost?.content ?? ""}
-// codeBoxClass={style["code-box"]}
-// syntaxHLClass={style["syntax-highlighter"]}
-// hasCopyButton={true}
-// codeHeaderClass={styles["code-header"]}
-// classCopied={styles["copied"]}
-// classCopy={styles["copy-button"]}
-
 function MarkDown({
   mdChildren,
 }) {

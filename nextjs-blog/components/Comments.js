@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/Comments.module.css";
 
 export default function Comment({ postId }) {
@@ -6,7 +6,7 @@ export default function Comment({ postId }) {
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
-        "http://localhost:5000/api/comments/" + postId,
+        "/api/comments/" + postId,
         {
           method: "GET",
         }
@@ -16,7 +16,7 @@ export default function Comment({ postId }) {
     };
 
     fetchData().catch(console.error);
-  }, []);
+  }, [postId]);
   console.log("comments: ", comments);
   return comments !== null ? (
     <div className={styles["comments-box"]}>

@@ -1,9 +1,13 @@
-import MarkDown from "./MarkDown";
+//import MarkDown from "./MarkDown";
 import styles from "../styles/PostLayout.module.css";
 import Link from "next/link";
-import Image from "next/image";
+// import Image from 'next/future/image';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 
-const STATIC_FILE_SERVER_URL = "http://localhost:5000";
+const MarkDown = dynamic(() => import('./MarkDown'), {
+  suspense: true,
+})
 
 export default function PostLayout({ post, siteMetadata }) {
   const postCreatedDate = new Date(post.createdAt);
@@ -27,7 +31,7 @@ export default function PostLayout({ post, siteMetadata }) {
                     <p className={styles["author"]} key={author}>
                       <img
                         className={styles["default-author-avatar"]}
-                        src={STATIC_FILE_SERVER_URL + siteMetadata.avatar}
+                        src={siteMetadata.avatar}
                         width={20}
                         height={20}
                       />
@@ -58,12 +62,14 @@ export default function PostLayout({ post, siteMetadata }) {
             ) : null}
             <time className={styles["time"]}>{`发布时间 : ${formatCreated}`}</time>
             <time className={styles["time"]}>{`更新时间 : ${formatUpdated}`}</time>
-            <p className={styles["post-category"]}>
+            <Link href={`/categories/${post.category}`}><p className={styles["post-category"]}>
               <span className="icon-drawer"></span>
               {post.category === "default" ? "未分类" : post.category}
-            </p>
+            </p></Link>
           </header>
+          <Suspense fallback={`Loading...`}>
           <MarkDown mdChildren={post.content} />
+          </Suspense>
         </article>
         {post.lastPost ? (
           <Link href={`/posts/${post.lastPost}`}>

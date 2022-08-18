@@ -31,8 +31,8 @@ export default function Footer({ siteMetadata }) {
         </span>
 
         {siteMetadata.wx ? (
-          <span className={styles["wx-icon-box"]}>
-          <span className={styles["wx-tooltip"]}>{siteMetadata.wx}</span>
+          <span className={styles["icon-box"]}>
+          <span className={styles["tooltip"]}>{siteMetadata.wx}</span>
             <svg
               className={styles["svg-logo"]}
               version="1.1"

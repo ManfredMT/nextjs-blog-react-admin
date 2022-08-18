@@ -1,6 +1,6 @@
 import styles from "../styles/SearchBar.module.css";
 
-export default function SearchBar({ className }) {
+export default function SearchBar({ value,onChange, onClickSearch,className }) {
   return (
     <div className={styles["search-box-wrap"] + " " + className}>
       <input
@@ -9,8 +9,11 @@ export default function SearchBar({ className }) {
         type="text"
         id="title-search"
         name="title-search"
+        
+        value={value}
+        onChange={onChange}
       ></input>
-      <button className={styles["search-button"]}>
+      <button aria-label="Search Post Title" onClick={onClickSearch} className={styles["search-button"]}>
         <svg
           version="1.1"
           xmlns="http://www.w3.org/2000/svg"

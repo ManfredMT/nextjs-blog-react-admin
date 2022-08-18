@@ -1,9 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-
-const STATIC_FILE_SERVER_URL = 'http://localhost:5000';
-
 const CommonSEO = ({
   title,
   description,
@@ -47,7 +44,7 @@ export const PageSEO = ({
   siteName,
   socialBanner,
 }) => {
-  const ogImageUrl = STATIC_FILE_SERVER_URL + socialBanner;
+  const ogImageUrl = siteUrl + socialBanner;
   return (
     <CommonSEO
       title={title}
@@ -67,7 +64,7 @@ export const TagSEO = ({
   siteName,
   socialBanner,
 }) => {
-  const ogImageUrl = STATIC_FILE_SERVER_URL + socialBanner;
+  const ogImageUrl = siteUrl + socialBanner;
   const router = useRouter();
   return (
     <>
@@ -98,7 +95,7 @@ export const CategorySEO = ({
   siteName,
   socialBanner,
 }) => {
-  const ogImageUrl = STATIC_FILE_SERVER_URL + socialBanner;
+  const ogImageUrl = siteUrl + socialBanner;
   const router = useRouter();
   return (
     <>
@@ -149,7 +146,7 @@ export const BlogSEO = ({
   const featuredImages = imagesArr.map((img) => {
     return {
       "@type": "ImageObject",
-      url: `${STATIC_FILE_SERVER_URL}${img}`,
+      url: `${siteUrl}${img}`,
     };
   });
 
@@ -185,7 +182,7 @@ export const BlogSEO = ({
       name: author,
       logo: {
         "@type": "ImageObject",
-        url: `${STATIC_FILE_SERVER_URL}${siteLogo}`,
+        url: `${siteUrl}${siteLogo}`,
       },
     },
     description: summary,

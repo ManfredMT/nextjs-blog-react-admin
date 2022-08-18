@@ -16,7 +16,7 @@ export default function CommentForm({ postId }) {
   const onSubmit = (e) => {
     e.preventDefault();
     const postData = async () => {
-      const response = await fetch("http://localhost:5000/api/comments", {
+      const response = await fetch("/api/comments", {
         method: "POST",
         headers: {
           "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
