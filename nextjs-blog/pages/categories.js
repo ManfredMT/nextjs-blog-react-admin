@@ -5,6 +5,7 @@ import { PageSEO } from "../components/SEO";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styles from "../styles/Categories.module.css";
+import styleAni from "../styles/AnimatePublic.module.css";
 
 export default function Categories({ allCategories, siteMetadata }) {
   console.log("allCategories: ", allCategories);
@@ -19,7 +20,7 @@ export default function Categories({ allCategories, siteMetadata }) {
       />
       <Header siteMetadata={siteMetadata} nav="categories" />
 
-      <main className={styles["categories-page-main"]}>
+      <main className={`${styles["categories-page-main"]} ${styleAni["fade-in-top"]}`}>
         <label
           className={styles["total-num-label"]}
         >{`共${allCategories.length}个分类`}</label>

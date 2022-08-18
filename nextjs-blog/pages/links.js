@@ -5,8 +5,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styles from "../styles/Links.module.css";
 import Image from "next/image";
-
-const STATIC_FILE_SERVER_URL = "http://localhost:5000";
+import styleAni from "../styles/AnimatePublic.module.css";
 
 export default function Links({ allLinks, siteMetadata }) {
   console.log("allLinks: ", allLinks);
@@ -56,7 +55,7 @@ export default function Links({ allLinks, siteMetadata }) {
         socialBanner={siteMetadata.socialBanner}
       />
       <Header siteMetadata={siteMetadata} nav="links" />
-      <main className={styles["links-page-main"]}>
+      <main className={`${styles["links-page-main"]} ${styleAni["fade-in-top"]}`}>
         <div className={styles["grid-wrap"]}>
           {allLinks.map((link) => {
             let description = link.website;
@@ -71,7 +70,7 @@ export default function Links({ allLinks, siteMetadata }) {
               <div key={link.id} className={styles["link-card"]}>
                 {link.picture ? (
                   <Image
-                    src={STATIC_FILE_SERVER_URL+link.picture}
+                    src={link.picture}
                     alt={link.name}
                     width={80}
                     height={80}

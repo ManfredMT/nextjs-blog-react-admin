@@ -1,6 +1,5 @@
 import Head from "next/head";
-import Image from "next/image";
-import Link from "next/link";
+import { useState } from "react";
 import styles from "../styles/Home.module.css";
 import { getAllPostsData, getPostRelatedPath } from "../lib/posts";
 import { getSiteMetadata } from "../lib/siteData";
@@ -14,13 +13,23 @@ import PostList from "../components/PostList";
 import Footer from "../components/Footer";
 
 const root = process.cwd();
-const STATIC_FILE_SERVER_URL = "http://localhost:5000";
 
 const DISPLAY_POST_NUMBER = 5;
 
 export default function Home({ allPostsData, siteMetadata }) {
   console.log("allPostsData: ", allPostsData);
   console.log("metadata: ", siteMetadata);
+  const [searchValue, setSearchValue] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState(allPostsData);
+  const onChange = (e) => {
+    setSearchValue(e.target.value);
+  };
+  const onClickSearch = () => {
+    
+    setFilteredPosts(
+      allPostsData.filter((post) => post.title.includes(searchValue))
+    );
+  };
   return (
     <>
       <PageSEO
@@ -37,7 +46,12 @@ export default function Home({ allPostsData, siteMetadata }) {
         <Header siteMetadata={siteMetadata} nav="home" />
 
         <main className={styles["main"]}>
-          <SearchBar className={styles["search-bar-wrap"]} />
+          <SearchBar
+            value={searchValue}
+            onChange={onChange}
+            onClickSearch={onClickSearch}
+            className={styles["search-bar-wrap"]}
+          />
 
           {/* <div className={styles["search-box-wrap"]}>
             <input 
@@ -52,7 +66,7 @@ export default function Home({ allPostsData, siteMetadata }) {
           <hr className={styles["search-post-hr"]} />
 
           <div className={styles["post-list-wrap"]}>
-            <PostList posts={allPostsData} displayN={DISPLAY_POST_NUMBER} />
+            <PostList posts={filteredPosts} displayN={DISPLAY_POST_NUMBER} />
           </div>
           {/* {allPostsData.map((post) => {
             return (

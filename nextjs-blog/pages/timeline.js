@@ -1,10 +1,13 @@
-import { getAllPostsData } from "../lib/posts";
+import { getMonthArchive } from "../lib/posts";
 import { getSiteMetadata } from "../lib/siteData";
 import { PageSEO } from "../components/SEO";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import PostTimeline from "../components/PostTimeline";
+import styleAni from "../styles/AnimatePublic.module.css";
 
-export default function TimeLine({ allPostsData, siteMetadata }) {
+export default function Timeline({ postArchiveData, siteMetadata }) {
+  console.log("postArchiveData: ", postArchiveData);
   return (
     <>
       <PageSEO
@@ -15,8 +18,9 @@ export default function TimeLine({ allPostsData, siteMetadata }) {
         socialBanner={siteMetadata.socialBanner}
       />
       <Header siteMetadata={siteMetadata} nav="timeline" />
-      <main>
-        {allPostsData.map((post) => {
+      <main className={styleAni["fade-in-top"]}>
+        <PostTimeline postArchiveData={postArchiveData} />
+        {/* {allPostsData.map((post) => {
           return (
             <article key={post._id}>
               <header>
@@ -32,7 +36,7 @@ export default function TimeLine({ allPostsData, siteMetadata }) {
               </header>
             </article>
           );
-        })}
+        })} */}
       </main>
       <Footer siteMetadata={siteMetadata} />
     </>
@@ -40,11 +44,11 @@ export default function TimeLine({ allPostsData, siteMetadata }) {
 }
 
 export async function getStaticProps() {
-  const allPostsData = await getAllPostsData();
+  const postArchiveData = await getMonthArchive();
   const siteMetadata = await getSiteMetadata();
   return {
     props: {
-      allPostsData,
+      postArchiveData,
       siteMetadata,
     },
   };

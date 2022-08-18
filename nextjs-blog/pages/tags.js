@@ -5,6 +5,7 @@ import { PageSEO } from "../components/SEO";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styles from "../styles/Tags.module.css";
+import styleAni from "../styles/AnimatePublic.module.css";
 
 export default function Tags({ allTags, siteMetadata }) {
   console.log("allTags: ", allTags);
@@ -18,7 +19,7 @@ export default function Tags({ allTags, siteMetadata }) {
         socialBanner={siteMetadata.socialBanner}
       />
       <Header siteMetadata={siteMetadata} nav="tags" />
-      <main className={styles["tags-page-main"]}>
+      <main className={`${styles["tags-page-main"]} ${styleAni["fade-in-top"]}`}>
         <label className={styles["tag-label"]}>{`标签 : `}</label>
         <div className={styles["tags-box"]}>
         {allTags.map((tag) => {
