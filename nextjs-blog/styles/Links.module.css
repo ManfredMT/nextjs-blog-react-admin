@@ -19,7 +19,6 @@
     justify-content: center;
     grid-row-gap: 2rem;
     grid-column-gap: 3rem;
-
 }
 
 .link-card {
@@ -31,6 +30,10 @@
     align-items: center;
     cursor: auto;
     padding-left: 1rem;
+}
+
+[data-theme='dark'] .link-card {
+    background-color: rgb(61, 61, 61);
 }
 .link-name {
     border-bottom: 1px solid lightgray;
@@ -60,5 +63,27 @@
 .link-card:hover {
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
     transition: all 0.2s;
+}
+
+[data-theme='dark'] .link-card:hover {
+    box-shadow:none;
+    outline: 2px solid rgb(201, 90, 201);
+}
+
+@media (max-width: 1224px) {
+    .grid-wrap {
+        grid-template-columns: repeat(auto-fit, 25rem);
+    }
+    .link-card {
+        width: 25rem;
+    }
+    .link-info-box {
+        width: 15rem;
+    }
+    .link-name {
+        color:rgb(155, 84, 221);
+        text-decoration: underline;
+    }
+
 }
 

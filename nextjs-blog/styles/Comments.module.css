@@ -22,8 +22,11 @@
 .comment {
     padding: 1.5rem;
     font-weight: 400;
-   
     color:rgb(7, 0, 53);
+}
+
+[data-theme='dark'] .comment {
+    color:rgb(226, 222, 255);
 }
 .comment-label {
     font-size: 1.5rem;
@@ -40,4 +43,11 @@
     transform: skew(12deg) translateX(-50%);
     background: rgba(155, 87, 238, 0.3);
     
+  }
+
+  @media (max-width: 1224px) {
+    .comments-box {
+        width: 90vw;
+    }
+
   }

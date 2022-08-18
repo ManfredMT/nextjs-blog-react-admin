@@ -21,6 +21,9 @@
     white-space: nowrap;
     position: relative;
 }
+[data-theme='dark'] .tag {
+    background-color: rgb(100, 100, 100);
+}
 
 .tag:hover {
     background-color: dodgerblue;
@@ -41,4 +44,9 @@
     background-color: rgba(221, 160, 221, 0.516);
     color: gray;
  
+}
+
+[data-theme='dark'] .post-number {
+    background-color: rgba(221, 160, 221, 0.93);
+    color: rgb(230, 230, 230);
 }

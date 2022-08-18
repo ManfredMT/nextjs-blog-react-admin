@@ -1,6 +1,9 @@
-.post-list-li + .post-list-li {
-   margin-top: 4rem;
-   max-width: 760px;
+.post-list-li+.post-list-li {
+    margin-top: 4rem;
+}
+
+.post-list-li {
+    max-width: 760px;
 }
 
 .post-list-ul {
@@ -13,8 +16,8 @@
 
 .post-title::before {
     position: absolute;
-    top:16px;
-    left:-35px;
+    top: 0.65rem;
+    left: -35px;
     width: 6px;
     height: 6px;
     content: '';
@@ -29,15 +32,26 @@
     background-color: #8000af;
 }
 
+[data-theme='dark'] .post-title::before {
+    border: 6px solid #6a6c6e;
+    background-color: #3c4146;
+}
+
+[data-theme='dark'] .post-title:hover::before {
+    border-color: #eabcff;
+    background-color: #a600e3;
+}
 
 .post-title {
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 500;
     max-width: 760px;
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .post-date {
-    color:#596177;
+    color: #596177;
     font-weight: 500;
     font-size: 1rem;
     margin-left: 0.5rem;
@@ -45,8 +59,17 @@
 
 }
 
-.post-title:hover > *,
-.post-title:active > * {
+.post-summary {
+    margin-top: 0.3rem;
+    font-size: 1.1rem;
+    color:#596177;
+}
+[data-theme='dark'] .post-summary {
+    color: #b1b7c9;
+}
+
+.post-title:hover>*,
+.post-title:active>* {
     text-decoration: underline;
     text-decoration-color: lightgray;
     text-underline-offset: 0.5rem;
@@ -59,6 +82,13 @@
     text-align: center;
     margin: 0.5rem;
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
+    color: #8000af;
+}
+
+[data-theme='dark'] .post-tag {
+    background-color: rgb(141, 141, 141);
+    box-shadow: rgba(255, 255, 255, 0.3) 0px 1px 2px 0px;
+    color:#aa00e8;
 }
 
 .tags-box {
@@ -75,9 +105,9 @@
     border: 1px solid #91C9FF;
     outline: none;
     transition: 1s ease-in-out;
-  }
-  
-  .btn-svg {
+}
+
+.btn-svg {
     position: absolute;
     left: 0;
     top: 0;
@@ -86,19 +116,34 @@
     stroke-dasharray: 150 480;
     stroke-dashoffset: 150;
     transition: 1s ease-in-out;
-  }
-  
-  .btn:hover {
+}
+
+.btn:hover {
     transition: 1s ease-in-out;
     background: #4F95DA;
-  }
-  
-  .btn:hover .btn-svg {
+}
+
+.btn:hover .btn-svg {
     stroke-dashoffset: -480;
-  }
-  
-  .btn span {
+}
+
+.btn span {
     color: white;
     font-size: 18px;
     font-weight: 100;
-  }
+}
+
+@media (max-width: 1224px) {
+    .post-list-li {
+        max-width: 70vw;
+    }
+
+    .post-title {
+        max-width: 70vw;
+    }
+
+    .tags-box {
+        width: 60vw;
+    }
+
+}

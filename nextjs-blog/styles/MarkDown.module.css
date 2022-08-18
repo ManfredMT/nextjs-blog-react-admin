@@ -18,3 +18,26 @@
     visibility: visible;
 }
 
+[data-theme='dark'] .preview-post-body {
+    background: black;
+    color: white;
+}
+
+[data-theme='dark'] .preview-post-body pre {
+    background-color: black;
+}
+
+@media (max-width: 1224px) {
+    .preview-post-body pre {
+        font-size: 0.6rem;
+    }
+    .code-header {
+        visibility: visible;
+        margin-right: 0rem;
+        top: 2.8rem;
+    }
+    .preview-post-body {
+        overflow-x: auto;
+    }
+}
+

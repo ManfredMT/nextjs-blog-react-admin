@@ -11,14 +11,20 @@
     font-size: 1rem;
     line-height: 2rem;
     margin-bottom: 1rem;
-    color: #80808a;
+    color: #323236;
     font-weight: 500;
 }
 
 .copyright-support {
-    color: grey;
+    color: rgb(59, 59, 59);
 }
 
+[data-theme='dark'] .copyright-box {
+    color: rgb(205, 205, 205);
+}
+[data-theme='dark'] .copyright-support {
+    color: rgb(205, 205, 205);
+}
 .social-info-box>*+* {
     margin-left: 1.5rem;
 }
@@ -38,7 +44,7 @@
 }
 
 .svg-logo:hover {
-    background-color: skyblue;
+    background-color: rgb(200, 135, 235);
 }
 
 .wx-icon-box {
@@ -69,8 +75,11 @@
 
 }
 
+[data-theme='dark'] .tooltip {
+    background-color: rgba(138, 138, 138, 0.856);
+}
+
 .icon-box:hover .tooltip {
     visibility: visible;
     opacity:1;
-    
 }

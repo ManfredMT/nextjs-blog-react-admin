@@ -7,6 +7,10 @@
     background-color: #4777e612;
 }
 
+[data-theme='dark'] .comment-form-box {
+    background-color: #3e434e;
+}
+
 .comment-textarea {
     display: block;
     width: 100%;
@@ -77,6 +81,10 @@
     cursor: pointer;
 }
 
+[data-theme='dark'] .submit-button {
+    box-shadow: 0 0 20px rgb(91, 91, 91);
+}
+
 .submit-button:hover {
     background-position: right center;
     color: #fff;
@@ -95,5 +103,13 @@
     font-size: 1.3rem;
     font-weight: 600;
     transition: all 1s;
+}
+
+@media (max-width: 1224px) {
+    .comment-form-box {
+        /* border: 1px solid green; */
+        width: 95vw;
+    }
 
 }
+

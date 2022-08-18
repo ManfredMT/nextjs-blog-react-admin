@@ -7,73 +7,91 @@
     overflow: hidden;
     font-family: 'Lato', sans-serif;
   } */
-  
-  .container {
-    /* width: 400px;
+
+.container {
+  /* width: 400px;
     height: 400px;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%); */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* border: 1px solid blue; */
-    margin-top:3rem;
-  }
-  
-  .center {
-    /* width: 180px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* border: 1px solid blue; */
+  margin-top: 3rem;
+}
+
+.center {
+  /* width: 180px;
     height: 60px; */
-    position: relative;
-  }
-  
-  .btn {
-    width: 180px;
-    height: 60px;
-    cursor: pointer;
-    background: rgb(240, 239, 239);
-    background: #fff;
-    border: 1px solid lightgray;
-    outline: none;
-    transition: 1s ease-in-out;
-    
-  }
-  
-  .btn svg {
-    position: absolute;
-    left: 0;
-    top: 0;
-    fill: none;
-    stroke: #fff;
-    stroke: black;
-    stroke-dasharray: 150 480;
-    stroke-dashoffset: 150;
-    transition: 1s ease-in-out;
-  }
-  
-  .btn:hover {
-    transition: 1s ease-in-out;
-    background: white;
-    
-  }
+  position: relative;
+}
 
-  .btn:active {
-    transform: scale(0.95);
-    transition: 0.1s ease-in-out;
-  }
-  
-  .btn:hover svg {
-    stroke-dashoffset: -480;
-  }
-  
-  .btn span {
-    color: black;
-    color: gray;
-    font-size: 1.3rem;
-    font-weight: 300;
-  }
+.btn {
+  width: 180px;
+  height: 60px;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid lightgray;
+  outline: none;
+  transition: 1s ease-in-out;
 
-  .btn:hover span {
-    color: black;
-  }
+}
+
+[data-theme='dark'] .btn {
+  background: black;
+  border: 1px solid lightgray;
+
+}
+
+.btn svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  fill: none;
+  stroke: black;
+  stroke-dasharray: 150 480;
+  stroke-dashoffset: 150;
+  transition: 1s ease-in-out;
+}
+
+[data-theme='dark'] .btn svg {
+  stroke: #fff;
+}
+
+.btn:hover {
+  transition: 1s ease-in-out;
+  background: white;
+
+}
+[data-theme='dark'] .btn:hover {
+  background: black;
+}
+.btn:active {
+  transform: scale(0.95);
+  transition: 0.1s ease-in-out;
+}
+
+.btn:hover svg {
+  stroke-dashoffset: -480;
+}
+
+.btn span {
+  color: black;
+  color: gray;
+  font-size: 1.3rem;
+  font-weight: 300;
+}
+
+.btn:hover span {
+  color: black;
+}
+
+[data-theme='dark'] .btn span {
+  color:rgb(216, 216, 216);
+}
+
+[data-theme='dark'] .btn:hover span {
+  color:white;
+}

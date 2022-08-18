@@ -14,3 +14,16 @@
     font-size: 1.5rem;
     color:lawngreen;
 }
+
+@media (max-width: 1224px) {
+    .copied,.copy-button {
+        font-size: 1rem;
+    }
+    .copy-button {
+        color:rgba(255, 255, 255, 0.545);
+    }
+    .copy-button:hover {
+        color:rgba(255, 255, 255, 0.545);
+    }
+
+}

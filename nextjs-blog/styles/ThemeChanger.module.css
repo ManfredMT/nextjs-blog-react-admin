@@ -1,0 +1,42 @@
+.sun-svg,.moon-svg {
+    height: 1.6rem;
+    width: 1.6rem;
+}
+
+.moon-svg {
+    fill:rgb(78, 0, 120);
+}
+
+
+.theme-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+@media (max-width: 1224px) {
+    .sun-svg {
+        fill:black;
+    }
+    .theme-button {
+        display: flex;
+        align-items: center;
+    }
+    .theme-button::before {
+        content: "主题 : ";
+        color:black;
+        font-size: 1.6rem;
+        margin-right: 0.5rem;
+        /* position: relative;
+        top:-3px */
+
+        
+    }
+    [data-theme='dark'] .sun-svg {
+        fill: white;
+    }
+    [data-theme='dark'] .theme-button::before {
+        color: white;
+    }
+
+}
