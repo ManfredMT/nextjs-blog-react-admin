@@ -166,6 +166,12 @@
     cursor: text;
 }
 
+.end-info {
+    font-size: 0.6rem;
+    color: gray;
+    margin: 0.5rem auto 0.5rem 2rem;
+}
+
 
 @media (min-width:1224px) {
     /* .select-header {
@@ -256,11 +262,5 @@
     .tag-box:focus-within .edit-item {
         background-color: #ffffff;
     }
-
-
-
-
-
-
 
 }

@@ -1,64 +1,30 @@
 .admin-panel-layout .logo {
   height: 32px;
   margin: 16px;
-  background: rgba(255, 255, 255, 0.3);
-  ;
 }
-
 
 .site-layout-sub-header-background {
   background: #fff;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
   padding: 0;
-
 }
 
-
-@media (min-width:1224px) {
-  .site-layout-sub-header-background {
-    border-radius: 1rem;
-    margin: 1.5rem 2rem 0;
-    box-shadow: none;
-  }
-
+.admin-panel-layout .drawer-trigger {
+  margin-left: 2rem;
 }
 
 .site-layout-background {
   background: #f0f2f5;
 }
 
-.admin-panel-layout .trigger {
-
-  padding: 30px;
-  font-size: 18px;
-
-  cursor: pointer;
-  transition: color 0.3s;
-  color: white;
-}
-
-.admin-panel-layout .trigger:hover {
-  color: #1890ff;
-}
-
-.admin-panel-layout .site-layout-sub-header-background {
-  display: flex;
-  align-items: center;
-  justify-content: right;
-}
-
 .admin-panel-layout .logout-button {
   margin-right: 10vw;
 }
 
-.admin-panel-layout .drawer-trigger {
-  position: absolute;
-  left: 10vw;
-  font-size: 20px;
-  cursor: pointer;
-  transition: color 0.3s;
-  color: #1890ff;
-
+.admin-panel-layout .side-box {
+  position: sticky;
+  top: 0;
+  height: 100vh;
 }
 
 .admin-panel-layout .no-style-button {
@@ -82,37 +48,53 @@
   color: #1890ff;
 }
 
-.admin-panel-layout .full-screen-button {
-  font-size: 16px;
-  margin-right: 1rem;
-}
-
-.admin-panel-layout .full-screen-button:hover {
-  color: #1890ff;
-}
-
-.admin-panel-layout .exit-full-screen-button {
-  font-size: 16px;
-  margin-right: 1rem;
-}
-
-.admin-panel-layout .exit-full-screen-button:hover {
-  color: #1890ff;
-}
-
 .admin-panel-layout .menu-fold-button {
   position: absolute;
   bottom: 0rem;
   width: 100%;
-
   background: #001c37;
-  color: blue;
+  background: transparent;
   border: 0px;
   border-top: 1px #4d5c6a solid;
   padding: 0;
   font: inherit;
   outline: inherit;
   cursor: default;
-  padding: 0px;
+}
 
+.admin-panel-layout .trigger {
+  padding: 30px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.3s;
+  color: white;
+}
+
+.admin-panel-layout .trigger:hover {
+  color: #1890ff;
+}
+
+.admin-panel-layout .logo-svg {
+  transition: all 0.5s;
+}
+
+.admin-panel-layout .site-layout-sub-header-background {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 桌面端css */
+@media (min-width:1224px) {
+  .site-layout-sub-header-background {
+    border-radius: 1rem;
+    margin: 1.5rem 2rem 0;
+    box-shadow: none;
+  }
+
+  .admin-panel-layout .site-layout-sub-header-background {
+    display: flex;
+    align-items: center;
+    justify-content: right;
+  }
 }
