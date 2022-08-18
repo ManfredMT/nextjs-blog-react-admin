@@ -5,7 +5,7 @@ const Comment = require("../models/commentModel");
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
-let revalidateUrl = `http://localhost:3001/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=post`;
+const revalidateUrl = `http://localhost:${process.env.NEXTJS_PORT}/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=post`;
 
 // @desc   Get Posts
 // @route  GET /api/posts

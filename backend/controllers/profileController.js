@@ -32,9 +32,6 @@ const updateProfile = asyncHandler(async (req, res) => {
   }
   let newProfileData = req.body;
   //console.log('req.files: ',req.files);
-  if (req.body.keywords === "") {
-    newProfileData.keywords = [];
-  }
 
   if (req?.files?.logo && req?.files?.logo[0]) {
     // if (req?.files?.logo[0].size > 300*1024) {

@@ -2,10 +2,9 @@ const asyncHandler = require("express-async-handler");
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
-let revalidateUrl = `http://localhost:3001/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=link`;
+const revalidateUrl = `http://localhost:${process.env.NEXTJS_PORT}/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=link`;
 
 const Link = require("../models/linkModel");
-const sharp = require("sharp");
 
 // @desc   Get links
 // @route  GET /api/links
