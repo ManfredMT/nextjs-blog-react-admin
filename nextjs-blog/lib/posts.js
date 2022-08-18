@@ -1,4 +1,4 @@
-import { connectDB } from "./utils/db";
+import connectDB from "./utils/db";
 import Post from "./utils/postModel";
 import User from "./utils/userModel";
 import dbConnect from "./utils/dbConnect";
@@ -221,8 +221,8 @@ export async function getPostByTitle(title) {
       );
       const sortTIndex = sortedTitles.findIndex((p) => p.title === title);
       const postsObj = JSON.parse(JSON.stringify(postsResult));
-      postsObj[0].nextPost = sortedTitles[sortTIndex + 1]?.title??null;
-      postsObj[0].lastPost = sortedTitles[sortTIndex - 1]?.title??null;
+      postsObj[0].nextPost = sortedTitles[sortTIndex + 1]?.title ?? null;
+      postsObj[0].lastPost = sortedTitles[sortTIndex - 1]?.title ?? null;
       console.log("getPostByTitle: ", postsObj);
       return postsObj;
     } else {
@@ -261,3 +261,49 @@ export async function getPostRelatedPath() {
     return postRelatedPath;
   }
 }
+
+
+export async function getMonthArchive() {
+  await dbConnect();
+  const name = process.env.USER_NAME;
+  const user = await User.findOne({ name });
+  if (!user) {
+    console.log("用户不存在");
+    return [];
+  } else {
+    const posts = await Post.find({ user: user.id, draft: false }).sort({createdAt: -1}).select(
+      "-content -image"
+    );
+    if (posts) {
+      const monthList = [];
+      const monthArchive = [];
+      posts.forEach((doc) => {
+        const createdDate = new Date(doc.createdAt);
+        const formatCreated = `${
+          createdDate.getMonth() + 1
+        }月, ${createdDate.getFullYear()}`;
+        if (!monthList.includes(formatCreated)) {
+          const postArchive = {
+            date: formatCreated,
+            posts: [{ id: doc._id.toString(), title: doc.title }],
+          };
+          monthArchive.push(postArchive);
+          monthList.push(formatCreated);
+        } else {
+          const archiveIndex = monthArchive.findIndex(
+            (a) => a.date === formatCreated
+          );
+          if(archiveIndex!==-1) {
+            monthArchive[archiveIndex].posts.push({
+            id: doc._id.toString(),
+            title: doc.title,
+          });
+          }
+        }
+      });
+      return monthArchive;
+    }
+  }
+}
+
+

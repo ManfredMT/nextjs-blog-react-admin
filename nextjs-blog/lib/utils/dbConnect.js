@@ -1,8 +1,8 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
-const MONGODB_URI = process.env.MONGODB_URI
-//const MONGODB_URI = 'mongodb://localhost:27017';
-const DB_NAME = process.env.DB_NAME
+const MONGODB_URI = process.env.MONGODB_URI;
+
+const DB_NAME = process.env.DB_NAME;
 
 if (!MONGODB_URI) {
   throw new Error(
