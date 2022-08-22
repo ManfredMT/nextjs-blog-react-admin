@@ -8,9 +8,7 @@ function RequireAuth({ children }) {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+  const { isError, isSuccess, message } = useSelector((state) => state.auth);
   const [isAuth, setIsAuth] = useState(false);
 
   useEffect(() => {
@@ -19,7 +17,7 @@ function RequireAuth({ children }) {
 
   useEffect(() => {
     if (isError) {
-      console.log("Auth error: ", message);
+      console.error("Auth error: ", message);
       setIsAuth(false);
       navigate("/", { replace: true, state: { from: location } });
       dispatch(reset());
@@ -27,11 +25,9 @@ function RequireAuth({ children }) {
     if (isSuccess) {
       setIsAuth(true);
     }
-    
   }, [dispatch, isError, isSuccess, message, location, navigate]);
 
-  return <>{isAuth ? <>{children}</> : <Loading />}</>;
-  
+  return isAuth ? <>{children}</> : <Loading />;
 }
 
 export default RequireAuth;

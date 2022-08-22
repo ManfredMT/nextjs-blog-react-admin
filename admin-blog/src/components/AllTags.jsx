@@ -1,30 +1,26 @@
 import {
   DeleteFilled,
-  EditFilled,
-  SearchOutlined,
-  TagOutlined
+  EditFilled, TagOutlined
 } from "@ant-design/icons";
 import {
-  Button,
-  Form,
-  Input,
-  InputNumber, message as antMessage, Popconfirm,
-  Space,
-  Table,
-  Typography
+  Form, message as antMessage,
+  Popconfirm, Typography
 } from "antd";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
 import style from "../css/AllItems.module.css";
 import {
-  deleteTag, getPosts,
+  deleteTag,
+  getPosts,
   reset,
   updateTag
 } from "../features/posts/postSlice";
-import usePrevious from "../hooks/usePrevious";
+import useColumnSearch from "../hooks/useColumnSearch";
+import useGetData from "../hooks/useGetData";
+import EditableTable from "./EditableTable";
 import HCenterSpin from "./HCenterSpin";
 
 function getTagCount(posts) {
@@ -42,73 +38,22 @@ function getTagCount(posts) {
   return tagCount;
 }
 
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `请输入${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
-
 function AllTags() {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const [form] = Form.useForm();
-
   const dispatch = useDispatch();
-  const { posts, isSuccess, isError, isLoading, message } = useSelector(
+  const { posts, isSuccess, isError, message } = useSelector(
     (state) => state.posts
   );
 
-  useEffect(() => {
-    dispatch(getPosts());
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
-
-  let isErrorReset = useRef(false);
-  useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
-      antMessage.error(message);
-    }
-  }, [isError, message]);
+  useGetData(getPosts, reset, isError, message);
 
   useEffect(() => {
     if (isSuccess && (message === "标签已更改" || message === "标签已删除")) {
       antMessage.success(message);
       dispatch(getPosts());
     }
-  }, [isSuccess, message]);
+  }, [isSuccess, message, dispatch]);
 
   const allPosts = useMemo(
     () =>
@@ -126,7 +71,7 @@ function AllTags() {
 
   const originData = getTagCount(allPosts);
 
-  const data = useMemo(()=>originData,[originData])
+  const data = useMemo(() => originData, [originData]);
   const [editingKey, setEditingKey] = useState("");
 
   const isEditing = (record) => record.key === editingKey;
@@ -147,15 +92,13 @@ function AllTags() {
   const save = async (key) => {
     try {
       const row = await form.validateFields();
-      console.log("key: ", key);
-      console.log("row: ", row);
       let tagFormData = new FormData();
       tagFormData.append("oldTag", key);
       tagFormData.append("newTag", row.tagName);
       dispatch(updateTag(tagFormData));
       setEditingKey("");
     } catch (errInfo) {
-      console.log("数据错误:", errInfo);
+      console.error("数据错误:", errInfo);
     }
   };
 
@@ -166,109 +109,29 @@ function AllTags() {
   };
 
   //实现一个搜索列
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
-
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
-
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
-  };
-  let searchInput;
-
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            searchInput = node;
-          }}
-          placeholder={"搜索标签名"}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{ marginBottom: 8, display: "block" }}
+  const inputPlaceholder = "搜索标签名";
+  const renderColumn = (text, dataIndex, searchedColumn, searchText) =>
+  searchedColumn === dataIndex ? (
+    <>
+      <Link to={`../post-tags?tag=${text}`}>
+        <TagOutlined />{" "}
+        <Highlighter
+          highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ""}
         />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            搜索
-          </Button>
-          <Button
-            onClick={() => handleReset(clearFilters)}
-            size="small"
-            style={{ width: 90 }}
-          >
-            重置
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            筛选
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : "",
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.select(), 100);
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <>
-          <Link to={`../post-tags?tag=${text}`}>
-            <TagOutlined />{" "}
-            <Highlighter
-              highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-              searchWords={[searchText]}
-              autoEscape
-              textToHighlight={text ? text.toString() : ""}
-            />
-          </Link>
-        </>
-      ) : (
-        <>
-          <Link to={`../post-tags?tag=${text}`}>
-            <TagOutlined />
-            {` ${text}`}
-          </Link>
-        </>
-      ),
-  });
+      </Link>
+    </>
+  ) : (
+    <>
+      <Link to={`../post-tags?tag=${text}`}>
+        <TagOutlined />
+        {` ${text}`}
+      </Link>
+    </>
+  );
+  const getColumnSearchProps = useColumnSearch(inputPlaceholder,renderColumn);
 
   const columns = [
     {
@@ -318,6 +181,7 @@ function AllTags() {
             </Typography.Link>
             {data.length >= 1 ? (
               <Popconfirm
+              className={style["delete-button-mobile"]}
                 okText="确认"
                 cancelText="取消"
                 title="确认删除标签?"
@@ -356,42 +220,17 @@ function AllTags() {
       },
     },
   ];
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === "postNumber" ? "number" : "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
-  const preIsSuccess = usePrevious(isSuccess);
 
   return isSuccess ? (
-    <Form form={form} component={false}>
-      <Table
-        className={style["item-table"]}
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
-        //bordered
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName={style["editable-row"]}
-        pagination={{
-          onChange: cancel,
-        }}
-      />
-    </Form>
+    <EditableTable
+      form={form}
+      data={data}
+      columns={columns}
+      editingKey={editingKey}
+      setEditingKey={setEditingKey}
+      tableClass={style["item-table"]}
+      tableRowClass={style["editable-row"]}
+    />
   ) : (
     <HCenterSpin />
   );

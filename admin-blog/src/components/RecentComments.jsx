@@ -3,44 +3,22 @@ import {
   Avatar,
   Card,
   Comment,
-  Divider,
-  Modal,
+  Divider, message as antMessage, Modal,
   Tooltip,
-  message as antMessage,
+  Empty
 } from "antd";
 import moment from "moment";
-import { useState, useMemo, useEffect, useRef } from "react";
-import { useMediaQuery } from "react-responsive";
-import style from "../css/RecentComments.module.css";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import HCenterSpin from "./HCenterSpin";
-import usePrevious from "../hooks/usePrevious";
+import style from "../css/RecentComments.module.css";
 import {
-  reset,
-  getComments,
-  deleteComment,
+  deleteComment, getComments, reset
 } from "../features/comments/commentSlice";
-
-// const comments = [
-//   { source: "post 1", time: "", commentContent: "comment 1", author: "Tom" },
-//   { source: "post 13", time: "", commentContent: "comment 2", author: "Tom" },
-//   { source: "post 1", time: "", commentContent: "comment 3", author: "Tom" },
-//   {
-//     source: "post 1",
-//     time: "",
-//     commentContent:
-//       "An image cropper for Ant Design Upload. To prevent overwriting the custom styles to antd, antd-img-crop does not import the style files of components. Therefore, if your project configured babel-plugin-import, and not use Modal or Slider, you need to import the styles yourself:",
-//     author: "Mark",
-//   },
-//   { source: "post 12", time: "", commentContent: "comment 5", author: "Mark" },
-//   { source: "post 1", time: "", commentContent: "comment 6", author: "Mark" },
-//   { source: "post 11", time: "", commentContent: "comment 7", author: "Mark" },
-// ];
+import HCenterSpin from "./HCenterSpin";
 
 function RecentComments() {
-  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const dispatch = useDispatch();
-  const { comments, isSuccess, isError, isLoading, message } = useSelector(
+  const { comments, isSuccess, isError, message } = useSelector(
     (state) => state.comments
   );
   useEffect(() => {
@@ -70,7 +48,7 @@ function RecentComments() {
       antMessage.success(message);
       dispatch(getComments());
     }
-  }, [isSuccess, message]);
+  }, [isSuccess, message, dispatch]);
 
   const allComments = useMemo(
     () =>
@@ -83,7 +61,7 @@ function RecentComments() {
           author: c.username,
           email:c.email,
         };
-      }),
+      }).sort((a,b)=>b.time-a.time),
     [comments]
   );
 
@@ -109,17 +87,11 @@ function RecentComments() {
     setIsModalVisible(true);
   };
 
-
-  const preIsSuccess = usePrevious(isSuccess);
-  console.log("isSuccess: ", isSuccess);
-  console.log("preIsSuccess: ", preIsSuccess);
-  console.log("allComments: ", allComments);
-
   return isSuccess ? (
-    <>
+    <>{allComments.length===0?<Empty />:
       <div className={style["recent-comment-box"]}>
         {allComments.map(
-          ({ id, source, time, commentContent, author,email }, index) => {
+          ({ id, source, time, commentContent, author,email }) => {
             return (
               <Card
                 key={id}
@@ -166,7 +138,7 @@ function RecentComments() {
             );
           }
         )}
-      </div>
+      </div>}
       <Modal
         title="删除评论"
         visible={isModalVisible}

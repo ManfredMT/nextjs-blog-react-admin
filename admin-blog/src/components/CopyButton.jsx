@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import copyPNG from "./images/icons8-copy-64.png";
-import copySvg from "./images/copy-svgrepo-com.svg";
-import copiedSvg from "./images/check-success-svgrepo-com.svg";
-
+import copySvg from "../images/copy-svgrepo-com.svg";
+import copiedSvg from "../images/check-success-svgrepo-com.svg";
 
 function CopyButton({ text, classCopy, classCopied }) {
   const [copied, setCopied] = useState(false);
@@ -28,7 +26,6 @@ function CopyButton({ text, classCopy, classCopied }) {
         <img title="复制成功" src={copiedSvg} alt="copied" className={classCopied} />
       ) : (
         <img
-          //style={{background:"transparent"}}
           title="复制"
           className={classCopy}
           src={copySvg}

@@ -1,25 +1,23 @@
-import { PlusOutlined } from "@ant-design/icons";
 import {
   Button,
   Divider,
   Form,
   Input,
-  message as antMessage,
-  Upload,
-  Select,
+  message as antMessage
 } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import style from "../css/BlogSetting.module.css";
 import {
   getProfile,
   reset,
-  updateProfile,
+  updateProfile
 } from "../features/profile/profileSlice";
-import usePrevious from "../hooks/usePrevious";
+import useGetData from "../hooks/useGetData";
 import HCenterSpin from "./HCenterSpin";
-//import {fileTypeFromBuffer} from 'file-type';
+import ImageUploadBox from "./ImageUploadBox";
+
 
 const getBase64 = (img, callback) => {
   const reader = new FileReader();
@@ -27,53 +25,24 @@ const getBase64 = (img, callback) => {
   reader.readAsDataURL(img);
 };
 
-const uploadButton = (
-  <div>
-    <PlusOutlined />
-    <div
-      style={{
-        marginTop: 8,
-      }}
-    >
-      Upload
-    </div>
-  </div>
-);
-
 function BlogSetting() {
+  const [imageUrl, setImageUrl] = useState();
+  const [imageAvatarUrl, setImageAvatarUrl] = useState();
+  const [imageBannerUrl, setImageBannerUrl] = useState();
+  const isImgValid = useRef(false);
+
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const dispatch = useDispatch();
-  const { profile, isSuccess, isError, isLoading, message } = useSelector(
+  const { profile, isSuccess, isError, message } = useSelector(
     (state) => state.profile
   );
-  const preIsSuccess = usePrevious(isSuccess);
-  useEffect(() => {
-    dispatch(getProfile());
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
-
-  let isErrorReset = useRef(false);
-  useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
-      antMessage.error(message);
-    }
-  }, [isError, message]);
-
+  useGetData(getProfile, reset, isError, message);
   useEffect(() => {
     if (isSuccess && message === "设置已更改") {
       antMessage.success(message);
       dispatch(getProfile());
     }
-  }, [isSuccess, message]);
-
-  // console.log("const preIsSuccess; ",preIsSuccess);
-  // console.log("isSuccess: ",isSuccess);
-  // console.log("profile: ",profile);
+  }, [isSuccess, message, dispatch]);
 
   const validateMessages = {
     required: "${label}不能为空!",
@@ -85,80 +54,65 @@ function BlogSetting() {
 
   const formRef = useRef(null);
 
-  function getFormDate(values) {
-    console.log("values: ", values);
-    const profileFormData = new FormData();
-    profileFormData.append("name", values.blog.name);
-    profileFormData.append("title", values.site.title);
-    profileFormData.append("author", values.site.author);
-    profileFormData.append("language", values.site.language);
-    profileFormData.append("locate", values.site.locate);
-    profileFormData.append("siteUrl", values.site.siteUrl);
-    profileFormData.append("siteRepo", values.site.siteRepo);
-    if (values.site.keywords.length !== 0) {
-      values.site.keywords.forEach((keyword) => {
-        profileFormData.append("keywords", keyword);
-      });
-    } else if (
-      profile[0].keywords.length !== 0 &&
-      values.site.keywords.length === 0
-    ) {
-      profileFormData.append("keywords", "");
-    }
-    if (values.blog.description !== null) {
-      profileFormData.append("description", values.blog.description);
-    } else if (profile[0]?.description && values.user.description === null) {
-      profileFormData.append("description", "");
-    }
-    if (values.user.email !== null) {
-      profileFormData.append("email", values.user.email);
-    } else if (profile[0]?.email && values.user.email === null) {
-      profileFormData.append("email", "");
-    }
-    if (values.user.wx !== null) {
-      profileFormData.append("wx", values.user.wx);
-    } else if (profile[0]?.email && values.user.email === null) {
-      profileFormData.append("email", "");
-    }
-    if (values.user.github !== null) {
-      profileFormData.append("github", values.user.github);
-    } else if (profile[0]?.github && values.user.github === null) {
-      profileFormData.append("github", "");
-    }
-    if (values.user.zhihu !== null) {
-      profileFormData.append("zhihu", values.user.zhihu);
-    } else if (profile[0]?.zhihu && values.user.zhihu === null) {
-      profileFormData.append("zhihu", "");
-    }
-    if (values.user.juejin !== null) {
-      profileFormData.append("juejin", values.user.juejin);
-    } else if (profile[0]?.juejin && values.user.juejin === null) {
-      profileFormData.append("juejin", "");
-    }
+  const getFormDate = useCallback(
+    (values) => {
+      //console.log("values: ", values);
+      const profileFormData = new FormData();
+      profileFormData.append("name", values.blog.name);
+      profileFormData.append("title", values.site.title);
+      profileFormData.append("author", values.site.author);
+      profileFormData.append("language", values.site.language);
+      profileFormData.append("locate", values.site.locate);
+      profileFormData.append("siteUrl", values.site.siteUrl);
+      profileFormData.append("siteRepo", values.site.siteRepo);
+      if (values.blog.description !== null) {
+        profileFormData.append("description", values.blog.description);
+      } else if (profile[0]?.description && values.user.description === null) {
+        profileFormData.append("description", "");
+      }
+      if (values.user.email !== null) {
+        profileFormData.append("email", values.user.email);
+      } else if (profile[0]?.email && values.user.email === null) {
+        profileFormData.append("email", "");
+      }
+      if (values.user.wx !== null) {
+        profileFormData.append("wx", values.user.wx);
+      } else if (profile[0]?.email && values.user.email === null) {
+        profileFormData.append("email", "");
+      }
+      if (values.user.github !== null) {
+        profileFormData.append("github", values.user.github);
+      } else if (profile[0]?.github && values.user.github === null) {
+        profileFormData.append("github", "");
+      }
+      if (values.user.zhihu !== null) {
+        profileFormData.append("zhihu", values.user.zhihu);
+      } else if (profile[0]?.zhihu && values.user.zhihu === null) {
+        profileFormData.append("zhihu", "");
+      }
+      if (values.user.juejin !== null) {
+        profileFormData.append("juejin", values.user.juejin);
+      } else if (profile[0]?.juejin && values.user.juejin === null) {
+        profileFormData.append("juejin", "");
+      }
 
-    if (values.upload && imageUrl) {
-      const logoFile = values.upload[0].originFileObj;
-      profileFormData.append("logo", logoFile);
-    }
-    if (values.uploadAvatar && imageAvatarUrl) {
-      const avatarFile = values.uploadAvatar[0].originFileObj;
-      profileFormData.append("avatar", avatarFile);
-    }
-    if (values.uploadSocialBanner && imageBannerUrl) {
-      const bannerFile = values.uploadSocialBanner[0].originFileObj;
-      profileFormData.append("socialBanner", bannerFile);
-    }
+      if (values.upload && imageUrl) {
+        const logoFile = values.upload[0].originFileObj;
+        profileFormData.append("logo", logoFile);
+      }
+      if (values.uploadAvatar && imageAvatarUrl) {
+        const avatarFile = values.uploadAvatar[0].originFileObj;
+        profileFormData.append("avatar", avatarFile);
+      }
+      if (values.uploadSocialBanner && imageBannerUrl) {
+        const bannerFile = values.uploadSocialBanner[0].originFileObj;
+        profileFormData.append("socialBanner", bannerFile);
+      }
 
-    return profileFormData;
-  }
-
-  const handleUpdateProfile = (e) => {
-    const formValues = formRef.current.getFieldsValue(true);
-    const profileFormData = getFormDate(formValues);
-    profileFormData.append("profileId", profile[0]._id);
-    dispatch(updateProfile(profileFormData));
-    //console.log("profileFormData: ",profileFormData);
-  };
+      return profileFormData;
+    },
+    [imageAvatarUrl, imageUrl, imageBannerUrl, profile]
+  );
 
   const onFinish = (values) => {
     const formValues = values;
@@ -174,13 +128,7 @@ function BlogSetting() {
     return e?.fileList;
   };
 
-  const [imageUrl, setImageUrl] = useState();
-  const [imageAvatarUrl, setImageAvatarUrl] = useState();
-  const [imageBannerUrl, setImageBannerUrl] = useState();
-  const isImgValid = useRef(false);
-
   const handleChange = (type, info) => {
-    console.log("info.file: ", info.file);
     const file = info.file;
     const isLt300k = file.size / 1024 < 300;
 
@@ -211,21 +159,7 @@ function BlogSetting() {
     }
   };
 
-  //console.log("debug fileList: ",fileList);
-  const uploadProps = {
-    beforeUpload: (file) => {
-      return false;
-    },
-    //fileList,
-    maxCount: 1,
-    name: "file",
-    listType: "picture-card",
-    showUploadList: false,
-    //onChange: (info)=>handleChange(,info),
-  };
-
   useEffect(() => {
-    console.log("profile: ", profile);
     if (profile[0]) {
       if (profile[0].logo) {
         setImageUrl(profile[0].logo);
@@ -239,45 +173,9 @@ function BlogSetting() {
     }
   }, [profile]);
 
-  const getDefaultImg = (type) => {
-    console.log("profile: ", profile);
-    if (!profile[0]) {
-      return null;
-    }
-    let defaultImage;
-    if (type === "logo") {
-      defaultImage = profile[0].logo;
-    }
-    if (type === "avatar") {
-      defaultImage = profile[0].avatar;
-    }
-    if (type === "banner") {
-      defaultImage = profile[0].socialBanner;
-    }
-    if (defaultImage) {
-      
-      const imgUrl = defaultImage;
-      // if(type==='logo') {
-      //   setImageUrl(imgUrl);
-      // }
-      // if(type==='avatar') {
-      //   setImageAvatarUrl(imgUrl);
-      // }
-      // if(type==='banner') {
-      //   setImageBannerUrl(imgUrl);
-      // }
-      return [
-        {
-          uid: "-1",
-          name: type,
-          status: "done",
-          url: imgUrl,
-        },
-      ];
-    } else {
-      return null;
-    }
-  };
+  const onFinishFailed=()=>{
+    antMessage.error("表单错误，请修改表单")
+  }
 
   return profile[0] !== undefined ? (
     <div className={style["main-box"]}>
@@ -301,6 +199,7 @@ function BlogSetting() {
         name="nest-messages"
         validateMessages={validateMessages}
         onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
       >
         <Divider orientation="left" plain>
           网页
@@ -386,41 +285,21 @@ function BlogSetting() {
           <Input placeholder={isTabletOrMobile ? "仓库地址(必填)" : null} />
         </Form.Item>
 
-        <Form.Item
-          initialValue={profile[0] ? profile[0].keywords ?? null : null}
-          name={["site", "keywords"]}
-          label="网页关键词"
+        <Form.Item 
+        label="社交横幅图" 
+        tooltip="建议尺寸1200*630,最小尺寸200*200,支持png,svg,icon格式，最大300KB,建议使用png格式."
         >
-          <Select
-            mode="tags"
-            placeholder={isTabletOrMobile ? "网页关键词(可选)" : null}
-          ></Select>
-        </Form.Item>
-
-        <Form.Item label="社交横幅图">
           <Form.Item
             name="uploadSocialBanner"
             valuePropName="fileList"
             getValueFromEvent={normFile}
             noStyle
           >
-            <Upload
-              {...uploadProps}
-              //defaultFileList={() => getDefaultImg("banner")}
+            <ImageUploadBox
               onChange={(info) => handleChange("banner", info)}
-            >
-              {imageBannerUrl ? (
-                <img
-                  src={imageBannerUrl}
-                  alt="social-banner"
-                  style={{
-                    width: "100%",
-                  }}
-                />
-              ) : (
-                uploadButton
-              )}
-            </Upload>
+              imageUrl={imageBannerUrl}
+              alt="social-banner"
+            />
           </Form.Item>
         </Form.Item>
 
@@ -459,57 +338,33 @@ function BlogSetting() {
           />
         </Form.Item>
 
-        <Form.Item label="首页Logo">
+        <Form.Item label="首页Logo" tooltip="支持png,svg,icon格式，最大300KB,建议使用无背景图片">
           <Form.Item
             name="upload"
             valuePropName="fileList"
             getValueFromEvent={normFile}
             noStyle
           >
-            <Upload
-              {...uploadProps}
+            <ImageUploadBox
               onChange={(info) => handleChange("logo", info)}
-              //defaultFileList={() => getDefaultImg("logo")}
-            >
-              {imageUrl ? (
-                <img
-                  src={imageUrl}
-                  alt="blog-logo"
-                  style={{
-                    width: "100%",
-                  }}
-                />
-              ) : (
-                uploadButton
-              )}
-            </Upload>
+              imageUrl={imageUrl}
+              alt="blog-logo"
+            />
           </Form.Item>
         </Form.Item>
 
-        <Form.Item label="头像">
+        <Form.Item label="头像" tooltip="支持png,svg,icon格式，最大300KB,建议使用png格式">
           <Form.Item
             name="uploadAvatar"
             valuePropName="fileList"
             getValueFromEvent={normFile}
             noStyle
           >
-            <Upload
-              {...uploadProps}
-              //defaultFileList={() => getDefaultImg("avatar")}
+            <ImageUploadBox
               onChange={(info) => handleChange("avatar", info)}
-            >
-              {imageAvatarUrl ? (
-                <img
-                  src={imageAvatarUrl}
-                  alt="avatar"
-                  style={{
-                    width: "100%",
-                  }}
-                />
-              ) : (
-                uploadButton
-              )}
-            </Upload>
+              imageUrl={imageAvatarUrl}
+              alt="avatar"
+            />
           </Form.Item>
         </Form.Item>
 
@@ -541,7 +396,7 @@ function BlogSetting() {
           ]}
           initialValue={profile[0]?.github ?? null}
         >
-          <Input placeholder={isTabletOrMobile ? "github(可选)" : null} />
+          <Input placeholder={"https://github.com/xxx (可选)"} />
         </Form.Item>
 
         <Form.Item
@@ -554,7 +409,7 @@ function BlogSetting() {
           ]}
           initialValue={profile[0]?.zhihu ?? null}
         >
-          <Input placeholder={isTabletOrMobile ? "知乎(可选)" : null} />
+          <Input placeholder={"https://www.zhihu.com/people/xxx (可选)"} />
         </Form.Item>
 
         <Form.Item
@@ -567,7 +422,7 @@ function BlogSetting() {
           ]}
           initialValue={profile[0]?.juejin ?? null}
         >
-          <Input placeholder={isTabletOrMobile ? "稀土掘金(可选)" : null} />
+          <Input placeholder={"https://juejin.cn/user/xxx 稀土掘金(可选)"} />
         </Form.Item>
 
         <Form.Item
@@ -590,7 +445,6 @@ function BlogSetting() {
             //className={style["submit-button"]}
             type="primary"
             htmlType="submit"
-            //onClick={handleUpdateProfile}
           >
             确认修改
           </Button>

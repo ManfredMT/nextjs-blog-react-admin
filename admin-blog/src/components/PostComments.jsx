@@ -27,27 +27,6 @@ import { getPosts, reset as resetPost } from "../features/posts/postSlice";
 const CheckboxGroup = Checkbox.Group;
 const { Option } = Select;
 
-// let AllComments = [];
-// for (let i = 0; i <= 1115; i++) {
-//   AllComments.push({
-//     id: `${i + 1}`,
-//     source: `JavaScript 的关键功能，比如变量、字符串、数字、数组等(${i + 1})`,
-//     commentContent: `comment ${i + 1}`,
-//     author: `author ${i + 1}`,
-//     time: new Date().toLocaleString(),
-//   });
-// }
-
-// let AllPosts = [];
-// for (let j = 0; j <= 1008; j++) {
-//   AllPosts.push({
-//     id: `post_${j + 1}`,
-//     title: `JavaScript 的关键功能，比如变量、字符串、数字、数组等(${j + 1})`,
-//   });
-// }
-
-//const plainOptions = AllComments.map((item) => item.id);
-
 function PostComments() {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
@@ -56,8 +35,9 @@ function PostComments() {
   const [checkedList, setCheckedList] = useState([]);
   const [indeterminate, setIndeterminate] = useState(false);
   const [checkAll, setCheckAll] = useState(false);
+  const [selectedValue, setSelectedValue] = useState("allPosts");
   const dispatch = useDispatch();
-  const { comments, isSuccess, isError, isLoading, message } = useSelector(
+  const { comments, isSuccess, isError, message } = useSelector(
     (state) => state.comments
   );
   const {
@@ -92,20 +72,25 @@ function PostComments() {
     ) {
       antMessage.success(message);
       dispatch(getComments());
+      setCheckedList([]);
+      setIndeterminate(false);
+      setSelectedValue("allPosts");
     }
-  }, [isSuccess, message]);
+  }, [isSuccess, message, dispatch]);
 
   const allComments = useMemo(
     () =>
-      comments.map((c) => {
-        return {
-          id: c._id,
-          source: c.source,
-          author: c.username,
-          commentContent: c.comment,
-          time: new Date(c.createdAt),
-        };
-      }),
+      comments
+        .map((c) => {
+          return {
+            id: c._id,
+            source: c.source,
+            author: c.username,
+            commentContent: c.comment,
+            time: new Date(c.createdAt),
+          };
+        })
+        .sort((a, b) => b.time - a.time),
     [comments]
   );
 
@@ -126,16 +111,16 @@ function PostComments() {
     }
   }, [isErrorPost, messagePost]);
 
-
-
   const allPosts = useMemo(
     () =>
-      posts.map((post) => {
-        return {
-          id: post._id,
-          title: post.title,
-        };
-      }),
+      posts
+        .filter((p) => !p.draft)
+        .map((post) => {
+          return {
+            id: post._id,
+            title: post.title,
+          };
+        }),
     [posts]
   );
 
@@ -149,15 +134,12 @@ function PostComments() {
     selectedComments.current = allComments;
   }, [allComments]);
 
-  // console.log('selectedComments: ',selectedComments)
-  // console.log("currentPageComments: ", currentPageComments);
   const currentPageCmId = useMemo(
     () => currentPageComments.map((item) => item.id),
     [currentPageComments]
   );
   const onChange = (list) => {
     setCheckedList(list);
-    //setIndeterminate(list.length && list.length < pageSize);
     setIndeterminate(list.length && list.length < currentPageComments.length);
     setCheckAll(list.length === currentPageComments.length);
   };
@@ -179,6 +161,7 @@ function PostComments() {
 
   const onChangeSelect = (value) => {
     console.log(`selected ${value}`);
+    setSelectedValue(value);
     if (value === "allPosts") {
       selectedComments.current = allComments;
     } else {
@@ -202,13 +185,12 @@ function PostComments() {
       placeholder="选择文章"
       optionFilterProp="children"
       onChange={onChangeSelect}
+      value={selectedValue}
       filterOption={(input, option) =>
         option.children.toLowerCase().includes(input.toLowerCase())
       }
       className={style["post-select"]}
       defaultValue="allPosts"
-
-      //onChange={handleChange}
     >
       <Option value="allPosts">所有文章</Option>
       {allPosts.map((post) => {
@@ -238,15 +220,10 @@ function PostComments() {
     setIsModalVisible(false);
   };
 
-  //console.log('checkedList: ',checkedList);
-
   const deleteSelectedCms = () => {
     setModalText(`确认删除所选评论(共${checkedList.length}条)?`);
     setIsModalVisible(true);
     commentsId.current = checkedList;
-    // setCheckedList([]);
-    // setIndeterminate(false);
-    // setCheckAll(false);
   };
 
   const handleDeleteComment = ({ cId }) => {
@@ -255,16 +232,8 @@ function PostComments() {
     commentsId.current = [cId];
   };
 
-  //isSuccess为true时,currentPageComments数据为得到,需等待下一帧.
+  //isSuccess为true时,currentPageComments数据未得到,需等待下一次渲染.
   const preIsSuccess = usePrevious(isSuccess);
-  const preIsSucPost = usePrevious(isSuccessPost);
-  console.log("isSuccess: ", isSuccess);
-  console.log("isSuccessPost: ", isSuccessPost);
-  console.log("preIsSuccess: ", preIsSuccess);
-  console.log("preIsSucPost: ", preIsSucPost);
-  console.log("allPost: ", allPosts);
-  console.log("allComments: ", allComments);
-  console.log("paginationTotal: ",paginationTotal)
 
   return preIsSuccess && isSuccess && isSuccessPost ? (
     <>

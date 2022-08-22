@@ -1,60 +1,17 @@
-import { InboxOutlined, LoadingOutlined } from "@ant-design/icons";
 import {
-  AutoComplete,
   Button,
-  Form,
-  Input,
-  message as antMessage,
-  Radio,
-  Select,
-  Spin,
-  Upload,
+  Form, message as antMessage
 } from "antd";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import style from "../css/EditPostForm.module.css";
 import { getPosts, reset, updatePost } from "../features/posts/postSlice";
+import useGetData from "../hooks/useGetData";
+import HCenterSpin from "./HCenterSpin";
 import MarkDownEditor from "./MarkDownEditor";
-
-const antIcon = (
-  <LoadingOutlined
-    style={{
-      fontSize: 24,
-    }}
-    spin
-  />
-);
-
-const validateMessages = {
-  required: "${label}不能为空!",
-  types: {
-    url: "${label}不是有效的链接!",
-  },
-};
-
-function getAllTags(posts) {
-  let AllTags = [];
-  posts.forEach(({ tags }) => {
-    tags.forEach((tag) => {
-      if (AllTags.includes(tag) === false) {
-        AllTags.push(tag);
-      }
-    });
-  });
-  return AllTags.sort();
-}
-
-function getAllCategories(posts) {
-  let AllCategories = [];
-  posts.forEach(({ category }) => {
-    if (!AllCategories.includes(category)) {
-      AllCategories.push(category);
-    }
-  });
-  return AllCategories.sort();
-}
+import PostForm from "./PostForm";
 
 function getAllAuthors(posts) {
   let AllAuthors = [];
@@ -69,7 +26,6 @@ function getAllAuthors(posts) {
 }
 
 function getUFormDate(values, currentPost) {
-  console.log("values: ", values);
   const postFormData = new FormData();
   postFormData.append("title", values.post.title);
   postFormData.append("category", values.post.category);
@@ -108,34 +64,18 @@ function getUFormDate(values, currentPost) {
 
 const PostEdit = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  
 
   const formRef = useRef(null);
 
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
   const dispatch = useDispatch();
-  const { posts, isSuccess, isError, isLoading, message } = useSelector(
+  const { posts, isSuccess, isError, message } = useSelector(
     (state) => state.posts
   );
   const navigate = useNavigate();
 
-  useEffect(() => {
-    dispatch(getPosts());
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
-
-  let isErrorReset = useRef(false);
-  useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
-      antMessage.error(message);
-    }
-  }, [isError, message]);
+  useGetData(getPosts, reset, isError, message);
 
   useEffect(() => {
     if (isSuccess && message === "文章已更改") {
@@ -155,24 +95,15 @@ const PostEdit = () => {
       }),
     [posts]
   );
-  const allTags = getAllTags(allPosts);
-  const allCategories = getAllCategories(allPosts);
+
   let allAuthors = getAllAuthors(allPosts);
   allAuthors.splice(
     allAuthors.findIndex((author) => author === "default"),
     1
   );
-  const categoryOptions = allCategories.map((c) => {
-    return { value: c };
-  });
 
   const currentPost = allPosts.find(
     (post) => post.id === searchParams.get("edit")
-  );
-  console.log(
-    "current post: ",
-    currentPost,
-    currentPost ?? currentPost?.tags.length === 0 ? null : currentPost?.tags
   );
 
   useEffect(() => {
@@ -193,6 +124,16 @@ const PostEdit = () => {
     postFormData.append("postId", searchParams.get("edit"));
     dispatch(updatePost(postFormData));
   };
+  const renderMDEditor = currentPost ? (
+    <Form.Item
+      initialValue={currentPost.content ?? null}
+      name={["post", "content"]}
+      label={isTabletOrMobile ? null : "文章内容"}
+      tooltip="MarkDown编辑器, 支持GFM、Katex公式、脚注、代码高亮"
+    >
+      <MarkDownEditor />
+    </Form.Item>
+  ) : null;
 
   return currentPost ? (
     <div className={style["new-form-body"]}>
@@ -201,155 +142,21 @@ const PostEdit = () => {
           {`⬅ 返回文章列表`}
         </Link>
       </div>
-      <Form
-        ref={formRef}
-        labelCol={
-          isTabletOrMobile
-            ? null
-            : {
-                span: 2,
-              }
-        }
-        wrapperCol={
-          isTabletOrMobile
-            ? null
-            : {
-                span: 21,
-              }
-        }
-        layout={isTabletOrMobile ? "vertical" : null}
-        name="nest-messages"
-        validateMessages={validateMessages}
+      <PostForm
+        formRef={formRef}
         onFinish={onFinishUpdate}
+        initTitle={currentPost ? currentPost.title : null}
+        initAuthors={currentPost ? currentPost.authors : null}
+        initCategory={currentPost ? currentPost.category : null}
+        hasDraftRadio={true}
+        initDraft={currentPost ? currentPost.draft : null}
+        initTags={currentPost.tags ?? null}
+        initSummary={currentPost.summary ?? null}
+        initCanonicalUrl={currentPost.canonicalUrl ?? null}
+        renderMDEditor={renderMDEditor}
+        posts={posts}
+        formClassName={null}
       >
-        <Form.Item
-          name={["post", "title"]}
-          label="文章标题"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          initialValue={currentPost ? currentPost.title : null}
-        >
-          <Input
-            onPressEnter={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            placeholder={isTabletOrMobile ? "文章标题(必填)" : null}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name={["post", "authors"]}
-          label="作者"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          initialValue={currentPost ? currentPost.authors : null}
-        >
-          <Select mode="tags">
-            {allAuthors.map((author, i) => {
-              return <Select.Option key={author}>{author}</Select.Option>;
-            })}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name={["post", "category"]}
-          label="分类"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          initialValue={currentPost ? currentPost.category : null}
-        >
-          <AutoComplete
-            allowClear
-            options={categoryOptions}
-            className={style["item-select"]}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name={["post", "draft"]}
-          label="是否为草稿"
-          rules={[
-            {
-              required: true,
-            },
-          ]}
-          initialValue={currentPost ? currentPost.draft : null}
-        >
-          <Radio.Group>
-            <Radio value={true}>草稿</Radio>
-            <Radio value={false}>博客文章</Radio>
-          </Radio.Group>
-        </Form.Item>
-
-        <Form.Item
-          initialValue={currentPost.tags ?? null}
-          name={["post", "tags"]}
-          label="标签"
-        >
-          <Select
-            mode="tags"
-            placeholder={isTabletOrMobile ? "标签(可选)" : null}
-          >
-            {allTags.map((tag, i) => {
-              return <Select.Option key={tag}>{tag}</Select.Option>;
-            })}
-          </Select>
-        </Form.Item>
-        <Form.Item
-          initialValue={currentPost.summary ?? null}
-          name={["post", "summary"]}
-          label="文章提要"
-        >
-          <Input.TextArea
-            //placeholder="文章提要"
-            placeholder={isTabletOrMobile ? "文章提要(可选)" : null}
-            autoSize={{ minRows: 2 }}
-            showCount
-            maxLength={500}
-          />
-        </Form.Item>
-
-        <Form.Item
-          initialValue={currentPost.canonicalUrl ?? null}
-          name={["post", "canonicalUrl"]}
-          label="标准链接"
-          rules={[
-            {
-              type: "url",
-            },
-          ]}
-          tooltip="表示该博客唯一的标准规范URL,用于搜索引擎优化"
-        >
-          <Input
-            onPressEnter={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-            }}
-            placeholder={isTabletOrMobile ? "标准链接(可选)" : null}
-          />
-        </Form.Item>
-
-        <Form.Item
-          initialValue={currentPost.content ?? null}
-          name={["post", "content"]}
-          label={isTabletOrMobile ? null : "文章内容"}
-          tooltip="MarkDown编辑器, 支持GFM、Katex公式、脚注、代码高亮"
-        >
-          <MarkDownEditor
-          //value={blogContent}
-          //onChange={onChangeContent}
-          />
-        </Form.Item>
-
         <Form.Item
           className={style["submit-button-box"]}
           wrapperCol={
@@ -362,15 +169,14 @@ const PostEdit = () => {
             className={style["submit-button"]}
             type="primary"
             htmlType="submit"
-            //onClick={handleUpdatePost}
           >
             确认修改
           </Button>
         </Form.Item>
-      </Form>
+      </PostForm>
     </div>
   ) : (
-    <Spin className={style["spin-center"]} indicator={antIcon} />
+    <HCenterSpin />
   );
 };
 

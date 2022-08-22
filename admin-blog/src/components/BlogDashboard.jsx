@@ -1,33 +1,31 @@
-import { Calendar, message as antMessage } from "antd";
-import locale from "antd/es/date-picker/locale/zh_CN";
+import { message as antMessage } from "antd";
+import { LineChart } from "echarts/charts";
+import {
+  DatasetComponent,
+  GridComponent,
+  LegendComponent,
+  TitleComponent,
+  TooltipComponent,
+  TransformComponent,
+} from "echarts/components";
+import * as echarts from "echarts/core";
+import { LabelLayout, UniversalTransition } from "echarts/features";
+import { SVGRenderer } from "echarts/renderers";
 import "moment/locale/zh-cn";
 import { useEffect, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
 import style from "../css/BlogDashboard.module.css";
 import { getPosts, reset } from "../features/posts/postSlice";
+import useGetData from "../hooks/useGetData";
+import useStackedLineChart from "../hooks/useStackedLineChart";
 import WordCloud from "./WordCloud";
-import * as echarts from 'echarts/core';
-import { LineChart } from 'echarts/charts';
-import {
-  TitleComponent,
-  TooltipComponent,
-  GridComponent,
-  DatasetComponent,
-  TransformComponent,
-  LegendComponent
-} from 'echarts/components';
-import { LabelLayout, UniversalTransition } from 'echarts/features';
-import { SVGRenderer } from 'echarts/renderers';
 
 import {
   getComments,
   reset as resetComments,
 } from "../features/comments/commentSlice";
-import usePrevious from "../hooks/usePrevious";
 import HCenterSpin from "./HCenterSpin";
-
 
 echarts.use([
   TitleComponent,
@@ -39,8 +37,8 @@ echarts.use([
   LineChart,
   LabelLayout,
   UniversalTransition,
-  SVGRenderer
-])
+  SVGRenderer,
+]);
 
 function getAllTags(posts) {
   let AllTags = [];
@@ -64,118 +62,7 @@ function getAllCategories(posts) {
   return AllCategories.sort();
 }
 
-function getMonthArchive(posts) {
-  let monthArchive = [];
-  const timeSortPosts = posts.sort((a, b) => {
-    return b.date - a.date;
-  });
-  timeSortPosts.forEach(({ date }) => {
-    const postYear = date.getFullYear();
-    const postMonth = date.getMonth() + 1;
-    const postYMString = postYear + "-" + postMonth;
-    const monthList = monthArchive.map((archive) => archive.date);
-    if (monthList.includes(postYMString)) {
-      const mAIndex = monthArchive.findIndex(
-        (archive) => archive.date === postYMString
-      );
-      monthArchive[mAIndex].postNumber += 1;
-    } else {
-      monthArchive.push({ date: postYMString, postNumber: 1 });
-    }
-  });
-  return monthArchive;
-}
-
-function getDayArchive(posts) {
-  let dayArchive = [];
-  const timeSortPosts = posts.sort((a, b) => {
-    return b.date - a.date;
-  });
-  timeSortPosts.forEach(({ date }) => {
-    const postYear = date.getFullYear();
-    const postMonth = date.getMonth() + 1;
-    const postDay = date.getDate();
-    const postYMDString = postYear + "-" + postMonth + "-" + postDay;
-    const dayList = dayArchive.map((archive) => archive.date);
-    if (dayList.includes(postYMDString)) {
-      const dAIndex = dayArchive.findIndex(
-        (archive) => archive.date === postYMDString
-      );
-      dayArchive[dAIndex].postNumber += 1;
-    } else {
-      dayArchive.push({ date: postYMDString, postNumber: 1 });
-    }
-  });
-  return dayArchive;
-}
-
-function getMonthSeries(posts) {
-  const todayDateObject = new Date();
-  const allTagsList = [];
-  const allCategoriesList = [];
-  const dateSeries = [];
-  const postSeries = [];
-  const tagSeries = [];
-  const categorySeries = [];
-  let tagStackNum = 0;
-  let postStackNum = 0;
-  let categoryStackNum = 0;
-  const todayDate = todayDateObject.getDate();
-  
-  
-  //windowEnd.setDate(todayDate-30);
-
-  for(let i=0;i<=30;i+=2) {
-    const windowStart = new Date();
-    const windowEnd = new Date();
-    windowStart.setDate(todayDate-31+i);
-    windowStart.setHours(0,0,0,0);
-    windowEnd.setDate(todayDate-30+i);
-    windowEnd.setHours(0,0,0,0);
-    dateSeries.push(`${windowEnd.getMonth()+1}.${windowEnd.getDate()}`);
-    let windowPosts;
-    if(i===0) {
-      windowPosts = posts.filter((post)=>{
-        const postDateClearTime = post.date.setHours(0,0,0,0);
-        return postDateClearTime<=windowEnd;
-      })
-    }else {
-      windowPosts = posts.filter((post)=>{
-        const postDateClearTime = post.date.setHours(0,0,0,0);
-        return windowStart<=postDateClearTime&&postDateClearTime<=windowEnd;
-      })
-    }
-    for(let j=0;j<windowPosts.length;j++) {
-      const post = windowPosts[j];
-      postStackNum+=1;
-      if(!allCategoriesList.includes(post.category)) {
-        categoryStackNum+=1;
-        allCategoriesList.push(post.category);
-      }
-      for(let k=0;k<post.tags.length;k++) {
-        const tag = post.tags[k];
-        if(!allTagsList.includes(tag)) {
-          tagStackNum+=1;
-          allTagsList.push(tag);
-        }
-      }
-    }
-    postSeries.push(postStackNum);
-    categorySeries.push(categoryStackNum);
-    tagSeries.push(tagStackNum);  
-
-  }
-  return {
-    dateSeries,
-    postSeries,
-    categorySeries,
-    tagSeries,
-  }
-
-}
-
 function BlogDashboard() {
-  const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const dispatch = useDispatch();
 
   const {
@@ -202,9 +89,10 @@ function BlogDashboard() {
     }
   }, [isErrorCom, messageCom]);
 
-  const comments = useMemo(
-    () =>
-      commentData.map((c) => {
+  const comments = useMemo(() => {
+    console.log("commentData: ", commentData);
+    if (commentData) {
+      return commentData.map((c) => {
         return {
           id: c._id,
           source: c.source,
@@ -212,223 +100,44 @@ function BlogDashboard() {
           author: c.username,
           commentContent: c.comment,
         };
-      }),
-    [commentData]
-  );
+      });
+    } else {
+      return [];
+    }
+  }, [commentData]);
 
-  const { posts, isSuccess, isError, isLoading, message } = useSelector(
+  const { posts, isSuccess, isError, message } = useSelector(
     (state) => state.posts
   );
 
-  useEffect(() => {
-    dispatch(getPosts());
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
+  useGetData(getPosts, reset, isError, message);
 
-  let isErrorReset = useRef(false);
+  const allPosts = useMemo(() => {
+    const postList = posts
+      .filter((p) => !p.draft)
+      .map((post) => {
+        return {
+          id: post._id,
+          date: new Date(post.createdAt),
+          ...post,
+        };
+      });
+    postList.sort((a, b) => b.date - a.date);
+    return postList;
+  }, [posts]);
 
-  useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
-      antMessage.error(message);
-    }
-  }, [isError, message]);
+  console.log("allPosts: ", allPosts);
 
-  const allPosts = useMemo(
-    () =>
-      posts
-        .filter((p) => !p.draft)
-        .map((post) => {
-          return {
-            id: post._id,
-            date: new Date(post.createdAt),
-            ...post,
-          };
-        }),
-    [posts]
-  );
-
-  const monthArchive = getMonthArchive(allPosts);
-  const dayArchive = getDayArchive(allPosts);
   const allTags = getAllTags(allPosts);
   const allCategories = getAllCategories(allPosts);
 
-  const dateCellRender = (value) => {
-    //console.log(value);
-    const formatDate = value.format("YYYY-M-D");
-    const archiveIndex = dayArchive.findIndex(
-      (archive) => archive.date === formatDate
-    );
-    if (archiveIndex === -1) {
-      return null;
-    } else {
-      return (
-        <div
-          className={style["calendar-post-number"]}
-        >{`(${dayArchive[archiveIndex].postNumber})`}</div>
-      );
-    }
-  };
-
-  const monthCellRender = (value) => {
-    const formatDate = value.format("YYYY-M");
-    //console.log("月份: ",formatDate);
-    const archiveIndex = monthArchive.findIndex(
-      (archive) => archive.date === formatDate
-    );
-    if (archiveIndex === -1) {
-      return null;
-    } else {
-      return (
-        <div
-          className={style["calendar-post-number"]}
-        >{`(${monthArchive[archiveIndex].postNumber})`}</div>
-      );
-    }
-  };
-
-  const preIsSuccess = usePrevious(isSuccess);
-  const preIsSucCom = usePrevious(isSuccessCom);
-  // console.log("isSuccess: ", isSuccess);
-  // console.log("isSuccessCom: ", isSuccessCom);
-  // console.log("preIsSuccess: ", preIsSuccess);
-  // console.log("preIsSucCom: ", preIsSucCom);
-  // console.log("allPosts: ", allPosts);
-  // console.log("comments: ", comments);
-
   const chartRef = useRef(null);
+  const { chartOption } = useStackedLineChart(allPosts, echarts);
 
-  const chartsData = useMemo(()=>getMonthSeries(allPosts),[allPosts]);
-  console.log("chartsData",chartsData);
-  
   useEffect(() => {
     if (isSuccess && isSuccessCom) {
-       let myChart = echarts.init(chartRef.current);
-      myChart.setOption({
-        color: ['#80FFA5', '#00DDFF', '#37A2FF', '#FF0087', '#FFBF00'],
-        title: {
-          text: '博客动态'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'line',
-            label: {
-              backgroundColor: '#6a7985'
-            }
-          }
-        },
-        legend: {
-          right: isTabletOrMobile?10:'10%',
-          data: ['文章数', '分类数', '标签数']
-        },
-        
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [
-          {
-            type: 'category',
-            boundaryGap: false,
-            data: chartsData.dateSeries
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value'
-          }
-        ],
-        series: [
-          {
-            name: '文章数',
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            lineStyle: {
-              width: 0
-            },
-            showSymbol: false,
-            areaStyle: {
-              opacity: 0.8,
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: 'rgb(128, 255, 165)'
-                },
-                {
-                  offset: 1,
-                  color: 'rgb(1, 191, 236)'
-                }
-              ])
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: chartsData.postSeries
-          },
-          {
-            name: '分类数',
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            lineStyle: {
-              width: 0
-            },
-            showSymbol: false,
-            areaStyle: {
-              opacity: 0.8,
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: 'rgb(0, 221, 255)'
-                },
-                {
-                  offset: 1,
-                  color: 'rgb(77, 119, 255)'
-                }
-              ])
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: chartsData.categorySeries
-          },
-          {
-            name: '标签数',
-            type: 'line',
-            stack: 'Total',
-            smooth: true,
-            lineStyle: {
-              width: 0
-            },
-            showSymbol: false,
-            areaStyle: {
-              opacity: 0.8,
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                {
-                  offset: 0,
-                  color: 'rgb(55, 162, 255)'
-                },
-                {
-                  offset: 1,
-                  color: 'rgb(116, 21, 219)'
-                }
-              ])
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: chartsData.tagSeries
-          },
-        ]
-      });
+      let myChart = echarts.init(chartRef.current);
+      myChart.setOption(chartOption);
     }
   }, [isSuccess, isSuccessCom]);
 
@@ -457,31 +166,11 @@ function BlogDashboard() {
         <div className={style["word-cloud-box"]}>
           <WordCloud words={allTags} speed={10} />
         </div>
-        <div ref={chartRef} id="chart" className={style["archive-card-body"]}>
-          {/* <p className={style["card-title"]}>日历:</p>
-          <hr />
-          {isTabletOrMobile ? (
-            <ul>
-              {monthArchive.map((archive, i) => {
-                return (
-                  <li key={i} className={style["archive-list"]}>
-                    <span>{archive.date.replace("-", "年") + "月"}</span>
-                    <span
-                      className={style["archive-number"]}
-                    >{`(${archive.postNumber})`}</span>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <Calendar
-              locale={locale}
-              fullscreen={false}
-              dateCellRender={dateCellRender}
-              monthCellRender={monthCellRender}
-            />
-          )} */}
-        </div>
+        <div
+          ref={chartRef}
+          id="chart"
+          className={style["archive-card-body"]}
+        ></div>
       </div>
 
       <div className={style["recent-list-row"]}>
@@ -493,7 +182,6 @@ function BlogDashboard() {
               .slice(0, 5)
               .sort((a, b) => b.date - a.date)
               .map((post, i) => {
-                //console.log(post.date);
                 return (
                   <li key={i} className={style["recent-post-list"]}>
                     <Link to={`/manage/post/all-posts?preview=${post.id}`}>

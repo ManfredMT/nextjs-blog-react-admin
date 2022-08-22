@@ -3,7 +3,6 @@ import {
   DownloadOutlined,
   EditOutlined,
   EyeOutlined,
-  LoadingOutlined,
 } from "@ant-design/icons";
 import {
   DatePicker,
@@ -15,28 +14,20 @@ import {
   Pagination,
   Radio,
   Select,
-  Spin,
 } from "antd";
+import fileDownload from "js-file-download";
 import moment from "moment";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
-import fileDownload from "js-file-download";
 import { useSearchParams } from "react-router-dom";
 import style from "../css/PostSearch.module.css";
 import { deletePost, getPosts, reset } from "../features/posts/postSlice";
+import useGetData from "../hooks/useGetData";
+import HCenterSpin from "./HCenterSpin";
 
 const { Option } = Select;
-
-const antIcon = (
-  <LoadingOutlined
-    style={{
-      fontSize: 24,
-    }}
-    spin
-  />
-);
 
 function getAllTags(posts) {
   let allTags = [];
@@ -94,7 +85,6 @@ function postTitleFilter(posts, titleSearch) {
 function postDateFilter(posts, datePickerArray) {
   const dPStart = new Date(datePickerArray[0]);
   const dPEnd = new Date(datePickerArray[1]);
-  //console.log("postDateFilter: ", dPStart, dPEnd);
   return posts.filter(({ date }) => {
     const dateSplit = date.split(" ")[0];
     const dateSplitMonth = dateSplit.split("/")[1];
@@ -113,10 +103,7 @@ function postDateFilter(posts, datePickerArray) {
       dateFormattedMonth +
       "-" +
       dateFormattedDay;
-    //console.log("postDateFilter formattedPostDate: ", formattedPostDate);
     const modifiedDate = new Date(formattedPostDate);
-    //console.log("postDateFilter modified date: ", modifiedDate,
-    //dPStart<=modifiedDate && modifiedDate<=dPEnd);
     return dPStart <= modifiedDate && modifiedDate <= dPEnd;
   });
 }
@@ -130,49 +117,25 @@ function dateStringToArray(dateParams) {
 }
 
 function checkDateParams(dateParams) {
-  if (dateParams.length !== 21) {
+  //正则表达式匹配的日期格式: "YYYY-MM-DD_YYYY-MM-DD"
+  const RE = /^\d{4}-(\d{2})-(\d{2})_\d{4}-(\d{2})-(\d{2})$/;
+  //console.log("Regex exec: ", RE.exec("2020-04-01_2022-08-02"));
+  const match = RE.exec(dateParams);
+  if (match === null) {
     return false;
   }
-  if (dateParams[4] !== "-") {
-    return false;
-  }
-  if (dateParams[7] !== "-") {
-    return false;
-  }
-  if (dateParams[10] !== "_") {
-    return false;
-  }
-  if (dateParams[15] !== "-") {
-    return false;
-  }
-  if (dateParams[18] !== "-") {
-    return false;
-  }
-  const numIndex = [0, 1, 2, 3, 5, 6, 8, 9, 11, 12, 13, 14, 16, 17, 19, 20];
-  for (let i of numIndex) {
-    if (!("0" <= dateParams[i] && dateParams[i] <= "9")) {
-      return false;
-    }
-  }
-  const dateStartMonth = dateParams.slice(5, 7);
-  const dateEndMonth = dateParams.slice(16, 18);
-  const dateStartDay = dateParams.slice(8, 10);
-  const dateEndDay = dateParams.slice(19);
+  const dateStartMonth = parseInt(match[1], 10);
+  const dateStartDay = parseInt(match[1], 10);
+  const dateEndMonth = parseInt(match[1], 10);
+  const dateEndDay = parseInt(match[1], 10);
   if (
-    !(1 <= parseInt(dateStartMonth, 10) && parseInt(dateStartMonth, 10) <= 12)
+    !(1 <= dateStartMonth && dateStartMonth <= 12) ||
+    !(1 <= dateEndMonth && dateEndMonth <= 12) ||
+    !(1 <= dateStartDay && dateStartDay <= 31) ||
+    !(1 <= dateEndDay && dateEndDay <= 31)
   ) {
     return false;
   }
-  if (!(1 <= parseInt(dateEndMonth, 10) && parseInt(dateEndMonth, 10) <= 12)) {
-    return false;
-  }
-  if (!(1 <= parseInt(dateStartDay, 10) && parseInt(dateStartDay, 10) <= 31)) {
-    return false;
-  }
-  if (!(1 <= parseInt(dateEndDay, 10) && parseInt(dateEndDay, 10) <= 31)) {
-    return false;
-  }
-
   return true;
 }
 
@@ -186,55 +149,136 @@ function PostSearch() {
     (state) => state.posts
   );
 
-  const allPosts = useMemo(
-    () =>
-      posts.map((post) => {
-        return {
-          id: post._id,
-          date: new Date(post.createdAt).toLocaleString(),
-          ...post,
-        };
-      }),
-    [posts]
+  console.log("posts: ",posts);
+  const allPosts = useMemo(() => {
+    const unsortedPosts = posts.map((post) => {
+      return {
+        id: post._id,
+        date: new Date(post.createdAt).toLocaleString(),
+        ...post,
+      };
+    });
+    const sortedPosts = unsortedPosts.sort(
+      (a, b) => new Date(b?.createdAt) - new Date(a?.createdAt)
+    );
+    return sortedPosts;
+  }, [posts]);
+
+  useGetData(getPosts, reset, isError, message);
+
+  //console.log("allPosts: ", allPosts);
+  const allTags = useMemo(() => getAllTags(allPosts), [allPosts]);
+  const allCategories = useMemo(() => getAllCategories(allPosts), [allPosts]);
+  const allAuthors = useMemo(() => getAllAuthors(allPosts), [allPosts]);
+
+  const filterByCategory = useCallback(
+    (posts) => {
+      if (
+        searchParams.get("category") &&
+        allCategories.includes(searchParams.get("category"))
+      ) {
+        return findPostByCategory(posts, searchParams.get("category"));
+      }
+      return posts;
+    },
+    [allCategories, searchParams]
   );
 
-  console.log("allPosts: ", allPosts);
-  const allTags = getAllTags(allPosts);
-  const allCategories = getAllCategories(allPosts);
-  const allAuthors = getAllAuthors(allPosts);
+  const filterByTag = useCallback(
+    (posts) => {
+      if (
+        searchParams.get("tag") &&
+        allTags.includes(searchParams.get("tag"))
+      ) {
+        return findPostByTag(posts, searchParams.get("tag"));
+      }
+      return posts;
+    },
+    [allTags, searchParams]
+  );
 
-  useEffect(() => {
-    dispatch(getPosts());
-    return () => {
-      dispatch(reset());
-    };
+  const filterByDraft = useCallback(
+    (posts) => {
+      if (searchParams.get("draft")) {
+        const draftParams = searchParams.get("draft");
+        if (draftParams === "only-draft") {
+          return posts.filter(({ draft }) => draft === true);
+        }
+        if (draftParams === "only-published") {
+          return posts.filter(({ draft }) => draft === false);
+        }
+      }
+      return posts;
+    },
+    [searchParams]
+  );
+
+  const filterByTitle = useCallback(
+    (posts) => {
+      if (searchParams.get("title")) {
+        return postTitleFilter(posts, searchParams.get("title"));
+      }
+      return posts;
+    },
+    [searchParams]
+  );
+
+  const filterByDate = useCallback(
+    (posts) => {
+      if (
+        searchParams.get("date") &&
+        checkDateParams(searchParams.get("date"))
+      ) {
+        return postDateFilter(
+          posts,
+          dateStringToArray(searchParams.get("date"))
+        );
+      }
+      return posts;
+    },
+    [searchParams]
+  );
+
+  const filterByAuthor = useCallback(
+    (posts) => {
+      if (
+        searchParams.get("author") &&
+        allAuthors.includes(searchParams.get("author"))
+      ) {
+        return findPostByAuthor(posts, searchParams.get("author"));
+      }
+      return posts;
+    },
+    [searchParams, allAuthors]
+  );
+
+  let filteredPosts = useRef();
+
+  const handlePagination = useCallback(() => {
+    const end =
+      filteredPosts.current.length > defaultPageSize
+        ? defaultPageSize
+        : filteredPosts.current.length;
+    setCurrentPagePosts(filteredPosts.current.slice(0, end));
+    setPaginationTotal(filteredPosts.current.length);
   }, []);
 
-  let isErrorReset = useRef(false);
-
-  useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
+  const searchObj = useMemo(() => {
+    const searchParamsCopy = {};
+    for (const [key, value] of searchParams.entries()) {
+      searchParamsCopy[key] = value;
     }
-    if (isErrorReset.current && isError) {
-      antMessage.error(message);
-    }
-  }, [isError, message]);
+    return searchParamsCopy;
+  }, [searchParams]);
 
   useEffect(() => {
     if (isSuccess && message === "成功删除文章") {
       antMessage.success(message);
     }
-  }, [isSuccess, message, posts]);
+  }, [isSuccess, message]);
 
-  const [currentPagePosts, setCurrentPagePosts] = useState(
-    allPosts.slice(0, defaultPageSize)
-  );
-  const [paginationTotal, setPaginationTotal] = useState(allPosts.length);
-
-  let filteredPosts = useRef(allPosts);
-  //console.log("currentPagePosts: ",currentPagePosts);
-  //console.log("filteredPosts: ",filteredPosts.current);
+  const [currentPagePosts, setCurrentPagePosts] = useState();
+  const [paginationTotal, setPaginationTotal] = useState();
 
   const onChangePage = (page, pageSize) => {
     const start = (page - 1) * defaultPageSize;
@@ -243,64 +287,24 @@ function PostSearch() {
   };
 
   const onChangeSelectTag = (value) => {
-    //console.log(`selected ${value}`);
     let filterResult = allPosts;
-    if (
-      searchParams.get("category") &&
-      allCategories.includes(searchParams.get("category"))
-    ) {
-      filterResult = findPostByCategory(
-        filterResult,
-        searchParams.get("category")
-      );
-    }
-    if (
-      searchParams.get("author") &&
-      allAuthors.includes(searchParams.get("author"))
-    ) {
-      filterResult = findPostByAuthor(filterResult, searchParams.get("author"));
-    }
-    if (searchParams.get("draft")) {
-      const draftParams = searchParams.get("draft");
-      if (draftParams === "only-draft") {
-        filterResult = filterResult.filter(({ draft }) => draft === true);
-      }
-      if (draftParams === "only-published") {
-        filterResult = filterResult.filter(({ draft }) => draft === false);
-      }
-    }
-    if (searchParams.get("title")) {
-      filterResult = postTitleFilter(filterResult, searchParams.get("title"));
-    }
-    if (searchParams.get("date") && checkDateParams(searchParams.get("date"))) {
-      filterResult = postDateFilter(
-        filterResult,
-        dateStringToArray(searchParams.get("date"))
-      );
-    }
-    if (value === "all-tags") {
+    filterResult = filterByCategory(filterResult);
+    filterResult = filterByAuthor(filterResult);
+    filterResult = filterByDraft(filterResult);
+    filterResult = filterByTitle(filterResult);
+    filterResult = filterByDate(filterResult);
+    if (value && value === "all-tags") {
       filteredPosts.current = filterResult;
     } else {
       filterResult = findPostByTag(filterResult, value);
       filteredPosts.current = filterResult;
     }
-    const end =
-      filteredPosts.current.length > defaultPageSize
-        ? defaultPageSize
-        : filteredPosts.current.length;
-    setCurrentPagePosts(filteredPosts.current.slice(0, end));
-    setPaginationTotal(filteredPosts.current.length);
-    if (value) {
-      const searchObj = {};
-      for (const [key, value] of searchParams.entries()) {
-        searchObj[key] = value;
-      }
-      if (value !== "all-tags") {
-        setSearchParams({ ...searchObj, tag: value });
-      } else {
-        delete searchObj.tag;
-        setSearchParams({ ...searchObj });
-      }
+    handlePagination();
+    if (value && value !== "all-tags") {
+      setSearchParams({ ...searchObj, tag: value });
+    } else {
+      delete searchObj.tag;
+      setSearchParams({ ...searchObj });
     }
   };
 
@@ -335,7 +339,7 @@ function PostSearch() {
         <Option value="all-tags">所有标签</Option>
         {allTags.map((tag, i) => {
           return (
-            <Option key={i} value={tag}>
+            <Option key={tag} value={tag}>
               {tag}
             </Option>
           );
@@ -345,38 +349,13 @@ function PostSearch() {
   );
 
   const onChangeSelectAuthor = (value) => {
-    console.log(`selected ${value}`);
+    //console.log(`selected ${value}`);
     let filterResult = allPosts;
-    if (
-      searchParams.get("category") &&
-      allCategories.includes(searchParams.get("category"))
-    ) {
-      filterResult = findPostByCategory(
-        filterResult,
-        searchParams.get("category")
-      );
-    }
-    if (searchParams.get("tag") && allTags.includes(searchParams.get("tag"))) {
-      filterResult = findPostByTag(filterResult, searchParams.get("tag"));
-    }
-    if (searchParams.get("draft")) {
-      const draftParams = searchParams.get("draft");
-      if (draftParams === "only-draft") {
-        filterResult = filterResult.filter(({ draft }) => draft === true);
-      }
-      if (draftParams === "only-published") {
-        filterResult = filterResult.filter(({ draft }) => draft === false);
-      }
-    }
-    if (searchParams.get("title")) {
-      filterResult = postTitleFilter(filterResult, searchParams.get("title"));
-    }
-    if (searchParams.get("date") && checkDateParams(searchParams.get("date"))) {
-      filterResult = postDateFilter(
-        filterResult,
-        dateStringToArray(searchParams.get("date"))
-      );
-    }
+    filterResult = filterByCategory(filterResult);
+    filterResult = filterByTag(filterResult);
+    filterResult = filterByDraft(filterResult);
+    filterResult = filterByTitle(filterResult);
+    filterResult = filterByDate(filterResult);
 
     if (value === "all-authors") {
       filteredPosts.current = filterResult;
@@ -385,25 +364,13 @@ function PostSearch() {
       filteredPosts.current = filterResult;
     }
 
-    console.log("onChangeSelectAuthor filteredPosts: ", filteredPosts.current);
+    handlePagination();
 
-    const end =
-      filteredPosts.current.length > defaultPageSize
-        ? defaultPageSize
-        : filteredPosts.current.length;
-    setCurrentPagePosts(filteredPosts.current.slice(0, end));
-    setPaginationTotal(filteredPosts.current.length);
-    if (value) {
-      const searchObj = {};
-      for (const [key, value] of searchParams.entries()) {
-        searchObj[key] = value;
-      }
-      if (value !== "all-authors") {
-        setSearchParams({ ...searchObj, author: value });
-      } else {
-        delete searchObj.author;
-        setSearchParams({ ...searchObj });
-      }
+    if (value && value !== "all-authors") {
+      setSearchParams({ ...searchObj, author: value });
+    } else {
+      delete searchObj.author;
+      setSearchParams({ ...searchObj });
     }
   };
 
@@ -449,35 +416,13 @@ function PostSearch() {
   );
 
   const onChangeSelectCategory = (value) => {
-    console.log(`selected ${value}`);
+    //console.log(`selected ${value}`);
     let filterResult = allPosts;
-    if (
-      searchParams.get("author") &&
-      allAuthors.includes(searchParams.get("author"))
-    ) {
-      filterResult = findPostByAuthor(filterResult, searchParams.get("author"));
-    }
-    if (searchParams.get("tag") && allTags.includes(searchParams.get("tag"))) {
-      filterResult = findPostByTag(filterResult, searchParams.get("tag"));
-    }
-    if (searchParams.get("draft")) {
-      const draftParams = searchParams.get("draft");
-      if (draftParams === "only-draft") {
-        filterResult = filterResult.filter(({ draft }) => draft === true);
-      }
-      if (draftParams === "only-published") {
-        filterResult = filterResult.filter(({ draft }) => draft === false);
-      }
-    }
-    if (searchParams.get("title")) {
-      filterResult = postTitleFilter(filterResult, searchParams.get("title"));
-    }
-    if (searchParams.get("date") && checkDateParams(searchParams.get("date"))) {
-      filterResult = postDateFilter(
-        filterResult,
-        dateStringToArray(searchParams.get("date"))
-      );
-    }
+    filterResult = filterByTag(filterResult);
+    filterResult = filterByAuthor(filterResult);
+    filterResult = filterByDraft(filterResult);
+    filterResult = filterByTitle(filterResult);
+    filterResult = filterByDate(filterResult);
 
     if (value === "all-categories") {
       filteredPosts.current = filterResult;
@@ -485,24 +430,13 @@ function PostSearch() {
       filterResult = findPostByCategory(filterResult, value);
       filteredPosts.current = filterResult;
     }
+    handlePagination();
 
-    const end =
-      filteredPosts.current.length > defaultPageSize
-        ? defaultPageSize
-        : filteredPosts.current.length;
-    setCurrentPagePosts(filteredPosts.current.slice(0, end));
-    setPaginationTotal(filteredPosts.current.length);
-    if (value) {
-      const searchObj = {};
-      for (const [key, value] of searchParams.entries()) {
-        searchObj[key] = value;
-      }
-      if (value !== "all-categories") {
-        setSearchParams({ ...searchObj, category: value });
-      } else {
-        delete searchObj.category;
-        setSearchParams({ ...searchObj });
-      }
+    if (value && value !== "all-categories") {
+      setSearchParams({ ...searchObj, category: value });
+    } else {
+      delete searchObj.category;
+      setSearchParams({ ...searchObj });
     }
   };
 
@@ -533,7 +467,7 @@ function PostSearch() {
           } else {
             return null;
           }
-        }} //=first category
+        }} 
       >
         <Option value="all-categories">所有分类</Option>
         {allCategories.map((category, i) => {
@@ -552,44 +486,11 @@ function PostSearch() {
 
   const onSearchTitle = (value) => {
     let filterResult = allPosts;
-    if (
-      searchParams.get("author") &&
-      allAuthors.includes(searchParams.get("author"))
-    ) {
-      filterResult = findPostByAuthor(filterResult, searchParams.get("author"));
-    }
-    if (searchParams.get("tag") && allTags.includes(searchParams.get("tag"))) {
-      filterResult = findPostByTag(filterResult, searchParams.get("tag"));
-    }
-    if (searchParams.get("draft")) {
-      const draftParams = searchParams.get("draft");
-      if (draftParams === "only-draft") {
-        filterResult = filterResult.filter(({ draft }) => draft === true);
-      }
-      if (draftParams === "only-published") {
-        filterResult = filterResult.filter(({ draft }) => draft === false);
-      }
-    }
-    if (
-      searchParams.get("category") &&
-      allCategories.includes(searchParams.get("category"))
-    ) {
-      filterResult = findPostByCategory(
-        filterResult,
-        searchParams.get("category")
-      );
-    }
-    if (searchParams.get("date") && checkDateParams(searchParams.get("date"))) {
-      filterResult = postDateFilter(
-        filterResult,
-        dateStringToArray(searchParams.get("date"))
-      );
-    }
-
-    const searchObj = {};
-    for (const [key, value] of searchParams.entries()) {
-      searchObj[key] = value;
-    }
+    filterResult = filterByCategory(filterResult);
+    filterResult = filterByAuthor(filterResult);
+    filterResult = filterByDraft(filterResult);
+    filterResult = filterByTag(filterResult);
+    filterResult = filterByDate(filterResult);
 
     if (value === "" || !value) {
       filteredPosts.current = filterResult;
@@ -599,16 +500,10 @@ function PostSearch() {
     } else {
       filterResult = postTitleFilter(filterResult, value);
       filteredPosts.current = filterResult;
-      //console.log("after title filter: ",filteredPosts.current);
       setIsTitleFiltered(true);
       setSearchParams({ ...searchObj, title: value });
     }
-    const end =
-      filteredPosts.current.length > defaultPageSize
-        ? defaultPageSize
-        : filteredPosts.current.length;
-    setCurrentPagePosts(filteredPosts.current.slice(0, end));
-    setPaginationTotal(filteredPosts.current.length);
+    handlePagination();
   };
 
   const onChangeTitleFilter = (e) => {
@@ -629,46 +524,14 @@ function PostSearch() {
   );
 
   const onChangeDate = (value, dateString) => {
-    console.log("Selected Time: ", value);
-    console.log("Formatted Selected Time: ", dateString);
     const dateArray = dateString;
 
     let filterResult = allPosts;
-    if (
-      searchParams.get("author") &&
-      allAuthors.includes(searchParams.get("author"))
-    ) {
-      filterResult = findPostByAuthor(filterResult, searchParams.get("author"));
-    }
-    if (searchParams.get("tag") && allTags.includes(searchParams.get("tag"))) {
-      filterResult = findPostByTag(filterResult, searchParams.get("tag"));
-    }
-    if (searchParams.get("draft")) {
-      const draftParams = searchParams.get("draft");
-      if (draftParams === "only-draft") {
-        filterResult = filterResult.filter(({ draft }) => draft === true);
-      }
-      if (draftParams === "only-published") {
-        filterResult = filterResult.filter(({ draft }) => draft === false);
-      }
-    }
-    if (
-      searchParams.get("category") &&
-      allCategories.includes(searchParams.get("category"))
-    ) {
-      filterResult = findPostByCategory(
-        filterResult,
-        searchParams.get("category")
-      );
-    }
-    if (searchParams.get("title")) {
-      filterResult = postTitleFilter(filterResult, searchParams.get("title"));
-    }
-
-    const searchObj = {};
-    for (const [key, value] of searchParams.entries()) {
-      searchObj[key] = value;
-    }
+    filterResult = filterByCategory(filterResult);
+    filterResult = filterByAuthor(filterResult);
+    filterResult = filterByDraft(filterResult);
+    filterResult = filterByTitle(filterResult);
+    filterResult = filterByTag(filterResult);
 
     if (value === null) {
       filteredPosts.current = filterResult;
@@ -679,12 +542,7 @@ function PostSearch() {
       filteredPosts.current = filterResult;
       setSearchParams({ ...searchObj, date: dateArrayToString(dateArray) });
     }
-    const end =
-      filteredPosts.current.length > defaultPageSize
-        ? defaultPageSize
-        : filteredPosts.current.length;
-    setCurrentPagePosts(filteredPosts.current.slice(0, end));
-    setPaginationTotal(filteredPosts.current.length);
+    handlePagination();
   };
 
   const renderPostDatePicker = (
@@ -717,37 +575,14 @@ function PostSearch() {
   const [radioValue, setRadioValue] = useState("all-posts");
 
   const onChangeRadio = (e) => {
-    console.log("radio checked", e.target.value);
     const radioChecked = e.target.value;
     setRadioValue(e.target.value);
     let filterResult = allPosts;
-    if (
-      searchParams.get("author") &&
-      allAuthors.includes(searchParams.get("author"))
-    ) {
-      filterResult = findPostByAuthor(filterResult, searchParams.get("author"));
-    }
-    if (searchParams.get("tag") && allTags.includes(searchParams.get("tag"))) {
-      filterResult = findPostByTag(filterResult, searchParams.get("tag"));
-    }
-    if (
-      searchParams.get("category") &&
-      allCategories.includes(searchParams.get("category"))
-    ) {
-      filterResult = findPostByCategory(
-        filterResult,
-        searchParams.get("category")
-      );
-    }
-    if (searchParams.get("title")) {
-      filterResult = postTitleFilter(filterResult, searchParams.get("title"));
-    }
-    if (searchParams.get("date") && checkDateParams(searchParams.get("date"))) {
-      filterResult = postDateFilter(
-        filterResult,
-        dateStringToArray(searchParams.get("date"))
-      );
-    }
+    filterResult = filterByCategory(filterResult);
+    filterResult = filterByAuthor(filterResult);
+    filterResult = filterByTag(filterResult);
+    filterResult = filterByTitle(filterResult);
+    filterResult = filterByDate(filterResult);
 
     if (radioChecked === "only-draft") {
       filterResult = filterResult.filter(({ draft }) => draft === true);
@@ -758,25 +593,13 @@ function PostSearch() {
     } else if (radioChecked === "all-posts") {
       filteredPosts.current = filterResult;
     }
+    handlePagination();
 
-    const end =
-      filteredPosts.current.length > defaultPageSize
-        ? defaultPageSize
-        : filteredPosts.current.length;
-    setCurrentPagePosts(filteredPosts.current.slice(0, end));
-    setPaginationTotal(filteredPosts.current.length);
-
-    if (radioChecked) {
-      const searchObj = {};
-      for (const [key, value] of searchParams.entries()) {
-        searchObj[key] = value;
-      }
-      if (radioChecked !== "all-posts") {
-        setSearchParams({ ...searchObj, draft: radioChecked });
-      } else {
-        delete searchObj.draft;
-        setSearchParams({ ...searchObj });
-      }
+    if (radioChecked && radioChecked !== "all-posts") {
+      setSearchParams({ ...searchObj, draft: radioChecked });
+    } else {
+      delete searchObj.draft;
+      setSearchParams({ ...searchObj });
     }
   };
 
@@ -786,7 +609,7 @@ function PostSearch() {
       <Radio.Group onChange={onChangeRadio} value={radioValue}>
         <Radio value={"all-posts"}>所有文章</Radio>
         <Radio value={"only-draft"}>仅草稿</Radio>
-        <Radio value={"only-published"}>已发布文章</Radio>
+        <Radio value={"only-published"}>仅发布的文章</Radio>
       </Radio.Group>
     </>
   );
@@ -880,9 +703,9 @@ tags:${tagsString}
           className={style["post-number"]}
         >{`共${paginationTotal}篇文章`}</div>
 
-        {isTabletOrMobile ? null : <Divider />}
+        {isTabletOrMobile ? null : <Divider className={style["divider-thin"]} />}
         <div className={style["grid-wrap"]}>
-          {currentPagePosts.length > 0 ? (
+          {currentPagePosts?.length > 0 ? (
             currentPagePosts.map((post, i) => {
               return (
                 <div key={post.id}>
@@ -917,6 +740,12 @@ tags:${tagsString}
                           <span key={i}>{`${author} `}</span>
                         ))}
                       </p>
+                      {post.summary?(
+                        <p>
+                          <span className={style["grey-label"]}>简介: </span>
+                          {post.summary}
+                        </p>
+                      ):null}
                     </div>
 
                     <div className={style["list-middle-box"]}>
@@ -983,7 +812,7 @@ tags:${tagsString}
                       </button>
                     </div>
                   </div>
-                  {isTabletOrMobile ? null : <Divider />}
+                  {isTabletOrMobile ? null : <Divider className={style["divider-thin"]} />}
                 </div>
               );
             })
@@ -1014,7 +843,7 @@ tags:${tagsString}
       </Modal>
     </>
   ) : (
-    <Spin className={style["spin-center"]} indicator={antIcon} />
+    <HCenterSpin />
   );
 }
 

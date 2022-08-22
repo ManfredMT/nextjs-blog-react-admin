@@ -1,32 +1,25 @@
-import {
-  DeleteFilled,
-  EditFilled,
-  GroupOutlined,
-  SearchOutlined,
-} from "@ant-design/icons";
-import {
-  Button,
-  Form,
-  Input,
-  InputNumber,
-  message as antMessage,
-  Popconfirm,
-  Space,
-  Table,
-  Typography,
-} from "antd";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { DeleteFilled, EditFilled, GroupOutlined } from "@ant-design/icons";
+import { Form, message as antMessage, Popconfirm, Typography } from "antd";
+import { useEffect, useMemo, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
 import style from "../css/AllItems.module.css";
 import { getPosts, reset, updateCategory } from "../features/posts/postSlice";
-import usePrevious from "../hooks/usePrevious";
+import useColumnSearch from "../hooks/useColumnSearch";
+import useGetData from "../hooks/useGetData";
+import EditableTable from "./EditableTable";
 import HCenterSpin from "./HCenterSpin";
 
 function getCategoryCount(posts) {
-  let categoryCount = [];
+  let categoryCount = [
+    {
+      key: "default",
+      categoryName: "default",
+      postNumber: 0,
+    },
+  ];
   posts.forEach(({ category }) => {
     const index = categoryCount.findIndex((c) => c.categoryName === category);
     if (index === -1) {
@@ -42,73 +35,24 @@ function getCategoryCount(posts) {
   return categoryCount;
 }
 
-const EditableCell = ({
-  editing,
-  dataIndex,
-  title,
-  inputType,
-  record,
-  index,
-  children,
-  ...restProps
-}) => {
-  const inputNode = inputType === "number" ? <InputNumber /> : <Input />;
-  return (
-    <td {...restProps}>
-      {editing ? (
-        <Form.Item
-          name={dataIndex}
-          style={{
-            margin: 0,
-          }}
-          rules={[
-            {
-              required: true,
-              message: `请输入${title}!`,
-            },
-          ]}
-        >
-          {inputNode}
-        </Form.Item>
-      ) : (
-        children
-      )}
-    </td>
-  );
-};
-
 function AllCategories() {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const [form] = Form.useForm();
 
   const dispatch = useDispatch();
-  const { posts, isSuccess, isError, isLoading, message } = useSelector(
+  const { posts, isSuccess, isError, message } = useSelector(
     (state) => state.posts
   );
 
-  useEffect(() => {
-    dispatch(getPosts());
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
-
-  let isErrorReset = useRef(false);
-  useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
-      antMessage.error(message);
-    }
-  }, [isError, message]);
+  console.log("AllCategories");
+  useGetData(getPosts, reset, isError, message);
 
   useEffect(() => {
     if (isSuccess && message === "类别已更改") {
       antMessage.success(message);
       dispatch(getPosts());
     }
-  }, [isSuccess, message]);
+  }, [isSuccess, message, dispatch]);
 
   const allPosts = useMemo(
     () =>
@@ -125,13 +69,7 @@ function AllCategories() {
   );
 
   const originData = getCategoryCount(allPosts);
-
-  // useEffect(() => {
-  //   setData(originData);
-  // }, [allPosts]);
-
-  // const [data, setData] = useState(originData);
-  const data = useMemo(()=>originData,[originData]);
+  const data = useMemo(() => originData, [originData]);
 
   const [editingKey, setEditingKey] = useState("");
 
@@ -159,7 +97,7 @@ function AllCategories() {
       dispatch(updateCategory(categoryFormData));
       setEditingKey("");
     } catch (errInfo) {
-      console.log("数据错误:", errInfo);
+      console.error("数据错误:", errInfo);
     }
   };
 
@@ -171,109 +109,29 @@ function AllCategories() {
   };
 
   //实现一个搜索列
-  const [searchText, setSearchText] = useState("");
-  const [searchedColumn, setSearchedColumn] = useState("");
-
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
-  };
-
-  const handleReset = (clearFilters) => {
-    clearFilters();
-    setSearchText("");
-  };
-  let searchInput;
-
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            searchInput = node;
-          }}
-          placeholder={"搜索分类名"}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{ marginBottom: 8, display: "block" }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            搜索
-          </Button>
-          <Button
-            onClick={() => handleReset(clearFilters)}
-            size="small"
-            style={{ width: 90 }}
-          >
-            重置
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            筛选
-          </Button>
-        </Space>
-      </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? "#1890ff" : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : "",
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.select(), 100);
-      }
-    },
-    render: (text) =>
-      searchedColumn === dataIndex ? (
-        <>
-          <Link to={`../post-category?category=${text}`}>
-            <GroupOutlined />
-            <Highlighter
-              highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
-              searchWords={[searchText]}
-              autoEscape
-              textToHighlight={text ? text.toString() : ""}
-            />
-          </Link>
-        </>
-      ) : (
-        <>
-          <Link to={`../post-category?category=${text}`}>
-            <GroupOutlined />
-            {` ${text}`}
-          </Link>
-        </>
-      ),
-  });
+  const inputPlaceholder = "搜索分类名";
+  const renderColumn = (text, dataIndex, searchedColumn, searchText) =>
+    searchedColumn === dataIndex ? (
+      <>
+        <Link to={`../post-category?category=${text}`}>
+          <GroupOutlined />
+          <Highlighter
+            highlightStyle={{ backgroundColor: "#ffc069", padding: 0 }}
+            searchWords={[searchText]}
+            autoEscape
+            textToHighlight={text ? text.toString() : ""}
+          />
+        </Link>
+      </>
+    ) : (
+      <>
+        <Link to={`../post-category?category=${text}`}>
+          <GroupOutlined />
+          {` ${text}`}
+        </Link>
+      </>
+    );
+  const getColumnSearchProps = useColumnSearch(inputPlaceholder, renderColumn);
 
   const columns = [
     {
@@ -325,6 +183,7 @@ function AllCategories() {
             ) : null}
             {data.length >= 1 && record.categoryName !== "default" ? (
               <Popconfirm
+                className={style["delete-button-mobile"]}
                 okText="确认"
                 cancelText="取消"
                 title="确认删除分类?"
@@ -365,48 +224,17 @@ function AllCategories() {
       },
     },
   ];
-  const mergedColumns = columns.map((col) => {
-    if (!col.editable) {
-      return col;
-    }
-
-    return {
-      ...col,
-      onCell: (record) => ({
-        record,
-        inputType: col.dataIndex === "postNumber" ? "number" : "text",
-        dataIndex: col.dataIndex,
-        title: col.title,
-        editing: isEditing(record),
-      }),
-    };
-  });
-  const preIsSuccess = usePrevious(isSuccess);
-  // console.log("isSuccess: ", isSuccess);
-  // console.log("preIsSuccess: ", preIsSuccess);
-  // console.log("allPosts: ",allPosts);
-  // console.log("originData: ",originData);
-  // console.log("data: ",data)
-
-
 
   return isSuccess ? (
-    <Form form={form} component={false}>
-      <Table
-        className={style["item-table"]}
-        components={{
-          body: {
-            cell: EditableCell,
-          },
-        }}
-        dataSource={data}
-        columns={mergedColumns}
-        rowClassName={style["editable-row"]}
-        pagination={{
-          onChange: cancel,
-        }}
-      />
-    </Form>
+    <EditableTable
+      form={form}
+      data={data}
+      columns={columns}
+      editingKey={editingKey}
+      setEditingKey={setEditingKey}
+      tableClass={style["item-table"]}
+      tableRowClass={style["editable-row"]}
+    />
   ) : (
     <HCenterSpin />
   );

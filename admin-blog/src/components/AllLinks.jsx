@@ -1,4 +1,4 @@
-import { LinkOutlined, LoadingOutlined, MoreOutlined } from "@ant-design/icons";
+import { LinkOutlined, MoreOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Card,
@@ -6,23 +6,15 @@ import {
   Menu,
   message as antMessage,
   Modal,
-  Spin
+  Empty
 } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import style from "../css/AllLinks.module.css";
 import { deleteLink, getLinks, reset } from "../features/links/linkSlice";
-
-const antIcon = (
-  <LoadingOutlined
-    style={{
-      fontSize: 24,
-    }}
-    spin
-  />
-);
-
+import useGetData from "../hooks/useGetData";
+import HCenterSpin from "./HCenterSpin";
 
 function AllLinks() {
   const dispatch = useDispatch();
@@ -40,19 +32,9 @@ function AllLinks() {
     };
   });
 
+  useGetData(getLinks, reset, isError, message);
   useEffect(() => {
-    if (isError) {
-      antMessage.error(message);
-    }
-
-    dispatch(getLinks());
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isSuccess && message !== "") {
+    if (isSuccess && message === "成功删除友链") {
       antMessage.success(message);
     }
   }, [isSuccess, message]);
@@ -72,7 +54,7 @@ function AllLinks() {
     setIsModalVisible(false);
   };
 
-  const handleCancel = (e) => {
+  const handleCancel = () => {
     setIsModalVisible(false);
   };
 
@@ -109,35 +91,11 @@ function AllLinks() {
     );
   };
 
-  //异步加载图片(有bug)
-  // const [imageSrcs, setImageSrcs] = useState([]);
-  // useEffect(() => {
-  //   console.log("run inside useEffect");
-  //   rnLinks.forEach(({ picture }, i) => {
-  //     if (picture) {
-  //       console.log("picture and type: ", picture.data, typeof picture.data);
-  //       const imgArrayBuffer = new Uint8Array(picture.data).buffer;
-  //       const imgBlob = new Blob([imgArrayBuffer], {
-  //         /* { type: "image/jpeg" } */
-  //       });
-  //       const reader = new FileReader();
-  //       reader.readAsDataURL(imgBlob);
-  //       reader.onloadend = function () {
-  //         const imgSrcs = imageSrcs.slice();
-  //         imgSrcs[i] = reader.result;
-  //         setImageSrcs(imgSrcs);
-  //       };
-  //     }
-  //   });
-  // }, []);
-
-  
-
   return !isLoading?(
-    <>
+    <>{rnLinks.length===0?<Empty />:
       <div className={style["links-box"]}>
         {rnLinks.map(
-          ({ _id, linkName, description, linkAddress, picture }, i) => {
+          ({ _id, linkName, description, linkAddress, picture }) => {
             let avatarNode = (
               <Avatar
                 style={{
@@ -148,17 +106,10 @@ function AllLinks() {
                 size={64}
               />
             );
-
             if (picture) {
-              const imgArrayBuffer = new Uint8Array(picture.data).buffer;
-              const imgBlob = new Blob([imgArrayBuffer], {
-                // type: "image/jpeg"
-              });
-
               avatarNode = (
                 <Avatar
-                  src={URL.createObjectURL(imgBlob)}
-                  //src={imageSrcs[i]}
+                  src={picture}
                   shape="square"
                   size={64}
                 />
@@ -178,7 +129,7 @@ function AllLinks() {
                     })}
                     trigger={["click"]}
                   >
-                    <a onClick={(e) => e.preventDefault()}>
+                    <a>
                       <MoreOutlined className={style["menu-button"]} />
                     </a>
                   </Dropdown>
@@ -197,7 +148,7 @@ function AllLinks() {
             );
           }
         )}
-      </div>
+      </div>}
       <Modal
         title="删除友链"
         visible={isModalVisible}
@@ -209,7 +160,7 @@ function AllLinks() {
         <p>确定删除友链?</p>
       </Modal>
     </>
-  ):<Spin className={style["spin-center"]} indicator={antIcon} />;
+  ):<HCenterSpin />;
 }
 
 export default AllLinks;

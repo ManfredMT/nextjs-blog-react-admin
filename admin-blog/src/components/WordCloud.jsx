@@ -1,7 +1,9 @@
 import { Text, TrackballControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useMemo, useRef } from "react";
-import * as THREE from "three";
+//import * as THREE from "three";
+import {Vector3, Quaternion, Spherical} from "three";
+
 
 const defaultColors = [
   "BlueViolet",
@@ -14,9 +16,9 @@ const defaultColors = [
 
 function rotate(L, camera, ctr, speed) {
   const vector = ctr.current.target.clone();
-  const l = new THREE.Vector3().subVectors(camera.position, vector).length();
+  const l = new Vector3().subVectors(camera.position, vector).length();
   const up = camera.up.clone();
-  const quaternion = new THREE.Quaternion();
+  const quaternion = new Quaternion();
 
   // Zoom correction
   camera.translateZ(L - l);
@@ -51,17 +53,17 @@ function Cloud({
   cZ,
   modifiedWords,
 }) {
-  // Create a count x count random words with spherical distribution
+  // Create a count x count words with spherical distribution
   const words = useMemo(() => {
     const temp = [];
-    const spherical = new THREE.Spherical();
+    const spherical = new Spherical();
     const phiSpan = Math.PI / (count + 1);
     const thetaSpan = (Math.PI * 2) / count;
     for (let i = 1; i < count + 1; i++)
       for (let j = 0; j < count; j++) {
         const wordIndex = (i - 1) * count + j;
         temp.push([
-          new THREE.Vector3().setFromSpherical(
+          new Vector3().setFromSpherical(
             spherical.set(radius, phiSpan * i, thetaSpan * j)
           ),
           modifiedWords[wordIndex],
@@ -108,8 +110,8 @@ function WordCloud({
   radius = 25,
   speed = 1,
   words,
-  
 }) {
+  
   const controlsRef = useRef();
   const wordsNumber = useMemo(() => words.length, [words]);
   const countCloudT = useMemo(() => getMSquare(wordsNumber), [wordsNumber]);
@@ -127,7 +129,10 @@ function WordCloud({
         colors={colors}
         modifiedWords={modifiedWords}
       />
-      <TrackballControls ref={controlsRef} />
+      <TrackballControls
+        ref={controlsRef}
+        noZoom={true}
+      />
     </Canvas>
   );
 }

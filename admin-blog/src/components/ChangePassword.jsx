@@ -1,6 +1,5 @@
 import { Button, Form, Input, message as antMessage } from "antd";
 import { useEffect, useRef, useState } from "react";
-//import style from "../css/blank.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import style from "../css/NewForm.module.css";
@@ -28,7 +27,7 @@ const ChangePassword = () => {
 
   useEffect(() => {
     if (isChangePWError) {
-      console.log(message);
+      //console.log(message);
       antMessage.error(message);
     }
     if (isSuccess && message !== "") {
@@ -43,7 +42,6 @@ const ChangePassword = () => {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
 
   const onFinish = (values) => {
-    console.log(values);
     if (values.password.new !== values.password.confirm) {
       setIsPWMatch(false);
     } else {
