@@ -63,8 +63,8 @@ const updateProfile = asyncHandler(async (req, res) => {
     newProfileData.socialBannerType = req.files["socialBanner"][0].mimetype;
   }
 
-  let revalidateUrl = 
-  `http://localhost:3001/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=post`;
+  const revalidateUrl = 
+  `http://localhost:${process.env.NEXTJS_PORT}/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=post`;
 
   try {
     const updatedProfile = await Profile.findByIdAndUpdate(
