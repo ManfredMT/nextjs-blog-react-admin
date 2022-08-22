@@ -19,7 +19,7 @@ function Login() {
     //console.log('user before : ',user)
     dispatch(checkJWT());
     //console.log('user after : ',user)
-  }, []);
+  }, [dispatch]);
 
   const from = location.state?.from?.pathname || "/manage";
 
