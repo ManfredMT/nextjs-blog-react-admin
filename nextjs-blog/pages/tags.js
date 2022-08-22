@@ -8,7 +8,7 @@ import styles from "../styles/Tags.module.css";
 import styleAni from "../styles/AnimatePublic.module.css";
 
 export default function Tags({ allTags, siteMetadata }) {
-  console.log("allTags: ", allTags);
+  //console.log("allTags: ", allTags);
   return (
     <>
       <PageSEO

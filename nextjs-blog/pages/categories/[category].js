@@ -17,7 +17,7 @@ export default function PostByCategory({
   siteMetadata,
   category,
 }) {
-  console.log("postsByCategory: ", postsByCategory);
+  //console.log("postsByCategory: ", postsByCategory);
   return (
     <>
       <CategorySEO
@@ -52,7 +52,7 @@ export async function getStaticPaths() {
   });
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   };
 }
 
@@ -73,16 +73,15 @@ export async function getStaticProps({ params }) {
   });
 
   // rss
-  console.log("filteredPosts: ", filteredPosts);
   if (filteredPosts.length > 0) {
     const rss = generateRss(
       filteredPosts,
       siteMetadata,
       `categories/${params.category}/feed.xml`
     );
-    console.log("rss: ", rss);
+    //console.log("rss: ", rss);
     const rssPath = path.join(root, "public", "categories", params.category);
-    console.log("rssPath: ", rssPath);
+    //console.log("rssPath: ", rssPath);
     fs.mkdirSync(rssPath, { recursive: true });
     fs.writeFileSync(path.join(rssPath, "feed.xml"), rss);
   }

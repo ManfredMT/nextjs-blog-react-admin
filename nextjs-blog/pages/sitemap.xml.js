@@ -1,3 +1,5 @@
+//参考 https://nextjs.org/learn/seo/crawling-and-indexing/xml-sitemaps
+
 import {getAllTags, getAllCategories, getAllPostTitles} from "../lib/posts";
 import {getSiteMetadata} from "../lib/siteData";
 

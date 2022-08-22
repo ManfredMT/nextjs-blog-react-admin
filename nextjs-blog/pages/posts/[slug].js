@@ -1,20 +1,20 @@
 import { getPostByTitle, getAllPostTitles } from "../../lib/posts";
-import Comment from "../../components/Comments";
-import CommentForm from "../../components/CommentForm";
 import { getSiteMetadata } from "../../lib/siteData";
 import { BlogSEO } from "../../components/SEO";
 import PostLayout from "../../components/PostLayout";
 import ShrinkHeader from "../../components/ShrinkHeader";
-import Footer from "../../components/Footer"
+import Footer from "../../components/Footer";
+import CommentSection from "../../components/CommentSection";
 
 export default function Post({ post, siteMetadata }) {
-  console.log("post: ", post);
-  console.log("post.updatedAt: ",post.updatedAt)
-  const authorDetails = post.authors ? post.authors.map((author)=>{
-    const name = author==='default'?siteMetadata.author:author;
-    return {name};
-  }):null;
-  const postTitle = post.title.length > 32?post.title.substr(0,32)+"...":post.title;
+  const authorDetails = post.authors
+    ? post.authors.map((author) => {
+        const name = author === "default" ? siteMetadata.author : author;
+        return { name };
+      })
+    : null;
+  const postTitle =
+    post.title.length > 32 ? post.title.substr(0, 32) + "..." : post.title;
   return (
     <>
       <BlogSEO
@@ -36,8 +36,7 @@ export default function Post({ post, siteMetadata }) {
       <ShrinkHeader siteMetadata={siteMetadata} postTitle={postTitle} />
       <main>
         <PostLayout post={post} siteMetadata={siteMetadata} />
-        <CommentForm postId={post._id} />
-        <Comment postId={post._id} />
+        <CommentSection postId={post._id} />
       </main>
       <Footer siteMetadata={siteMetadata} />
     </>
@@ -48,7 +47,7 @@ export async function getStaticPaths() {
   const paths = await getAllPostTitles();
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 }
 
@@ -77,7 +76,7 @@ export async function getStaticProps({ params }) {
 
   return {
     props: {
-      post:posts[0],
+      post: posts[0],
       siteMetadata,
     },
   };

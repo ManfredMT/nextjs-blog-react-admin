@@ -8,7 +8,6 @@ import Image from "next/image";
 import styleAni from "../styles/AnimatePublic.module.css";
 
 export default function Links({ allLinks, siteMetadata }) {
-  console.log("allLinks: ", allLinks);
   const linkIcon = (
     <svg
       className={styles["link-icon"]}

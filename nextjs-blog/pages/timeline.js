@@ -7,7 +7,6 @@ import PostTimeline from "../components/PostTimeline";
 import styleAni from "../styles/AnimatePublic.module.css";
 
 export default function Timeline({ postArchiveData, siteMetadata }) {
-  console.log("postArchiveData: ", postArchiveData);
   return (
     <>
       <PageSEO
@@ -20,23 +19,6 @@ export default function Timeline({ postArchiveData, siteMetadata }) {
       <Header siteMetadata={siteMetadata} nav="timeline" />
       <main className={styleAni["fade-in-top"]}>
         <PostTimeline postArchiveData={postArchiveData} />
-        {/* {allPostsData.map((post) => {
-          return (
-            <article key={post._id}>
-              <header>
-                <h2>{post.title}</h2>
-                <p>{post.createdAt}</p>
-                {post.tags.length > 0 ? (
-                  <div>
-                    {post.tags.map((tag) => {
-                      return <span key={tag}>{tag}</span>;
-                    })}
-                  </div>
-                ) : null}
-              </header>
-            </article>
-          );
-        })} */}
       </main>
       <Footer siteMetadata={siteMetadata} />
     </>

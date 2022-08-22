@@ -8,7 +8,6 @@ import styles from "../styles/Categories.module.css";
 import styleAni from "../styles/AnimatePublic.module.css";
 
 export default function Categories({ allCategories, siteMetadata }) {
-  console.log("allCategories: ", allCategories);
   return (
     <>
       <PageSEO

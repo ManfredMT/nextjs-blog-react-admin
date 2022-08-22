@@ -13,7 +13,6 @@ const root = process.cwd();
 const DISPLAY_POST_NUMBER = 5;
 
 export default function PostByTag({ postsData, siteMetadata, tag }) {
-  console.log("postsData: ", postsData);
   return (
     <>
       <TagSEO
@@ -47,7 +46,7 @@ export async function getStaticPaths() {
   });
   return {
     paths,
-    fallback: false,
+    fallback: 'blocking',
   };
 }
 
