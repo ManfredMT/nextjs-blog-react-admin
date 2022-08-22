@@ -1,12 +1,10 @@
 .article-and-next {
     width: 80vw;
     margin: 2rem auto;
-    /* border: 1px solid blue; */
 }
 
 .authors-box {
     display: flex;
-    /* border: 1px solid red; */
     justify-content: center;
 
 }
@@ -22,6 +20,7 @@
     margin: 0.5rem 0;
     font-weight: 400;
 }
+
 [data-theme='dark'] .time {
     color: rgb(156, 156, 156);
 }
@@ -80,9 +79,11 @@
     box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 2px 0px;
     cursor: pointer;
 }
+
 [data-theme='dark'] .post-tag {
     background-color: rgb(107, 107, 107);
 }
+
 .post-tag:hover {
     background-color: dodgerblue;
     color: white;
@@ -91,7 +92,6 @@
 .post-category:hover {
     color: blueviolet;
     cursor: pointer;
-
 }
 
 
@@ -102,11 +102,10 @@
 
 .last-post-box,
 .next-post-box {
-    
+
     display: inline-block;
     width: 20vw;
     margin-top: 3rem;
-    /* border: 1px solid red; */
     vertical-align: top;
 }
 
@@ -115,8 +114,8 @@
     margin-left: 33vw;
     cursor: pointer;
     transition: all 0.3s;
-    
-    
+
+
 }
 
 .next-post-box:hover {
@@ -127,6 +126,7 @@
 .next-post-box:hover .post-nav-title {
     color: darkblue;
 }
+
 [data-theme='dark'] .next-post-box:hover .post-nav-title {
     color: rgb(126, 126, 255);
 }
@@ -144,6 +144,7 @@
 .last-post-box:hover .post-nav-title {
     color: darkblue;
 }
+
 [data-theme='dark'] .last-post-box:hover .post-nav-title {
     color: rgb(126, 126, 255);
 }
@@ -152,5 +153,32 @@
     .authors-box {
         flex-wrap: wrap;
     }
+
+    .next-post-box:hover {
+        transform: none;
+    }
+
+
+    .next-post-box:hover .post-nav-title {
+        color: inherit;
+    }
+
+    [data-theme='dark'] .next-post-box:hover .post-nav-title {
+        color: inherit;
+    }
+
+    .last-post-box:hover {
+        transform: none;
+    }
+
+    .last-post-box:hover .post-nav-title {
+        color: inherit;
+    }
+
+    [data-theme='dark'] .last-post-box:hover .post-nav-title {
+        color: inherit;
+    }
+
+
 
 }

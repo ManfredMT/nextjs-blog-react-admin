@@ -1,7 +1,6 @@
 .dashboard-body {
   margin: 0 0.5rem;
   padding: 0;
-
 }
 
 .first-row>div {
@@ -42,7 +41,7 @@
 }
 
 .comment-ul-wrap {
-  margin-top:1rem;
+  margin-top: 1rem;
 }
 
 .card-title {
@@ -52,9 +51,9 @@
 }
 
 .card-title-more {
-  margin:0;
+  margin: 0;
   margin-right: 2rem;
-  color:gray;
+  color: gray;
   cursor: pointer;
 }
 
@@ -85,39 +84,41 @@
   padding-bottom: 0.5rem;
 
 
-	animation: gradient 15s ease infinite;
+  animation: gradient 15s ease infinite;
 }
 
 .number-card-box:nth-child(1) {
   background: linear-gradient(-45deg, #7029d2, #a86fe9, #a1228a, #f92ff2);
   background-size: 400% 400%;
-} 
+}
 
 .number-card-box:nth-child(2) {
   background: linear-gradient(-45deg, #f97a37, #ffa26b, #fa9c22, #f02828);
   background-size: 400% 400%;
-} 
+}
 
 .number-card-box:nth-child(3) {
   background: linear-gradient(-45deg, #3c84fb, #6da1ff, #482fea, #23a8bd);
   background-size: 400% 400%;
-} 
+}
 
 .number-card-box:nth-child(4) {
   background: linear-gradient(-45deg, #27be0f, #7ee669, #23a6d5, #23d5ab);
   background-size: 400% 400%;
-} 
+}
 
 @keyframes gradient {
-	0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 hr {
@@ -132,13 +133,13 @@ hr {
   height: 100%;
 }
 
-.number-card-box > p {
+.number-card-box>p {
   font-size: 1rem;
-  margin:0;
-  color:white;
-} 
+  margin: 0;
+  color: white;
+}
 
-.number-card-box > p+p {
+.number-card-box>p+p {
   font-size: 2rem;
   font-weight: 900;
 }
@@ -146,7 +147,7 @@ hr {
 .card-header {
   display: flex;
   justify-content: space-between;
-  margin:0;
+  margin: 0;
 }
 
 @media (max-width:1224px) {
@@ -162,13 +163,13 @@ hr {
 
   .first-row {
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap:2rem;
+    grid-gap: 2rem;
   }
 
   .archive-cloud-row {
     display: flex;
     margin-top: 1rem;
-   
+
   }
 
   .word-cloud-box {
@@ -181,21 +182,6 @@ hr {
 
   }
 
-  /* .recent-post-body {
-    display: inline-block;
-    width: 45%;
-  }
-
-  .recent-comment-body {
-    display: inline-block;
-    width: 30%;
-    margin-top: 0;
-  }
-
-  .recent-list-row {
-    margin-top:2rem;
-  } */
-
   .recent-list-row {
     display: flex;
     margin-top: 1rem;
@@ -204,28 +190,24 @@ hr {
   .post-date {
     float: none;
     clear: none;
-    margin-left:2rem;
-  }
-
-  .comment-list {
-    
+    margin-left: 2rem;
   }
 
   .comment-text {
-    
+
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
   }
 
   .recent-post-body {
-    flex:1
+    flex: 1
   }
 
   .recent-comment-body {
     margin-left: 2rem;
     width: 30rem;
-    
+
   }
 
   .calendar-post-number {
@@ -235,4 +217,3 @@ hr {
 
 
 }
-

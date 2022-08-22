@@ -2,7 +2,6 @@
     width: 80px;
     height: 80px;
     padding: 0.5rem;
-    /* margin: 1rem; */
     border-radius: 1rem;
     background-color: darkmagenta;
     fill: white;
@@ -44,7 +43,6 @@
     width: 18rem;
     text-align: center;
     align-self:flex-start;
-    /* border: 1px solid purple; */
     padding-left: 0.5rem;
     padding-right: 0.5rem;
     margin-left: 1rem;

@@ -19,8 +19,6 @@
 
 
 .source-delete-box {
-    /* position: absolute;
-    bottom: 1rem; */
     display: flex;
     justify-content: space-between;
 }
@@ -55,8 +53,6 @@
     }
     
     .source-delete-box {
-        /* position: absolute;
-        bottom: 1rem; */
         display: flex;
         justify-content: space-between;
     }
@@ -96,10 +92,10 @@
     }
 
     .delete-button {
-        display: none;
+        visibility: hidden;
     }
 
     .card-box:hover .delete-button {
-        display: flex;
+        visibility: visible;
     }
 }

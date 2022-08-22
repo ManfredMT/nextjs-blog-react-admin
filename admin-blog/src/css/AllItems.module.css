@@ -16,7 +16,6 @@
 
 .item-table {
     margin: 0;
-    /* box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px; */
 }
 
 .no-style-button {
@@ -32,10 +31,6 @@
 .hover-blue:hover {
     color: #6b9dd6;
 }
-
-
-
-
 
 .delete-button-mobile {
     color: rgb(255, 96, 96);

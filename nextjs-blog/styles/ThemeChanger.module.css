@@ -27,10 +27,6 @@
         color:black;
         font-size: 1.6rem;
         margin-right: 0.5rem;
-        /* position: relative;
-        top:-3px */
-
-        
     }
     [data-theme='dark'] .sun-svg {
         fill: white;

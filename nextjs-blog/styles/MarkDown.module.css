@@ -31,13 +31,14 @@
     .preview-post-body pre {
         font-size: 0.6rem;
     }
+
     .code-header {
         visibility: visible;
         margin-right: 0rem;
         top: 2.8rem;
     }
+
     .preview-post-body {
         overflow-x: auto;
     }
 }
-

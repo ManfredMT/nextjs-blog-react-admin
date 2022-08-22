@@ -17,20 +17,9 @@
 
 }
 
-.comment-wrap {
-    /* display: flex;
-    justify-content: left;
-    align-items: center;
-    padding-right: 0rem;
-    flex-wrap: wrap; */
-
-}
-
 .checkbox-group {
     width: 100%;
 }
-
-
 
 .delete-selected-icon-button {
     display: inline-block;
@@ -116,25 +105,13 @@
         display: flex;
         justify-content: left;
         align-items: center;
-        padding-right: 10rem;
+        padding-right: 5rem;
 
     }
 
-    /* .checkbox-group {
-        width: 100%;
-    } */
-
-    /* .comment-box {
-        margin-left: 0.5rem;
-    } */
-
-    /* .divider {
-        margin-top: 0.5rem;
-        margin-bottom: 0.5rem;
-    } */
-
     .source-right {
         margin-left: auto;
+        width: 20rem;
     }
 
     .delete-comment-button {
@@ -156,10 +133,10 @@
     }
 
     .delete-comment-button {
-        display: none;
+        visibility: hidden;
     }
 
     .comment-wrap:hover .delete-comment-button {
-        display:flex
+        visibility: visible;
     }
 }

@@ -31,7 +31,6 @@
 
 @media (min-width:1224px) {
     .links-box {
-        
         grid-template-columns: 1fr 1fr;
         grid-gap: 1.5em;
         margin: 0 2rem;

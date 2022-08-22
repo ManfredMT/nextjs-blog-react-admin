@@ -13,9 +13,6 @@
 }
 
 .post-list-wrap {
-  /* display: flex;
-  flex-direction: column;
-  align-items: center;  */
   margin: 0 auto;
   width: max-content;
 }
@@ -25,6 +22,5 @@
     height: 1px;
     background-color: #a7a7a7;
     width: 90vw;
-
   }
 }

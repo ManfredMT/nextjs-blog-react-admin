@@ -1,5 +1,4 @@
 .login-page-box {
-
     display: flex;
     height: 100vh;
     justify-content: center;
@@ -14,17 +13,12 @@
 .blurred-box {
     position: relative;
     width: 80vw;
-    /* height: 350px; */
-    /*   
-    top: calc(50% - 175px);
-    left: calc(50% - 125px); */
     background: inherit;
     border-radius: 1.5rem;
     overflow: hidden;
 }
 
 .blurred-box::after {
-
     content: '';
     width: 85vw;
     height: 50vh;
@@ -77,11 +71,6 @@
 
 .submit-button {
     background-image: linear-gradient(to right, #457fca 0%, #5691c8 51%, #457fca 100%);
-    /* background-image: linear-gradient(to right, #1e3c72 0%, #2a5298  51%, #1e3c72  100%);
-    background-image: linear-gradient(to right, #4CA1AF 0%, #C4E0E5  51%, #4CA1AF  100%);
-    background-image: linear-gradient(to right, #E0EAFC 0%, #CFDEF3  51%, #E0EAFC  100%);
-    background-image: linear-gradient(to right, #141E30 0%, #243B55  51%, #141E30  100%);
-    background-image: linear-gradient(to right, #000428 0%, #004e92  51%, #000428  100%); */
     margin: 0.3rem;
     padding: 0.5rem 1.5rem;
     text-align: center;
@@ -118,7 +107,6 @@
 
     .submit-button:hover {
         background-position: right center;
-        /* change the direction of the change here */
         color: #fff;
         text-decoration: none;
     }
