@@ -7,11 +7,17 @@ export default function ShrinkHeader({ siteMetadata, nav, postTitle }) {
   useEffect(() => {
     if (typeof window !== "undefined") {
       window.addEventListener("scroll", () =>
-        
         setShrink(window.pageYOffset > 80)
       );
     }
   }, []);
 
-  return <Header shrink={shrink} siteMetadata={siteMetadata} nav={nav} postTitle={postTitle} />;
+  return (
+    <Header
+      shrink={shrink}
+      siteMetadata={siteMetadata}
+      nav={nav}
+      postTitle={postTitle}
+    />
+  );
 }

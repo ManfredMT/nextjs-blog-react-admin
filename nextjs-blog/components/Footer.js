@@ -1,12 +1,11 @@
 import styles from "../styles/Footer.module.css";
-import Image from "next/image";
 
 export default function Footer({ siteMetadata }) {
   return (
     <footer className={styles["footer"]}>
       <div className={styles["social-info-box"]}>
         <span className={styles["icon-box"]}>
-        <span className={styles["tooltip"]}>{siteMetadata.email}</span>
+          <span className={styles["tooltip"]}>{siteMetadata.email}</span>
           <svg
             className={styles["svg-logo"]}
             version="1.1"
@@ -32,7 +31,7 @@ export default function Footer({ siteMetadata }) {
 
         {siteMetadata.wx ? (
           <span className={styles["icon-box"]}>
-          <span className={styles["tooltip"]}>{siteMetadata.wx}</span>
+            <span className={styles["tooltip"]}>{siteMetadata.wx}</span>
             <svg
               className={styles["svg-logo"]}
               version="1.1"
@@ -119,10 +118,9 @@ export default function Footer({ siteMetadata }) {
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
+                fillRule="evenodd"
+                clipRule="evenodd"
                 d="M17.5875 6.77268L21.8232 3.40505L17.5875 0.00748237L17.5837 0L13.3555 3.39757L17.5837 6.76894L17.5875 6.77268ZM17.5863 17.3955H17.59L28.5161 8.77432L25.5526 6.39453L17.59 12.6808H17.5863L17.5825 12.6845L9.61993 6.40201L6.66016 8.78181L17.5825 17.3992L17.5863 17.3955ZM17.5828 23.2891L17.5865 23.2854L32.2133 11.7456L35.1768 14.1254L28.5238 19.3752L17.5865 28L0.284376 14.3574L0 14.1291L2.95977 11.7531L17.5828 23.2891Z"
-                //fill="#1E80FF"
               />
             </svg>
           </a>
@@ -142,7 +140,7 @@ export default function Footer({ siteMetadata }) {
               <g>
                 <path fill="none" d="M0 0h24v24H0z" />
                 <path
-                  fill-rule="nonzero"
+                  fillRule="nonzero"
                   d="M13.373 18.897h1.452l.478 1.637 2.605-1.637h3.07V5.395h-7.605v13.502zM14.918 6.86h4.515v10.57h-1.732l-1.73 1.087-.314-1.084-.739-.003V6.861zm-2.83 4.712H8.846a70.3 70.3 0 0 0 .136-4.56h3.172s.122-1.4-.532-1.384H6.135c.216-.814.488-1.655.813-2.524 0 0-1.493 0-2 1.339-.211.552-.82 2.677-1.904 4.848.365-.04 1.573-.073 2.284-1.378.131-.366.156-.413.318-.902h1.79c0 .651-.074 4.151-.104 4.558h-3.24c-.729 0-.965 1.466-.965 1.466h4.066C6.92 16.131 5.456 18.74 2.8 20.8c1.27.363 2.536-.057 3.162-.614 0 0 1.425-1.297 2.206-4.298l3.346 4.03s.49-1.668-.077-2.481c-.47-.554-1.74-2.052-2.281-2.595l-.907.72c.27-.867.433-1.71.488-2.524h3.822s-.005-1.466-.47-1.466z"
                 />
               </g>
@@ -159,7 +157,7 @@ export default function Footer({ siteMetadata }) {
         target="_blank"
         rel="noopener noreferrer"
       >
-        Powered by{" "}Next.js
+        Powered by Next.js
       </a>
     </footer>
   );

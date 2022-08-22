@@ -1,39 +1,62 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import styles from "../styles/Comments.module.css";
+import styleAni from "../styles/AnimatePublic.module.css";
 
-export default function Comment({ postId }) {
+export default function Comments({
+  postId,
+  isCommentChange,
+  setIsCommentChange,
+}) {
   const [comments, setComments] = useState(null);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await fetch(
-        "/api/comments/" + postId,
-        {
-          method: "GET",
-        }
-      );
-      const json = await response.json();
-      setComments(json);
-    };
 
-    fetchData().catch(console.error);
+  const fetchData = useCallback(async (signal) => {
+    const response = await fetch("/api/comments/" + postId, {
+      method: "GET",
+      signal,
+    });
+    const json = await response.json();
+    setComments(json);
   }, [postId]);
-  console.log("comments: ", comments);
+
+  useEffect(() => {
+    console.log("effect get comments ",isCommentChange);
+    const controller = new AbortController();
+    const signal = controller.signal;
+    fetchData(signal).catch((err)=>{
+      if(err.name !== "AbortError") {
+        console.error(err);
+      }else {
+        //console.log("取消请求");
+      };
+    });
+    return () => {
+      console.log("effect clean get comments");
+      controller.abort();
+      setIsCommentChange(false);
+    };
+  }, [postId, isCommentChange, setIsCommentChange, fetchData]);
+
   return comments !== null ? (
     <div className={styles["comments-box"]}>
       <h3 className={styles["comment-label"]}>{`评论 : `}</h3>
-      {comments.map((c) => {
-        const commentCreatedDate = new Date(c.createdAt);
-        const formatCreated = `${commentCreatedDate.getFullYear()}年${
-          commentCreatedDate.getMonth() + 1
-        }月${commentCreatedDate.getDate()}日`;
-        return (
-          <div className={styles["comment-wrap"]} key={c._id}>
-            <div className={styles["comment-user"]}>{c.username}</div>
-            <time className={styles["comment-date"]}>{formatCreated}</time>
-            <div className={styles["comment"]}>{c.comment}</div>
-          </div>
-        );
-      })}
+      {comments
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+        .map((c) => {
+          const commentCreatedDate = new Date(c.createdAt);
+          const formatCreated = `${commentCreatedDate.getFullYear()}年${
+            commentCreatedDate.getMonth() + 1
+          }月${commentCreatedDate.getDate()}日`;
+          return (
+            <div
+              className={`${styles["comment-wrap"]} ${styleAni["fade-in-top"]}`}
+              key={c._id}
+            >
+              <div className={styles["comment-user"]}>{c.username}</div>
+              <time className={styles["comment-date"]}>{formatCreated}</time>
+              <div className={styles["comment"]}>{c.comment}</div>
+            </div>
+          );
+        })}
     </div>
   ) : (
     <p>loading</p>

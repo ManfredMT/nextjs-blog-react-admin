@@ -1,7 +1,6 @@
-//import MarkDown from "./MarkDown";
+
 import styles from "../styles/PostLayout.module.css";
 import Link from "next/link";
-// import Image from 'next/future/image';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
@@ -34,6 +33,7 @@ export default function PostLayout({ post, siteMetadata }) {
                         src={siteMetadata.avatar}
                         width={20}
                         height={20}
+                        alt="avatar"
                       />
                       {siteMetadata.author}
                     </p>

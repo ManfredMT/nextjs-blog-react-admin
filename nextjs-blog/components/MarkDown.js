@@ -17,7 +17,7 @@ function MarkDown({
   return (
     <ReactMarkdown
       className={`${styles["preview-post-body"]} markdown-body`}
-      children={mdChildren}
+      //children={mdChildren}
       remarkPlugins={[
         remarkGfm,
         [remarkFootnotes, { inlineNotes: true }],
@@ -54,7 +54,7 @@ function MarkDown({
                     />
                   </div>
                 <SyntaxHighlighter
-                  children={String(children).replace(/\n$/, "")}
+                  //children={String(children).replace(/\n$/, "")}
                   style={atomDark}
                   className={styles["syntax-highlighter"]}
                   wrapLines={true}
@@ -64,7 +64,7 @@ function MarkDown({
                   language={match[1]}
                   PreTag="div"
                   {...props}
-                />
+                >{String(children).replace(/\n$/, "")}</SyntaxHighlighter>
               </div>
             );
           } else if (!inline) {
@@ -76,7 +76,7 @@ function MarkDown({
                     />
                   </div>
                 <SyntaxHighlighter
-                  children={String(children).replace(/\n$/, "")}
+                  //children={String(children).replace(/\n$/, "")}
                   style={atomDark}
                   className={styles["syntax-highlighter"]}
                   wrapLines={true}
@@ -86,7 +86,7 @@ function MarkDown({
                   language={"text"}
                   PreTag="div"
                   {...props}
-                />
+                >{String(children).replace(/\n$/, "")}</SyntaxHighlighter>
               </div>
             );
           } else {
@@ -98,7 +98,7 @@ function MarkDown({
           }
         },
       }}
-    />
+    >{mdChildren}</ReactMarkdown>
   );
 }
 

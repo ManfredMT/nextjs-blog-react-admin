@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "../styles/CommentForm.module.css";
 
-export default function CommentForm({ postId }) {
+export default function CommentForm({ postId, setIsCommentChange }) {
   const [comment, setComment] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -28,9 +28,10 @@ export default function CommentForm({ postId }) {
     };
     postData()
       .then((data) => {
-        console.log("response data: ", data);
+        //console.log("response data: ", data);
         setMessage("评论已发送");
         setShowNotice(true);
+        setIsCommentChange(true);
       })
       .catch((error) => {
         console.error("error: ", error);
@@ -43,15 +44,6 @@ export default function CommentForm({ postId }) {
         setEmail("");
       });
 
-    // try {
-    //   postData();
-    // } catch (error) {
-    //   console.error(error);
-    // } finally {
-    //   setComment("");
-    //   setUsername("");
-    //   setEmail("");
-    // }
   };
   useEffect(() => {
     if (showNotice) {

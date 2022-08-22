@@ -2,7 +2,7 @@ import styles from "../styles/PostList.module.css";
 import Link from "next/link";
 import { useState,useMemo, useEffect } from "react";
 import LoadMoreBtn from "./LoadMoreBtn";
-import styleAni from "../styles/AnimatePublic.module.css"
+import styleAni from "../styles/AnimatePublic.module.css";
 
 export default function PostList({ posts, displayN }) {
   const postNumber = useMemo(()=>posts.length,[posts]);
@@ -15,12 +15,10 @@ export default function PostList({ posts, displayN }) {
       postNumber > index + displayN ? index + displayN : postNumber;
     setTimeout(()=>setIndex(newIndex), 300);
     setTimeout(()=>setIsCompleted(postNumber <= index + displayN),300);
-    //setIndex(newIndex);
-    //setIsCompleted(postNumber <= index + displayN);
   };
   useEffect(()=>{
     setIsCompleted(postNumber <= displayN)
-  },[postNumber]);
+  },[postNumber, displayN]);
 
   return (
     <>
