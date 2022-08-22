@@ -11,6 +11,10 @@ const protect = asyncHandler(async (req,res,next)=>{
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
             req.user = await User.findById(decoded.id).select('-password');
+            if(!req.user) {
+                res.status(401)
+                throw new Error('not authorized') 
+            }
             const userUpdatedAt = parseInt(req.user.updatedAt.valueOf()/1000);
             const jwtIssueAt = decoded.iat;
             if (userUpdatedAt > jwtIssueAt) {

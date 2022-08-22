@@ -38,10 +38,16 @@ const setDefaultPasswd = async () => {
   }
 };
 
+//设置默认的博客网站信息
 const setDefaultProfile = async ()=>{
   const userName = process.env.USER_NAME;
   const userExists = await User.findOne({ name: userName });
-  const profileExists = await Profile.findOne({user: userExists.id});
+  let profileExists = null;
+  if(userExists) {
+    profileExists = await Profile.findOne({user: userExists.id});
+  }else {
+    throw new Error("初始用户创建失败");
+  }
   if(!profileExists) {
     const profileObj = {
     user: userExists.id,
@@ -54,7 +60,7 @@ const setDefaultProfile = async ()=>{
     locale: 'zh-CN',
     email: 'name@site.com',
     description: '个人博客',
-    logo: '/api/image/logo.png',
+    logo: '/api/image/logo.svg',
     avatar: '/api/image/avatar.ico',
     socialBanner: '/api/image/og-image.png',
 
@@ -67,5 +73,7 @@ const setDefaultProfile = async ()=>{
   }
   
 }
+
+
 
 module.exports = { connectDB, setDefaultPasswd, setDefaultProfile };
