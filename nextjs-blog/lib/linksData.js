@@ -7,7 +7,7 @@ export async function getAllLinksData() {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const linksResult = await Link.find({ user: user.id });

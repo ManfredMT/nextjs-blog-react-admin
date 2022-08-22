@@ -6,15 +6,10 @@ const DB_NAME = process.env.DB_NAME;
 
 if (!MONGODB_URI) {
   throw new Error(
-    'Please define the MONGODB_URI environment variable inside .env.local'
-  )
+    '请在.env.local文件里设置MONGODB_URI环境变量'
+  );
 }
 
-/**
- * Global is used here to maintain a cached connection across hot reloads
- * in development. This prevents connections growing exponentially
- * during API Route usage.
- */
 let cached = global.mongoose
 
 if (!cached) {

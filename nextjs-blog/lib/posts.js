@@ -5,11 +5,10 @@ import dbConnect from "./utils/dbConnect";
 
 export async function getAllPostsData() {
   await dbConnect();
-  //connectDB();
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const posts = await Post.find({ user: user.id, draft: false }).select(
@@ -24,7 +23,7 @@ export async function getAllTags() {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const tagsFindResult = await Post.find({
@@ -56,7 +55,7 @@ export async function getPostsByTag(tagName) {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const tagsFindResult = await Post.find({
@@ -77,7 +76,7 @@ export async function getAllCategories() {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const cFindResult = await Post.find({
@@ -103,7 +102,7 @@ export async function getPostsByCategory(categoryName) {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const cFindResult = await Post.find({
@@ -124,7 +123,7 @@ export async function getPostById(postId) {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const postsResult = await Post.find({
@@ -134,7 +133,7 @@ export async function getPostById(postId) {
     }).select("-image");
 
     if (postsResult) {
-      console.log("lib postsResult: ", postsResult);
+      //console.log("lib postsResult: ", postsResult);
       return JSON.parse(JSON.stringify(postsResult));
     } else {
       return [];
@@ -147,7 +146,7 @@ export async function getAllPostIds() {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const postsResult = await Post.find({
@@ -174,7 +173,7 @@ export async function getAllPostTitles() {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const postsResult = await Post.find({
@@ -201,7 +200,7 @@ export async function getPostByTitle(title) {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const postsResult = await Post.find({
@@ -223,7 +222,6 @@ export async function getPostByTitle(title) {
       const postsObj = JSON.parse(JSON.stringify(postsResult));
       postsObj[0].nextPost = sortedTitles[sortTIndex + 1]?.title ?? null;
       postsObj[0].lastPost = sortedTitles[sortTIndex - 1]?.title ?? null;
-      console.log("getPostByTitle: ", postsObj);
       return postsObj;
     } else {
       return [];
@@ -236,7 +234,7 @@ export async function getPostRelatedPath() {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const posts = await Post.find({ user: user.id, draft: false }).select(
@@ -268,7 +266,7 @@ export async function getMonthArchive() {
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
     const posts = await Post.find({ user: user.id, draft: false }).sort({createdAt: -1}).select(

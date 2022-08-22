@@ -3,18 +3,17 @@ import User from "./utils/userModel";
 import Profile from "./utils/profileModel";
 
 export async function getSiteMetadata() {
-    await dbConnect();
-  //connectDB();
+  await dbConnect();
   const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (!user) {
-    console.log("用户不存在");
+    console.error("用户不存在");
     return [];
   } else {
-    const profileResult = await Profile.find({user: user.id});
+    const profileResult = await Profile.find({ user: user.id });
     let siteMetadata = {};
-    if(profileResult.length===1) {
-      profileResult.forEach((doc)=>{
+    if (profileResult.length === 1) {
+      profileResult.forEach((doc) => {
         siteMetadata.id = doc._id.toString();
         siteMetadata.name = doc.name;
         siteMetadata.title = doc.title;
@@ -28,26 +27,24 @@ export async function getSiteMetadata() {
         siteMetadata.logo = doc.logo;
         siteMetadata.avatar = doc.avatar;
         siteMetadata.socialBanner = doc.socialBanner;
-        if(doc.keywords) {
+        if (doc.keywords) {
           siteMetadata.keywords = doc.keywords;
         }
-        if(doc.github) {
+        if (doc.github) {
           siteMetadata.github = doc.github;
         }
-        if(doc.zhihu) {
+        if (doc.zhihu) {
           siteMetadata.zhihu = doc.zhihu;
         }
-        if(doc.juejin) {
+        if (doc.juejin) {
           siteMetadata.juejin = doc.juejin;
         }
-        if(doc.wx) {
+        if (doc.wx) {
           siteMetadata.wx = doc.wx;
         }
-
-      })
+      });
     }
-    
-    
+
     return siteMetadata;
   }
 }
