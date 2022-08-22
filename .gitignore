@@ -1,1 +1,7 @@
 node_modules/
+
+nextjs-blog/public/tags/
+nextjs-blog/public/categories/
+nextjs-blog/public/feed.xml
+
+.VSCodeCounter/
