@@ -17,7 +17,11 @@ yarn-error.log*
 lerna-debug.log*
 .pnpm-debug.log*
 
+# upload images
+/uploads/image/*
+!/uploads/image/avatar.ico
+!/uploads/image/logo.svg
+!/uploads/image/og-image.png
 
-uploads/
 # production
 /build
