@@ -90,7 +90,7 @@ function BlogDashboard() {
   }, [isErrorCom, messageCom]);
 
   const comments = useMemo(() => {
-    console.log("commentData: ", commentData);
+    //console.log("commentData: ", commentData);
     if (commentData) {
       return commentData.map((c) => {
         return {
@@ -126,7 +126,7 @@ function BlogDashboard() {
     return postList;
   }, [posts]);
 
-  console.log("allPosts: ", allPosts);
+  //console.log("allPosts: ", allPosts);
 
   const allTags = getAllTags(allPosts);
   const allCategories = getAllCategories(allPosts);

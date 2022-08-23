@@ -149,7 +149,7 @@ function PostSearch() {
     (state) => state.posts
   );
 
-  console.log("posts: ",posts);
+  //console.log("posts: ",posts);
   const allPosts = useMemo(() => {
     const unsortedPosts = posts.map((post) => {
       return {
