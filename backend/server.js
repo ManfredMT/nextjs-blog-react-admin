@@ -81,7 +81,7 @@ if (process.env.NODE_ENV === "production") {
     expressStaticGzip(path.join(__dirname, "../admin-blog/build"))
   );
   app.get("/*", limiterStatic, function (req, res) {
-    res.sendFile(path.join(__dirname, "build", "index.html"));
+    res.sendFile(path.join(__dirname, "../admin-blog/build", "index.html"));
   });
 }
 
