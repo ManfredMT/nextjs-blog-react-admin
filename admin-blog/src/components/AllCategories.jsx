@@ -44,7 +44,7 @@ function AllCategories() {
     (state) => state.posts
   );
 
-  console.log("AllCategories");
+  //console.log("AllCategories");
   useGetData(getPosts, reset, isError, message);
 
   useEffect(() => {

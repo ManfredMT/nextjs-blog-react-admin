@@ -41,7 +41,7 @@ function PostCategory() {
     (state) => state.posts
   );
 
-  console.log("PostCategory");
+  //console.log("PostCategory");
   useGetData(getPosts, reset, isError, message);
 
   useEffect(() => {
@@ -75,7 +75,7 @@ function PostCategory() {
         selectedPosts.current.length > defaultPageSize
           ? defaultPageSize
           : selectedPosts.current.length;
-      console.log("fire setCurrentPagePosts");
+      //console.log("fire setCurrentPagePosts");
       setCurrentPagePosts(selectedPosts.current.slice(0, end));
       setPaginationTotal(selectedPosts.current.length);
     },
@@ -125,7 +125,7 @@ function PostCategory() {
     setSearchParams,
   ]);
 
-  console.log("currentPagePosts: ", currentPagePosts);
+  //console.log("currentPagePosts: ", currentPagePosts);
 
   const onChangePage = (page, pageSize) => {
     const start = (page - 1) * defaultPageSize;
