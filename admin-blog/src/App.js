@@ -46,7 +46,7 @@ function App() {
               }
             >
               <Route index element={<ManageNav />} />
-              <Route path="dashboard" element={<Suspense fallback={<Loading />}><BlogDashboard /></Suspense>} />
+              <Route path="dashboard" element={<Suspense fallback={<HCenterSpin />}><BlogDashboard /></Suspense>} />
 
               <Route path="post" element={<PostNav />}>
                 <Route
@@ -57,29 +57,29 @@ function App() {
                     </Suspense>
                   }
                 />
-                <Route path="new-post" element={<Suspense fallback={<Loading />}><NewPost /></Suspense>} />
+                <Route path="new-post" element={<Suspense fallback={<HCenterSpin />}><NewPost /></Suspense>} />
               </Route>
               <Route path="tag" element={<TagNav />}>
-                <Route path="all-tags" element={<Suspense fallback={<Loading />}><AllTags /></Suspense>} />
-                <Route path="post-tags" element={<Suspense fallback={<Loading />}><PostTags /></Suspense>} />
+                <Route path="all-tags" element={<Suspense fallback={<HCenterSpin />}><AllTags /></Suspense>} />
+                <Route path="post-tags" element={<Suspense fallback={<HCenterSpin />}><PostTags /></Suspense>} />
               </Route>
               <Route path="category" element={<CategoryNav />}>
-                <Route path="all-categories" element={<Suspense fallback={<Loading />}><AllCategories /></Suspense>} />
-                <Route path="post-category" element={<Suspense fallback={<Loading />}><PostCategory /></Suspense>} />
+                <Route path="all-categories" element={<Suspense fallback={<HCenterSpin />}><AllCategories /></Suspense>} />
+                <Route path="post-category" element={<Suspense fallback={<HCenterSpin />}><PostCategory /></Suspense>} />
               </Route>
               <Route path="link" element={<LinkNav from="/manage/link" />}>
-                <Route path="all-links" element={<Suspense fallback={<Loading />}><AllLinks /></Suspense>} />
-                <Route path="new-link" element={<Suspense fallback={<Loading />}><NewLink /></Suspense>} />
-                <Route path=":linkId" element={<Suspense fallback={<Loading />}><EditLink /></Suspense>} />
+                <Route path="all-links" element={<Suspense fallback={<HCenterSpin />}><AllLinks /></Suspense>} />
+                <Route path="new-link" element={<Suspense fallback={<HCenterSpin />}><NewLink /></Suspense>} />
+                <Route path=":linkId" element={<Suspense fallback={<HCenterSpin />}><EditLink /></Suspense>} />
                 <Route index element={<LinkNav from="/manage/link/" />} />
               </Route>
               <Route path="comment" element={<CommentNav />}>
-                <Route path="recent-comments" element={<Suspense fallback={<Loading />}><RecentComments /></Suspense>} />
-                <Route path="post-comments" element={<Suspense fallback={<Loading />}><PostComments /></Suspense>} />
+                <Route path="recent-comments" element={<Suspense fallback={<HCenterSpin />}><RecentComments /></Suspense>} />
+                <Route path="post-comments" element={<Suspense fallback={<HCenterSpin />}><PostComments /></Suspense>} />
               </Route>
 
-              <Route path="setting" element={<Suspense fallback={<Loading />}><BlogSetting /></Suspense>} />
-              <Route path="change-password" element={<Suspense fallback={<Loading />}><ChangePassword /></Suspense>} />
+              <Route path="setting" element={<Suspense fallback={<HCenterSpin />}><BlogSetting /></Suspense>} />
+              <Route path="change-password" element={<Suspense fallback={<HCenterSpin />}><ChangePassword /></Suspense>} />
 
               <Route
                 path="*"
