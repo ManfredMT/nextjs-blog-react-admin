@@ -2,10 +2,10 @@
 import styles from "../styles/PostLayout.module.css";
 import Link from "next/link";
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+
 
 const MarkDown = dynamic(() => import('./MarkDown'), {
-  suspense: true,
+  loading:()=>{"loading..."}
 })
 
 export default function PostLayout({ post, siteMetadata }) {
@@ -67,9 +67,9 @@ export default function PostLayout({ post, siteMetadata }) {
               {post.category === "default" ? "未分类" : post.category}
             </p></Link>
           </header>
-          <Suspense fallback={`Loading...`}>
+          {/* <Suspense fallback={`Loading...`}> */}
           <MarkDown mdChildren={post.content} />
-          </Suspense>
+          {/* </Suspense> */}
         </article>
         {post.lastPost ? (
           <Link href={`/posts/${post.lastPost}`}>
