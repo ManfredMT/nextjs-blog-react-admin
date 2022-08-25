@@ -11,8 +11,11 @@ const antIcon = (
   />
 );
 
-function HCenterSpin() {
-  return <Spin className={style["spin-center"]} indicator={antIcon} />;
+function HCenterSpin({verticallyCenter=false}) {
+  return <Spin 
+  className={`${style["spin-center"]} ${verticallyCenter?style["v-center"]:""}`} 
+  indicator={antIcon}
+   />;
 }
 
 export default HCenterSpin;

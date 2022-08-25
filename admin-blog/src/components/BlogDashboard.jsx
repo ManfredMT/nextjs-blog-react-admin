@@ -12,20 +12,20 @@ import * as echarts from "echarts/core";
 import { LabelLayout, UniversalTransition } from "echarts/features";
 import { SVGRenderer } from "echarts/renderers";
 import "moment/locale/zh-cn";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, lazy, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import style from "../css/BlogDashboard.module.css";
 import { getPosts, reset } from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import useStackedLineChart from "../hooks/useStackedLineChart";
-import WordCloud from "./WordCloud";
-
 import {
   getComments,
   reset as resetComments,
 } from "../features/comments/commentSlice";
 import HCenterSpin from "./HCenterSpin";
+
+const WordCloud = lazy(() => import("./WordCloud"));
 
 echarts.use([
   TitleComponent,
@@ -164,7 +164,9 @@ function BlogDashboard() {
 
       <div className={style["archive-cloud-row"]}>
         <div className={style["word-cloud-box"]}>
-          <WordCloud words={allTags} speed={10} />
+          <Suspense fallback={<HCenterSpin verticallyCenter={true} />}>
+            <WordCloud words={allTags} speed={10} />
+          </Suspense>
         </div>
         <div
           ref={chartRef}
