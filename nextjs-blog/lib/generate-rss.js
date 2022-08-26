@@ -1,3 +1,4 @@
+// 参考 https://github.com/timlrx/tailwind-nextjs-starter-blog
 import { escape } from './utils/htmlEscaper';
 
 const generateRssItem = (siteMetadata, post, isCategory) => `
