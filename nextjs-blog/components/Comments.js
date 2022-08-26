@@ -19,7 +19,6 @@ export default function Comments({
   }, [postId]);
 
   useEffect(() => {
-    console.log("effect get comments ",isCommentChange);
     const controller = new AbortController();
     const signal = controller.signal;
     fetchData(signal).catch((err)=>{
@@ -30,7 +29,6 @@ export default function Comments({
       };
     });
     return () => {
-      console.log("effect clean get comments");
       controller.abort();
       setIsCommentChange(false);
     };
