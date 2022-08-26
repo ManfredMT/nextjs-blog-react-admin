@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const path = require('path');
+const path = require("path");
 const {
   getProfile,
   updateProfile,
@@ -25,10 +25,14 @@ function fileFilter(req, file, cb) {
   ) {
     cb(null, true);
   } else {
-    cb(new Error('Image type error'))
+    cb(new Error("Image type error"));
   }
 }
-const upload = multer({ storage: storage, fileFilter, limits:{fileSize : 300*1024 } });
+const upload = multer({
+  storage: storage,
+  fileFilter,
+  limits: { fileSize: 300 * 1024 },
+});
 
 router.route("/").get(protect, getProfile);
 router.route("/:id").put(
