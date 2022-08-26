@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import style from "../css/EditPostForm.module.css";
-import { getPosts, reset, updatePost } from "../features/posts/postSlice";
+import { getPosts, reset, updatePost, resetError } from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import HCenterSpin from "./HCenterSpin";
 import MarkDownEditor from "./MarkDownEditor";
@@ -75,7 +75,7 @@ const PostEdit = () => {
   );
   const navigate = useNavigate();
 
-  useGetData(getPosts, reset, isError, message);
+  useGetData(getPosts, reset, isError, message, resetError);
 
   useEffect(() => {
     if (isSuccess && message === "文章已更改") {

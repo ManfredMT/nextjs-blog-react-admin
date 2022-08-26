@@ -8,11 +8,11 @@ import { message as antMessage } from "antd";
 import "easymde/dist/easymde.min.css";
 import "github-markdown-css";
 import "katex/dist/katex.min.css";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useSearchParams } from "react-router-dom";
 import style from "../css/PostPreview.module.css";
-import { getSinglePost, reset } from "../features/posts/postSlice";
+import { getSinglePost, reset, resetError } from "../features/posts/postSlice";
 import HCenterSpin from "./HCenterSpin";
 import MDComponent from "./MDComponent";
 
@@ -24,21 +24,22 @@ function PostPreview() {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+
   useEffect(() => {
     dispatch(getSinglePost(searchParams.get("preview")));
     return () => {
       dispatch(reset());
     };
   }, []);
-  let isErrorReset = useRef(false);
+
   useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
+    if (isError) {
       antMessage.error(message);
     }
-  }, [isError, message]);
+    return ()=>{
+      dispatch(resetError());
+    }
+  }, [isError, message, dispatch]);
 
   const previewRender = useMemo(() => {
     return (

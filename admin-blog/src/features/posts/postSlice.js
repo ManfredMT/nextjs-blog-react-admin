@@ -5,6 +5,7 @@ const initialState = {
   posts: [],
   isError: false,
   isLoading: false,
+  isLoadEnd: false,
   isSuccess: false,
   message: "",
   singlePost: null,
@@ -163,6 +164,13 @@ export const postSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => initialState,
+    resetError: (state)=>{
+      state.isError = false;
+      state.message = "";
+    },
+    resetIsError: (state)=>{
+      state.isError = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -187,17 +195,20 @@ export const postSlice = createSlice({
       })
       .addCase(getPosts.pending, (state) => {
         state.isLoading = true;
+        state.isLoadEnd = false;
       })
       .addCase(getPosts.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.posts = action.payload;
         state.message = "";
+        state.isLoadEnd = true;
       })
       .addCase(getPosts.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        state.isLoadEnd = false;
       })
       .addCase(deletePost.pending, (state) => {
         state.isLoading = true;
@@ -298,5 +309,5 @@ export const postSlice = createSlice({
   },
 });
 
-export const { reset } = postSlice.actions;
+export const { reset, resetError, resetIsError } = postSlice.actions;
 export default postSlice.reducer;

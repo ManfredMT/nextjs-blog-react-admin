@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import style from "../css/EditPostForm.module.css";
-import { createPost, getPosts, reset } from "../features/posts/postSlice";
+import { createPost, getPosts, reset, resetError } from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import MarkDownEditor from "./MarkDownEditor";
 import PostForm from "./PostForm";
@@ -61,7 +61,7 @@ const NewPost = () => {
   const { posts, isSuccess, isError, message } = useSelector(
     (state) => state.posts
   );
-  useGetData(getPosts, reset, isError, message);
+  useGetData(getPosts, reset, isError, message, resetError);
 
   useEffect(() => {
     if (
@@ -105,7 +105,7 @@ const NewPost = () => {
   };
 
   const onFinishNewPost = (values) => {
-    console.log("onFinishNewPost: ", values);
+    //console.log("onFinishNewPost: ", values);
     const formValues = values;
     const postFormData = getFormDate(formValues, blogContent);
     postFormData.append("draft", isDraft.current);

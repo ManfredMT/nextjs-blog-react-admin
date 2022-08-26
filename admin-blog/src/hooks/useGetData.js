@@ -1,8 +1,8 @@
 import { message as antMessage } from "antd";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-export default function useGetData(getData, reset, isError, message) {
+export default function useGetData(getData, reset, isError, message, resetError) {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getData());
@@ -12,13 +12,12 @@ export default function useGetData(getData, reset, isError, message) {
   }, [dispatch,getData,reset]);
 
 
-  let isErrorReset = useRef(false);
   useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
+    if (isError) {
       antMessage.error(message);
     }
-  }, [isError, message]);
+    return ()=>{
+      dispatch(resetError());
+    }
+  }, [isError, message, dispatch, resetError]);
 }

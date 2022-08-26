@@ -1,15 +1,14 @@
-import {
-  Divider,
-  Empty,
-  message as antMessage,
-  Modal,
-  Pagination
-} from "antd";
+import { Divider, Empty, message as antMessage, Modal, Pagination } from "antd";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import style from "../css/PostTC.module.css";
-import { getPosts, reset, updatePost } from "../features/posts/postSlice";
+import {
+  getPosts,
+  reset,
+  updatePost,
+  resetError,
+} from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import usePrevious from "../hooks/usePrevious";
 import ArticleInfo from "./ArticleInfo";
@@ -36,11 +35,11 @@ function PostTags() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const dispatch = useDispatch();
-  const { posts, isSuccess, isError, message } = useSelector(
+  const { posts, isSuccess, isError, isLoadEnd, message } = useSelector(
     (state) => state.posts
   );
 
-  useGetData(getPosts, reset, isError, message);
+  useGetData(getPosts, reset, isError, message, resetError);
 
   useEffect(() => {
     if (isSuccess && message === "文章已更改") {
@@ -65,17 +64,19 @@ function PostTags() {
 
   const allTags = useMemo(() => getAllTags(allPosts), [allPosts]);
 
-  const reloadPageByTag = useCallback((value) => {
-    const filterResult = findPostByTag(allPosts, value);
-    selectedPosts.current = filterResult;
-    const end =
-      selectedPosts.current.length > defaultPageSize
-        ? defaultPageSize
-        : selectedPosts.current.length;
-    setCurrentPagePosts(selectedPosts.current.slice(0, end));
-    setPaginationTotal(selectedPosts.current.length);
-  },[allPosts]);
-
+  const reloadPageByTag = useCallback(
+    (value) => {
+      const filterResult = findPostByTag(allPosts, value);
+      selectedPosts.current = filterResult;
+      const end =
+        selectedPosts.current.length > defaultPageSize
+          ? defaultPageSize
+          : selectedPosts.current.length;
+      setCurrentPagePosts(selectedPosts.current.slice(0, end));
+      setPaginationTotal(selectedPosts.current.length);
+    },
+    [allPosts]
+  );
 
   const defaultPageSize = 10;
 
@@ -109,7 +110,13 @@ function PostTags() {
     } else {
       setSelectValue(null);
     }
-  }, [defaultPostTags, searchParams, setSearchParams, allTags, reloadPageByTag]);
+  }, [
+    defaultPostTags,
+    searchParams,
+    setSearchParams,
+    allTags,
+    reloadPageByTag,
+  ]);
 
   const onChangePage = (page, pageSize) => {
     const start = (page - 1) * defaultPageSize;
@@ -243,9 +250,9 @@ function PostTags() {
     }
   };
 
-  const preIsSuccess = usePrevious(isSuccess);
+  const preIsLoadEnd = usePrevious(isLoadEnd);
 
-  return isSuccess && preIsSuccess ? (
+  return isLoadEnd && preIsLoadEnd ? (
     <>
       <div className={style["select-list-box"]}>
         <div className={style["select-header"]}>{renderPostSelect}</div>

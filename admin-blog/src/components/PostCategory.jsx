@@ -10,7 +10,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import style from "../css/PostTC.module.css";
-import { getPosts, reset, updatePost } from "../features/posts/postSlice";
+import { getPosts, reset, updatePost, resetError } from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import usePrevious from "../hooks/usePrevious";
 import ArticleInfo from "./ArticleInfo";
@@ -24,6 +24,10 @@ function getAllCategories(posts) {
       AllCategories.push(category);
     }
   });
+  //如果没有default,加上default分类
+  if(!AllCategories.includes("default")) {
+    AllCategories.push("default");
+  }
   return AllCategories.sort();
 }
 
@@ -37,12 +41,12 @@ function PostCategory() {
   const defaultPageSize = 10;
 
   const dispatch = useDispatch();
-  const { posts, isSuccess, isError, message } = useSelector(
+  const { posts, isSuccess, isError,isLoadEnd, message } = useSelector(
     (state) => state.posts
   );
 
   //console.log("PostCategory");
-  useGetData(getPosts, reset, isError, message);
+  useGetData(getPosts, reset, isError, message, resetError);
 
   useEffect(() => {
     if (isSuccess && message === "文章已更改") {
@@ -96,6 +100,7 @@ function PostCategory() {
   let selectedPosts = useRef();
 
   useEffect(() => {
+    //console.log("useEffect 设置URL ");
     setPostUpdatedCategories(defaultPostCategories);
     if (allCategories.length > 0) {
       if (!searchParams.get("category")) {
@@ -109,6 +114,7 @@ function PostCategory() {
         //设置选中的分类
         setSelectValue("default");
       } else {
+        //console.log("刷新页面");
         //刷新页面
         changeFilter(searchParams.get("category"));
         //设置选中的分类
@@ -204,9 +210,9 @@ function PostCategory() {
     return { value: c };
   });
 
-  const preIsSuccess = usePrevious(isSuccess);
+  const preIsLoadEnd = usePrevious(isLoadEnd);
 
-  return isSuccess && preIsSuccess ? (
+  return isLoadEnd && preIsLoadEnd ? (
     <>
       <div className={style["select-list-box"]}>
         <div className={style["select-header"]}>{renderPostSelect}</div>

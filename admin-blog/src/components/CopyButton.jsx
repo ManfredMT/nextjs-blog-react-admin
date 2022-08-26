@@ -16,7 +16,6 @@ function CopyButton({ text, classCopy, classCopied }) {
     <CopyToClipboard
       text={text}
       onCopy={(text, result) => {
-        console.log("copy text: ", text, result);
         if (result) {
           setCopied(true);
         }

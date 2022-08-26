@@ -2,7 +2,7 @@ import { Button, Form, message as antMessage } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "../css/NewLink.module.css";
-import { createLink, reset } from "../features/links/linkSlice";
+import { createLink, resetError } from "../features/links/linkSlice";
 import LinkForm from "./LinkForm";
 
 const NewLink = () => {
@@ -14,12 +14,8 @@ const NewLink = () => {
 
   const [isImgValid, setIsImgValid] = useState(false);
 
-  let isErrorReset = useRef(false);
   useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
+    if (isError) {
       antMessage.error(message);
     }
     if (isSuccess && message === "成功创建友链") {
@@ -27,12 +23,12 @@ const NewLink = () => {
       formRef.current.resetFields();
     }
     return () => {
-      dispatch(reset());
+      dispatch(resetError());
     };
   }, [isError, isSuccess, message, dispatch]);
 
   const onFinish = (values) => {
-    console.log(values);
+    //console.log(values);
     const linkFormData = new FormData();
     linkFormData.append("name", values.link.name);
     linkFormData.append("website", values.link.address);
@@ -40,7 +36,7 @@ const NewLink = () => {
       linkFormData.append("description", values.link.introduction);
     }
     if (values.dragger && isImgValid) {
-      console.log("uploaded image: ", values.dragger[0].originFileObj);
+      //console.log("uploaded image: ", values.dragger[0].originFileObj);
       const imageFile = values.dragger[0].originFileObj;
       linkFormData.append("picture", imageFile);
     }

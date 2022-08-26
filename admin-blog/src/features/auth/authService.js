@@ -9,7 +9,7 @@ const register = async (userData) => {
     localStorage.setItem("user", JSON.stringify(response.data));
   }
 
-  console.log("response.data", response.data);
+  //console.log("response.data", response.data);
 
   return response.data;
 };
@@ -37,7 +37,7 @@ const getUserData = async (token) => {
 
 const logout = () => {
   localStorage.removeItem("user");
-  console.log("removed localStorage item user");
+  //console.log("清除localStorage中的user");
 };
 
 const changePassword = async (token, passwordData) => {

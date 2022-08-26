@@ -1,9 +1,9 @@
 import { Button, Form, message as antMessage } from "antd";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import style from "../css/NewLink.module.css";
-import { getLinks, reset, updateLink } from "../features/links/linkSlice";
+import { getLinks, reset, updateLink, resetError } from "../features/links/linkSlice";
 import HCenterSpin from "./HCenterSpin";
 import LinkForm from "./LinkForm";
 
@@ -16,7 +16,7 @@ const EditLink = () => {
     (state) => state.links
   );
 
-  const currentLink = links.find((link) => link._id === params.linkId);
+  const currentLink = useMemo(()=>links.find((link) => link._id === params.linkId),[links, params]);
 
   const formRef = useRef(null);
 
@@ -27,26 +27,25 @@ const EditLink = () => {
     return () => {
       dispatch(reset());
     };
-  }, []);
+  }, [dispatch]);
 
-  let isErrorReset = useRef(false);
+
   useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
+    if (isError) {
       antMessage.error(message);
     }
     if (isSuccess && message === "友链已更改") {
       antMessage.success(message);
       navigate("../all-links");
     }
+    return ()=>{
+      dispatch(resetError());
+    }
   }, [isError, isSuccess, message, dispatch, navigate]);
 
   useEffect(() => {
     if (links.length !== 0) {
       const linkIndex = links.findIndex((link) => link._id === params.linkId);
-      console.log("link index: ", linkIndex);
       if (linkIndex === -1) {
         navigate("../all-links");
       }
@@ -64,7 +63,6 @@ const EditLink = () => {
       linkFormData.append("description", "");
     }
     if (values.dragger && isImgValid) {
-      console.log("uploaded image: ", values.dragger);
       const imageFile = values.dragger[0].originFileObj;
       linkFormData.append("picture", imageFile);
     }

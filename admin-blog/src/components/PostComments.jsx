@@ -21,8 +21,10 @@ import {
   reset,
   getComments,
   deleteComment,
+  resetIsError 
 } from "../features/comments/commentSlice";
-import { getPosts, reset as resetPost } from "../features/posts/postSlice";
+import { getPosts, reset as resetPost, resetIsError as resetIsErrorPost} from "../features/posts/postSlice";
+import useGetData from "../hooks/useGetData";
 
 const CheckboxGroup = Checkbox.Group;
 const { Option } = Select;
@@ -37,31 +39,32 @@ function PostComments() {
   const [checkAll, setCheckAll] = useState(false);
   const [selectedValue, setSelectedValue] = useState("allPosts");
   const dispatch = useDispatch();
-  const { comments, isSuccess, isError, message } = useSelector(
+  const { comments, isSuccess, isError,isLoadEnd, message } = useSelector(
     (state) => state.comments
   );
   const {
     posts,
-    isSuccess: isSuccessPost,
     isError: isErrorPost,
+    isLoadEnd: isLoadEndPost,
     message: messagePost,
   } = useSelector((state) => state.posts);
+
   useEffect(() => {
     dispatch(getComments());
     return () => {
       dispatch(reset());
     };
-  }, []);
+  }, [dispatch]);
 
-  let isErrorReset = useRef(false);
+  const preMessage = usePrevious(message);
   useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
+    if (isError && preMessage !== message) {
       antMessage.error(message);
     }
-  }, [isError, message]);
+    return ()=>{
+      dispatch(resetIsError());
+    }
+  }, [isError, message, dispatch, preMessage]);
 
   useEffect(() => {
     if (
@@ -93,23 +96,7 @@ function PostComments() {
         .sort((a, b) => b.time - a.time),
     [comments]
   );
-
-  useEffect(() => {
-    dispatch(getPosts());
-    return () => {
-      dispatch(resetPost());
-    };
-  }, []);
-
-  let isErrorResetPost = useRef(false);
-  useEffect(() => {
-    if (!isErrorPost) {
-      isErrorResetPost.current = true;
-    }
-    if (isErrorResetPost.current && isErrorPost) {
-      antMessage.error(messagePost);
-    }
-  }, [isErrorPost, messagePost]);
+  useGetData(getPosts, resetPost, isErrorPost, messagePost, resetIsErrorPost);
 
   const allPosts = useMemo(
     () =>
@@ -160,7 +147,6 @@ function PostComments() {
   };
 
   const onChangeSelect = (value) => {
-    console.log(`selected ${value}`);
     setSelectedValue(value);
     if (value === "allPosts") {
       selectedComments.current = allComments;
@@ -232,10 +218,10 @@ function PostComments() {
     commentsId.current = [cId];
   };
 
-  //isSuccess为true时,currentPageComments数据未得到,需等待下一次渲染.
-  const preIsSuccess = usePrevious(isSuccess);
+  //isLoadEnd为true时,currentPageComments数据未得到,需等待下一次渲染.
+  const preIsLoadEnd = usePrevious(isLoadEnd);
 
-  return preIsSuccess && isSuccess && isSuccessPost ? (
+  return preIsLoadEnd && isLoadEnd && isLoadEndPost ? (
     <>
       <div className={style["post-comments-box"]}>
         <div className={style["comments-header"]}>

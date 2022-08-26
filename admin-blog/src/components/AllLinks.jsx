@@ -12,7 +12,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import style from "../css/AllLinks.module.css";
-import { deleteLink, getLinks, reset } from "../features/links/linkSlice";
+import { deleteLink, getLinks, reset, resetError } from "../features/links/linkSlice";
 import useGetData from "../hooks/useGetData";
 import HCenterSpin from "./HCenterSpin";
 
@@ -32,7 +32,7 @@ function AllLinks() {
     };
   });
 
-  useGetData(getLinks, reset, isError, message);
+  useGetData(getLinks, reset, isError, message, resetError);
   useEffect(() => {
     if (isSuccess && message === "成功删除友链") {
       antMessage.success(message);

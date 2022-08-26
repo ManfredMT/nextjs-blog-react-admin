@@ -16,12 +16,13 @@ import { useEffect, useMemo, useRef, lazy, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import style from "../css/BlogDashboard.module.css";
-import { getPosts, reset } from "../features/posts/postSlice";
+import { getPosts, reset, resetError } from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import useStackedLineChart from "../hooks/useStackedLineChart";
 import {
   getComments,
   reset as resetComments,
+  resetError as resetErrorComments,
 } from "../features/comments/commentSlice";
 import HCenterSpin from "./HCenterSpin";
 
@@ -67,8 +68,8 @@ function BlogDashboard() {
 
   const {
     comments: commentData,
-    isSuccess: isSuccessCom,
     isError: isErrorCom,
+    isLoadEnd: isLoadEndCom,
     message: messageCom,
   } = useSelector((state) => state.comments);
 
@@ -77,17 +78,16 @@ function BlogDashboard() {
     return () => {
       dispatch(resetComments());
     };
-  }, []);
+  }, [dispatch]);
 
-  let isErrorResetCom = useRef(false);
   useEffect(() => {
-    if (!isErrorCom) {
-      isErrorResetCom.current = true;
-    }
-    if (isErrorResetCom.current && isErrorCom) {
+    if (isErrorCom) {
       antMessage.error(messageCom);
     }
-  }, [isErrorCom, messageCom]);
+    return ()=>{
+      dispatch(resetErrorComments());
+    }
+  }, [isErrorCom, messageCom, dispatch]);
 
   const comments = useMemo(() => {
     //console.log("commentData: ", commentData);
@@ -106,11 +106,11 @@ function BlogDashboard() {
     }
   }, [commentData]);
 
-  const { posts, isSuccess, isError, message } = useSelector(
+  const { posts, isError,isLoadEnd, message } = useSelector(
     (state) => state.posts
   );
 
-  useGetData(getPosts, reset, isError, message);
+  useGetData(getPosts, reset, isError, message, resetError);
 
   const allPosts = useMemo(() => {
     const postList = posts
@@ -126,8 +126,6 @@ function BlogDashboard() {
     return postList;
   }, [posts]);
 
-  //console.log("allPosts: ", allPosts);
-
   const allTags = getAllTags(allPosts);
   const allCategories = getAllCategories(allPosts);
 
@@ -135,13 +133,13 @@ function BlogDashboard() {
   const { chartOption } = useStackedLineChart(allPosts, echarts);
 
   useEffect(() => {
-    if (isSuccess && isSuccessCom) {
+    if (isLoadEnd && isLoadEndCom) {
       let myChart = echarts.init(chartRef.current);
       myChart.setOption(chartOption);
     }
-  }, [isSuccess, isSuccessCom]);
+  }, [isLoadEnd, isLoadEndCom, chartOption]);
 
-  return isSuccess && isSuccessCom ? (
+  return isLoadEnd && isLoadEndCom ? (
     <div className={style["dashboard-body"]}>
       <div className={style["first-row"]}>
         <div className={style["number-card-box"]}>

@@ -23,7 +23,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import { useSearchParams } from "react-router-dom";
 import style from "../css/PostSearch.module.css";
-import { deletePost, getPosts, reset } from "../features/posts/postSlice";
+import { deletePost, getPosts, reset, resetError } from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import HCenterSpin from "./HCenterSpin";
 
@@ -164,7 +164,7 @@ function PostSearch() {
     return sortedPosts;
   }, [posts]);
 
-  useGetData(getPosts, reset, isError, message);
+  useGetData(getPosts, reset, isError, message, resetError);
 
   //console.log("allPosts: ", allPosts);
   const allTags = useMemo(() => getAllTags(allPosts), [allPosts]);
@@ -664,6 +664,7 @@ function PostSearch() {
     setIsModalVisible(true);
   };
 
+  // 下载的md文件Front-matter符合Hexo格式,draft用于表示是否为草稿,不是hexo预先定义的.
   const downloadMD = ({ postId }, e) => {
     const currentPost = allPosts.find((post) => post.id === postId);
     let tagsString = "";

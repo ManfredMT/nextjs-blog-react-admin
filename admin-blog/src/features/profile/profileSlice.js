@@ -5,6 +5,7 @@ const initialState = {
   profile: [],
   isError: false,
   isLoading: false,
+  isLoadEnd: false,
   isSuccess: false,
   message: "",
 };
@@ -53,23 +54,29 @@ export const profileSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => initialState,
+    resetError: (state)=>{
+      state.isError = false;
+      state.message = "";
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getProfile.pending, (state) => {
         state.isLoading = true;
-       
+        state.isLoadEnd = false;
       })
       .addCase(getProfile.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.profile = action.payload;
         state.message = "";
+        state.isLoadEnd = true;
       })
       .addCase(getProfile.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        state.isLoadEnd = false;
       })
       .addCase(updateProfile.pending, (state) => {
         state.isLoading = true;
@@ -89,5 +96,5 @@ export const profileSlice = createSlice({
   },
 });
 
-export const { reset } = profileSlice.actions;
+export const { reset, resetError } = profileSlice.actions;
 export default profileSlice.reducer;

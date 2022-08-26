@@ -16,7 +16,8 @@ import {
   deleteTag,
   getPosts,
   reset,
-  updateTag
+  updateTag,
+  resetError
 } from "../features/posts/postSlice";
 import useColumnSearch from "../hooks/useColumnSearch";
 import useGetData from "../hooks/useGetData";
@@ -42,11 +43,11 @@ function AllTags() {
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const { posts, isSuccess, isError, message } = useSelector(
+  const { posts, isSuccess, isError, isLoadEnd, message } = useSelector(
     (state) => state.posts
   );
 
-  useGetData(getPosts, reset, isError, message);
+  useGetData(getPosts, reset, isError, message, resetError);
 
   useEffect(() => {
     if (isSuccess && (message === "标签已更改" || message === "标签已删除")) {
@@ -221,7 +222,7 @@ function AllTags() {
     },
   ];
 
-  return isSuccess ? (
+  return isLoadEnd ? (
     <EditableTable
       form={form}
       data={data}

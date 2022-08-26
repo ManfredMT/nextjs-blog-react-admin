@@ -5,6 +5,7 @@ const initialState = {
   links: [],
   isError: false,
   isLoading: false,
+  isLoadEnd: false,
   isSuccess: false,
   message: "",
 };
@@ -86,6 +87,10 @@ export const linkSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => initialState,
+    resetError: (state)=>{
+      state.isError = false;
+      state.message = "";
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -106,18 +111,20 @@ export const linkSlice = createSlice({
       })
       .addCase(getLinks.pending, (state) => {
         state.isLoading = true;
-       
+        state.isLoadEnd = false;
       })
       .addCase(getLinks.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.links = action.payload;
         state.message = "";
+        state.isLoadEnd = true;
       })
       .addCase(getLinks.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        state.isLoadEnd = false;
       })
       .addCase(deleteLink.pending, (state) => {
         state.isLoading = true;
@@ -157,5 +164,5 @@ export const linkSlice = createSlice({
   },
 });
 
-export const { reset } = linkSlice.actions;
+export const { reset, resetError } = linkSlice.actions;
 export default linkSlice.reducer;

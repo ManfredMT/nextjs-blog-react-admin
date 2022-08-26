@@ -6,6 +6,7 @@ const initialState = {
   isError: false,
   isLoading: false,
   isSuccess: false,
+  isLoadEnd: false,
   message: "",
 };
 
@@ -72,22 +73,32 @@ export const commentSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => initialState,
+    resetError: (state)=>{
+      state.isError = false;
+      state.message = "";
+    },
+    resetIsError: (state)=>{
+      state.isError = false;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(getComments.pending, (state) => {
         state.isLoading = true;
+        state.isLoadEnd = false;
       })
       .addCase(getComments.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isSuccess = true;
         state.comments = action.payload;
         state.message = "";
+        state.isLoadEnd = true;
       })
       .addCase(getComments.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;
+        state.isLoadEnd = false;
       })
       .addCase(deleteComment.pending, (state) => {
         state.isLoading = true;
@@ -122,5 +133,5 @@ export const commentSlice = createSlice({
   },
 });
 
-export const { reset } = commentSlice.actions;
+export const { reset, resetError, resetIsError } = commentSlice.actions;
 export default commentSlice.reducer;

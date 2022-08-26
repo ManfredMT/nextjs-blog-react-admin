@@ -12,7 +12,8 @@ import style from "../css/BlogSetting.module.css";
 import {
   getProfile,
   reset,
-  updateProfile
+  updateProfile,
+  resetError
 } from "../features/profile/profileSlice";
 import useGetData from "../hooks/useGetData";
 import HCenterSpin from "./HCenterSpin";
@@ -36,7 +37,7 @@ function BlogSetting() {
   const { profile, isSuccess, isError, message } = useSelector(
     (state) => state.profile
   );
-  useGetData(getProfile, reset, isError, message);
+  useGetData(getProfile, reset, isError, message, resetError);
   useEffect(() => {
     if (isSuccess && message === "设置已更改") {
       antMessage.success(message);

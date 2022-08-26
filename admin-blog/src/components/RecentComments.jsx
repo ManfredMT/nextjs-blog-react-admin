@@ -12,31 +12,17 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "../css/RecentComments.module.css";
 import {
-  deleteComment, getComments, reset
+  deleteComment, getComments, reset, resetError
 } from "../features/comments/commentSlice";
+import useGetData from "../hooks/useGetData";
 import HCenterSpin from "./HCenterSpin";
 
 function RecentComments() {
   const dispatch = useDispatch();
-  const { comments, isSuccess, isError, message } = useSelector(
+  const { comments, isSuccess, isError,isLoadEnd, message } = useSelector(
     (state) => state.comments
   );
-  useEffect(() => {
-    dispatch(getComments());
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
-
-  let isErrorReset = useRef(false);
-  useEffect(() => {
-    if (!isError) {
-      isErrorReset.current = true;
-    }
-    if (isErrorReset.current && isError) {
-      antMessage.error(message);
-    }
-  }, [isError, message]);
+  useGetData(getComments, reset, isError, message, resetError);
 
   useEffect(() => {
     if (
@@ -87,7 +73,7 @@ function RecentComments() {
     setIsModalVisible(true);
   };
 
-  return isSuccess ? (
+  return isLoadEnd ? (
     <>{allComments.length===0?<Empty />:
       <div className={style["recent-comment-box"]}>
         {allComments.map(

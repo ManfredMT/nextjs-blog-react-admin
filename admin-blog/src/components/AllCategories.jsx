@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import { Link } from "react-router-dom";
 import style from "../css/AllItems.module.css";
-import { getPosts, reset, updateCategory } from "../features/posts/postSlice";
+import { getPosts, reset, updateCategory, resetError } from "../features/posts/postSlice";
 import useColumnSearch from "../hooks/useColumnSearch";
 import useGetData from "../hooks/useGetData";
 import EditableTable from "./EditableTable";
@@ -40,12 +40,12 @@ function AllCategories() {
   const [form] = Form.useForm();
 
   const dispatch = useDispatch();
-  const { posts, isSuccess, isError, message } = useSelector(
+  const { posts, isSuccess, isError, isLoadEnd, message } = useSelector(
     (state) => state.posts
   );
 
   //console.log("AllCategories");
-  useGetData(getPosts, reset, isError, message);
+  useGetData(getPosts, reset, isError, message, resetError);
 
   useEffect(() => {
     if (isSuccess && message === "类别已更改") {
@@ -225,7 +225,7 @@ function AllCategories() {
     },
   ];
 
-  return isSuccess ? (
+  return isLoadEnd ? (
     <EditableTable
       form={form}
       data={data}

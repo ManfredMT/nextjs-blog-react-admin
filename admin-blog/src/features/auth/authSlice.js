@@ -31,7 +31,6 @@ export const login = createAsyncThunk("auth/login", async (user, thunkAPI) => {
   try {
     return await authService.login(user);
   } catch (error) {
-    console.log("error: ", error);
     let message =
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
@@ -148,7 +147,6 @@ export const authSlice = createSlice({
         state.message = "密码修改成功,请重新登录"
       })
       .addCase(changePasswd.rejected, (state, action) => {
-        console.log("change passwd rejected: ",action.payload);
         state.isChangePWError = true;
         state.isLoading = false;
         state.message = action.payload;
