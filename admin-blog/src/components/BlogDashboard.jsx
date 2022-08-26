@@ -84,9 +84,9 @@ function BlogDashboard() {
     if (isErrorCom) {
       antMessage.error(messageCom);
     }
-    return ()=>{
+    return () => {
       dispatch(resetErrorComments());
-    }
+    };
   }, [isErrorCom, messageCom, dispatch]);
 
   const comments = useMemo(() => {
@@ -106,7 +106,7 @@ function BlogDashboard() {
     }
   }, [commentData]);
 
-  const { posts, isError,isLoadEnd, message } = useSelector(
+  const { posts, isError, isLoadEnd, message } = useSelector(
     (state) => state.posts
   );
 
@@ -133,10 +133,17 @@ function BlogDashboard() {
   const { chartOption } = useStackedLineChart(allPosts, echarts);
 
   useEffect(() => {
+    let myChart;
     if (isLoadEnd && isLoadEndCom) {
-      let myChart = echarts.init(chartRef.current);
+      myChart = echarts.init(chartRef.current);
       myChart.setOption(chartOption);
     }
+    return () => {
+      //消除echarts的初始化,否则报警告.
+      if (myChart !== null && myChart !== "" && myChart !== undefined) {
+        myChart.dispose();
+      }
+    };
   }, [isLoadEnd, isLoadEndCom, chartOption]);
 
   return isLoadEnd && isLoadEndCom ? (
