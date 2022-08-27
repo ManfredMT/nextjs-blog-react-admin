@@ -106,8 +106,8 @@ function changeWords(words) {
 
 function WordCloud({
   colors = defaultColors,
-  cZ = 38,
-  radius = 25,
+  cZ = 30,
+  radius = 20,
   speed = 1,
   words,
 }) {
@@ -119,7 +119,7 @@ function WordCloud({
 
   return (
     <Canvas dpr={[1, 2]} camera={{ position: [0, 0, 35], fov: 90 }}>
-      <fog attach="fog" args={["#f0f2f5", 0, 95]} />
+      <fog attach="fog" args={["#ffffff", 0, 70]} />
       <Cloud
         cZ={cZ}
         speed={speed}
