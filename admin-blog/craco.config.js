@@ -5,6 +5,7 @@ const BundleAnalyzerPlugin =
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 
 const overrideConfig = {
+
   plugins: [
     {
       plugin: CracoLessPlugin,
@@ -27,7 +28,7 @@ const overrideConfig = {
         "import",
         {
           libraryName: "antd",
-          libraryDirectory: "es",
+          libraryDirectory: "lib",
           style: true,
         },
       ],
@@ -35,7 +36,7 @@ const overrideConfig = {
   },
   webpack: {
     plugins: whenProd(()=>[
-      new BundleAnalyzerPlugin(),
+      //new BundleAnalyzerPlugin(),
       new CompressionWebpackPlugin({
           filename: "[path][base].gz",
           algorithm: 'gzip',// 使用gzip压缩
@@ -54,18 +55,5 @@ const overrideConfig = {
     }, {}),
   },
 };
-
-
-// overrideConfig.webpack.plugins.push(new BundleAnalyzerPlugin());
-// overrideConfig.webpack.plugins.push(new CompressionWebpackPlugin({
-//   filename: "[path][base].gz",
-//   algorithm: 'gzip',// 使用gzip压缩
-//   test: new RegExp(
-//       '\\.(js|css)$' // 压缩 js 与 css
-//   ),
-//   threshold: 8192,// 资源文件大于8192B时会被压缩
-//   minRatio: 0.8, // 最小压缩比达到0.8时才会被压缩
-//   deleteOriginalAssets: false,
-// }))
 
 module.exports = overrideConfig;

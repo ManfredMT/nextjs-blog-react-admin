@@ -4,6 +4,8 @@ import { Provider } from "react-redux";
 import { store } from "./app/store";
 import App from "./App";
 import "./index.css";
+//通过babel-plugin-import导入antd的styles
+//import "./App.less";
 import zhCN from "antd/lib/locale/zh_CN";
 import { ConfigProvider } from "antd";
 
