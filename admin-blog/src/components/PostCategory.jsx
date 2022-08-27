@@ -4,13 +4,13 @@ import {
   Empty,
   message as antMessage,
   Modal,
-  Pagination,
+  Pagination
 } from "antd";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import style from "../css/PostTC.module.css";
-import { getPosts, reset, updatePost, resetError } from "../features/posts/postSlice";
+import { getPosts, reset, resetError, updatePost } from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import usePrevious from "../hooks/usePrevious";
 import ArticleInfo from "./ArticleInfo";

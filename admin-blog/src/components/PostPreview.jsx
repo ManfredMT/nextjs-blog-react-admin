@@ -18,11 +18,11 @@ import MDComponent from "./MDComponent";
 
 function PostPreview() {
   const dispatch = useDispatch();
-  const { singlePost, isSuccess, isError, message } = useSelector(
+  const { singlePost, isError, message } = useSelector(
     (state) => state.posts
   );
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
 
   useEffect(() => {
@@ -30,7 +30,7 @@ function PostPreview() {
     return () => {
       dispatch(reset());
     };
-  }, []);
+  }, [dispatch, searchParams]);
 
   useEffect(() => {
     if (isError) {

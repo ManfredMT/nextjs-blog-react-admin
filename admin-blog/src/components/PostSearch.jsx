@@ -2,7 +2,7 @@ import {
   DeleteOutlined,
   DownloadOutlined,
   EditOutlined,
-  EyeOutlined,
+  EyeOutlined
 } from "@ant-design/icons";
 import {
   DatePicker,
@@ -13,7 +13,7 @@ import {
   Modal,
   Pagination,
   Radio,
-  Select,
+  Select
 } from "antd";
 import fileDownload from "js-file-download";
 import moment from "moment";
@@ -484,7 +484,7 @@ function PostSearch() {
   const [searchText, setSearchText] = useState("");
   const [isTitleFiltered, setIsTitleFiltered] = useState(false);
 
-  const onSearchTitle = (value) => {
+  const onSearchTitle = useCallback((value) => {
     let filterResult = allPosts;
     filterResult = filterByCategory(filterResult);
     filterResult = filterByAuthor(filterResult);
@@ -504,7 +504,9 @@ function PostSearch() {
       setSearchParams({ ...searchObj, title: value });
     }
     handlePagination();
-  };
+  },[allPosts, filterByCategory, filterByAuthor, filterByDraft, filterByTag, filterByDate, 
+    setSearchParams, searchObj, handlePagination
+  ]);
 
   const onChangeTitleFilter = (e) => {
     setSearchText(e.target.value);
@@ -637,6 +639,9 @@ function PostSearch() {
     setCurrentPagePosts(allPosts.slice(0, defaultPageSize));
     setPaginationTotal(allPosts.length);
     filteredPosts.current = allPosts;
+  }, [allPosts]);
+
+  useEffect(()=>{
     if (
       searchParams.get("draft") &&
       ["all-posts", "only-draft", "only-published"].includes(
@@ -649,7 +654,7 @@ function PostSearch() {
       setSearchText(searchParams.get("title"));
     }
     onSearchTitle(searchParams.get("title"));
-  }, [allPosts]);
+  },[searchParams, onSearchTitle])
 
   const onClickEdit = ({ postId }, e) => {
     setSearchParams({ edit: postId });

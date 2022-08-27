@@ -13,7 +13,7 @@ function RequireAuth({ children }) {
 
   useEffect(() => {
     dispatch(checkJWT());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (isError) {

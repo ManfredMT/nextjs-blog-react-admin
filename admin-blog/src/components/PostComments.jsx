@@ -5,26 +5,21 @@ import {
   Checkbox,
   Comment,
   Divider,
-  Empty,
-  Modal,
+  Empty, message as antMessage, Modal,
   Pagination,
-  Select,
-  message as antMessage,
+  Select
 } from "antd";
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import style from "../css/PostComments.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import HCenterSpin from "./HCenterSpin";
-import usePrevious from "../hooks/usePrevious";
 import {
-  reset,
-  getComments,
-  deleteComment,
-  resetIsError 
+  deleteComment, getComments, reset, resetIsError
 } from "../features/comments/commentSlice";
-import { getPosts, reset as resetPost, resetIsError as resetIsErrorPost} from "../features/posts/postSlice";
+import { getPosts, reset as resetPost, resetIsError as resetIsErrorPost } from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
+import usePrevious from "../hooks/usePrevious";
+import HCenterSpin from "./HCenterSpin";
 
 const CheckboxGroup = Checkbox.Group;
 const { Option } = Select;

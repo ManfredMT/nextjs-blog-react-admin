@@ -6,11 +6,14 @@ import style from "../css/NewForm.module.css";
 import { changePasswd, reset } from "../features/auth/authSlice";
 
 const validateMessages = {
+  // eslint-disable-next-line
   required: "${label}不能为空!",
   types: {
+    // eslint-disable-next-line
     url: "${label}不是有效的链接!",
   },
   number: {
+    // eslint-disable-next-line
     range: "${label} must be between ${min} and ${max}",
   },
 };

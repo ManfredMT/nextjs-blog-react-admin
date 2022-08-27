@@ -45,10 +45,14 @@ function BlogSetting() {
     }
   }, [isSuccess, message, dispatch]);
 
+  //antd为什么要用这种奇怪的写法?
   const validateMessages = {
+    // eslint-disable-next-line
     required: "${label}不能为空!",
     types: {
+      // eslint-disable-next-line
       url: "${label}不是有效的链接!",
+      // eslint-disable-next-line
       email: "${label}不是有效的邮件格式!",
     },
   };

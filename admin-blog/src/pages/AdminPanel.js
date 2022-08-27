@@ -28,7 +28,7 @@ function AdminPanel() {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isSuccess } = useSelector((state) => state.auth);
+  const { user,} = useSelector((state) => state.auth);
 
   //根据当前的URL设置左侧菜单栏的状态
   useEffect(() => {

@@ -5,9 +5,7 @@ import { useSearchParams } from "react-router-dom";
 import style from "../css/PostTC.module.css";
 import {
   getPosts,
-  reset,
-  updatePost,
-  resetError,
+  reset, resetError, updatePost
 } from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import usePrevious from "../hooks/usePrevious";

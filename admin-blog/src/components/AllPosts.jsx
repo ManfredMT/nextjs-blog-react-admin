@@ -5,7 +5,7 @@ import PostPreview from "./PostPreview";
 import PostSearch from "./PostSearch"
 
 function AllPosts() {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const previewParams = searchParams.get('preview');
   const editParams = searchParams.get('edit');
   if(previewParams) {

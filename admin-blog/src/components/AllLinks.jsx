@@ -2,17 +2,20 @@ import { LinkOutlined, MoreOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Card,
-  Dropdown,
-  Menu,
+  Dropdown, Empty, Menu,
   message as antMessage,
-  Modal,
-  Empty
+  Modal
 } from "antd";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import style from "../css/AllLinks.module.css";
-import { deleteLink, getLinks, reset, resetError } from "../features/links/linkSlice";
+import {
+  deleteLink,
+  getLinks,
+  reset,
+  resetError
+} from "../features/links/linkSlice";
 import useGetData from "../hooks/useGetData";
 import HCenterSpin from "./HCenterSpin";
 
@@ -91,64 +94,72 @@ function AllLinks() {
     );
   };
 
-  return !isLoading?(
-    <>{rnLinks.length===0?<Empty />:
-      <div className={style["links-box"]}>
-        {rnLinks.map(
-          ({ _id, linkName, description, linkAddress, picture }) => {
-            let avatarNode = (
-              <Avatar
-                style={{
-                  backgroundColor: "#87d068",
-                }}
-                icon={<LinkOutlined />}
-                shape="square"
-                size={64}
-              />
-            );
-            if (picture) {
-              avatarNode = (
+  return !isLoading ? (
+    <>
+      {rnLinks.length === 0 ? (
+        <Empty />
+      ) : (
+        <div className={style["links-box"]}>
+          {rnLinks.map(
+            ({ _id, linkName, description, linkAddress, picture }) => {
+              let avatarNode = (
                 <Avatar
-                  src={picture}
+                  style={{
+                    backgroundColor: "#87d068",
+                  }}
+                  icon={<LinkOutlined />}
                   shape="square"
                   size={64}
                 />
               );
-            }
-            return (
-              <Card
-                key={_id}
-                title={linkName}
-                extra={
-                  <Dropdown
-                    overlay={getMenu({
-                      _id,
-                      linkName,
-                      description,
-                      linkAddress,
-                    })}
-                    trigger={["click"]}
-                  >
-                    <a>
-                      <MoreOutlined className={style["menu-button"]} />
-                    </a>
-                  </Dropdown>
-                }
-              >
-                <Meta
-                  avatar={avatarNode}
-                  title={
-                    <a href={linkAddress} target="_blank" rel="noreferrer">
-                      {linkAddress}
-                    </a>
+              if (picture) {
+                avatarNode = <Avatar src={picture} shape="square" size={64} />;
+              }
+              return (
+                <Card
+                  key={_id}
+                  title={linkName}
+                  extra={
+                    <Dropdown
+                      overlay={getMenu({
+                        _id,
+                        linkName,
+                        description,
+                        linkAddress,
+                      })}
+                      trigger={["click"]}
+                    >
+                      <button
+                        style={{
+                          background: "none",
+                          color: "inherit",
+                          border: "none",
+                          padding: 0,
+                          font: "inherit",
+                          outline: "inherit",
+                          cursor: "pointer",
+                        }}
+                      >
+                        <MoreOutlined className={style["menu-button"]} />
+                      </button>
+                    </Dropdown>
                   }
-                  description={description}
-                />
-              </Card>
-            );
-          }
-        )}
-      </div>}
+                >
+                  <Meta
+                    avatar={avatarNode}
+                    title={
+                      <a href={linkAddress} target="_blank" rel="noreferrer">
+                        {linkAddress}
+                      </a>
+                    }
+                    description={description}
+                  />
+                </Card>
+              );
+            }
+          )}
+        </div>
+      )}
       <Modal
         title="删除友链"
         visible={isModalVisible}
@@ -160,7 +171,9 @@ function AllLinks() {
         <p>确定删除友链?</p>
       </Modal>
     </>
-  ):<HCenterSpin />;
+  ) : (
+    <HCenterSpin />
+  );
 }
 
 export default AllLinks;

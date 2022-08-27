@@ -11,8 +11,10 @@ import { useMediaQuery } from "react-responsive";
 import style from "../css/EditPostForm.module.css";
 
 const validateMessages = {
+  // eslint-disable-next-line
   required: "${label}不能为空!",
   types: {
+    // eslint-disable-next-line
     url: "${label}不是有效的链接!",
   },
 };
