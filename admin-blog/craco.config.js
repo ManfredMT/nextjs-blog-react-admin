@@ -1,7 +1,7 @@
 const CracoLessPlugin = require("craco-less");
 const { whenProd } = require("@craco/craco");
-const BundleAnalyzerPlugin =
-  require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin =
+//   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 
 const overrideConfig = {
