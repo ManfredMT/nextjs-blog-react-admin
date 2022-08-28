@@ -14,14 +14,21 @@ const rateLimit = require("express-rate-limit");
 connectDB();
 
 //设置管理员默认账号
-setDefaultPasswd().then(()=>setDefaultProfile());
-
+setDefaultPasswd().then(() => setDefaultProfile());
 
 const app = express();
+if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", true);
+}
 
 const httpServer = http.createServer(app);
 
-app.use(cors());
+app.use(
+  cors(
+    //设置origin为false取消所有cors.
+    //{origin: false}
+  )
+);
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,
@@ -85,9 +92,6 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
-// app.listen(port, () => {
-//   console.log(`Server started on port ${port}`);
-// });
 httpServer.listen(port, () => {
   console.log(`HTTP服务器启动,端口为: ${port}`);
 });
