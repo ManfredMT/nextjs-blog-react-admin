@@ -3,6 +3,18 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
 
+// 设置内容安全策略
+const ContentSecurityPolicy = `
+  default-src 'self';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline';
+  child-src 'none';
+  style-src 'self' 'unsafe-inline';
+  font-src 'self';
+  media-src 'none';
+  object-src 'none';
+  img-src 'self' data:;
+`
+
 const nextConfig = {
   i18n: {
     locales: ["zh"],
@@ -16,8 +28,12 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/api/:slug*',
-        destination: `http://localhost:${process.env.PORT}/api/:slug*`
+        source: '/api/image/:slug*',
+        destination: `http://localhost:${process.env.PORT}/api/image/:slug*`
+      },
+      {
+        source: '/api/comments/:slug*',
+        destination: `http://localhost:${process.env.PORT}/api/comments/:slug*`
       },
     ]
   },
@@ -46,7 +62,10 @@ const nextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains',
           },
-          
+          // {
+          //   key: 'Content-Security-Policy',
+          //   value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
+          // }
         ],
       },
     ]
