@@ -23,6 +23,9 @@ export default function CommentForm({ postId, setIsCommentChange }) {
         },
         body: new URLSearchParams(form),
       });
+      if (response.status >= 400 && response.status < 600) {
+        throw new Error("Bad response from server");
+      }
       const json = await response.json();
       return json;
     };
