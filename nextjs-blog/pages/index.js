@@ -14,7 +14,7 @@ import Footer from "../components/Footer";
 
 const root = process.cwd();
 
-const DISPLAY_POST_NUMBER = 5;
+const DISPLAY_POST_NUMBER = 10;
 
 export default function Home({ allPostsData, siteMetadata }) {
   const [searchValue, setSearchValue] = useState("");
