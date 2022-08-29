@@ -37,7 +37,7 @@ export default function CommentForm({ postId, setIsCommentChange }) {
         setIsCommentChange(true);
       })
       .catch((error) => {
-        console.error("error: ", error);
+        console.error("error: ", error.message);
         setMessage("发送失败");
         setShowNotice(true);
       })
