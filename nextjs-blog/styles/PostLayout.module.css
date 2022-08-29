@@ -1,5 +1,5 @@
 .article-and-next {
-    width: 80vw;
+    width: 70vw;
     margin: 2rem auto;
 }
 
@@ -150,6 +150,9 @@
 }
 
 @media (max-width: 1224px) {
+    .article-and-next {
+        width: 90vw;
+    }
     .authors-box {
         flex-wrap: wrap;
     }

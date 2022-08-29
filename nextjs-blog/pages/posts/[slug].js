@@ -14,7 +14,7 @@ export default function Post({ post, siteMetadata }) {
       })
     : null;
   const postTitle =
-    post.title.length > 32 ? post.title.substr(0, 32) + "..." : post.title;
+    post.title.length > 22 ? post.title.substr(0, 22) + "..." : post.title;
   return (
     <>
       <BlogSEO
