@@ -4,6 +4,10 @@ const { whenProd } = require("@craco/craco");
 //   require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 
+// 查看打包时间
+const SpeedMeasurePlugin = require("speed-measure-webpack-plugin");
+const smp = new SpeedMeasurePlugin();
+
 const overrideConfig = {
 
   plugins: [
@@ -34,7 +38,7 @@ const overrideConfig = {
       ],
     ],
   },
-  webpack: {
+  webpack: smp.wrap({
     plugins: whenProd(()=>[
       //new BundleAnalyzerPlugin(),
       new CompressionWebpackPlugin({
@@ -53,7 +57,7 @@ const overrideConfig = {
         mode: "production",
       };
     }, {}),
-  },
+  }),
 };
 
 module.exports = overrideConfig;
