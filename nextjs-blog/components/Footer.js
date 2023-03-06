@@ -149,7 +149,7 @@ export default function Footer({ siteMetadata }) {
         ) : null}
       </div>
       <div className={styles["copyright-box"]}>
-        {`Copyright © ${siteMetadata.title} 2022 • All rights reserved.`}
+        {`Copyright © ${siteMetadata.title} ${new Date().getFullYear()} • All rights reserved.`}
       </div>
       <a
         className={styles["copyright-support"]}
