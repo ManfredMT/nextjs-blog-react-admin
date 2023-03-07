@@ -110,10 +110,34 @@ const setPosts = asyncHandler(async (req, res) => {
         });
       }
     }
+
+    const allPostTitle = await Post.find({
+      user: req.user.id,
+      draft: false,
+    }).select("title createdAt");
+    if (allPostTitle.length) {
+      const allPostTitleObj = JSON.parse(JSON.stringify(allPostTitle));
+      const sortedTitles = allPostTitleObj.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      const sortTIndex = sortedTitles.findIndex(
+        (p) => p.title === req.body.title
+      );
+      const nextPost = sortedTitles[sortTIndex + 1]?.title ?? null;
+      const lastPost = sortedTitles[sortTIndex - 1]?.title ?? null;
+      if (nextPost) {
+        pages.push("/posts/" + nextPost);
+      }
+      if (lastPost) {
+        pages.push("/posts/" + lastPost);
+      }
+    }
+
     const pageDoc = await Page.findOne({ user: req.user.id });
     const mergePages = [...pages, ...pageDoc.pages];
     const deDupPages = [...new Set(mergePages)];
     await Page.findOneAndUpdate({ user: req.user.id }, { pages: deDupPages });
+    // console.log("pages: ",deDupPages);
 
     res.status(200).json(post);
   } catch (error) {
@@ -177,6 +201,28 @@ const updatePost = asyncHandler(async (req, res) => {
       pages.push("/tags/" + tag);
     });
 
+    const allPostTitle = await Post.find({
+      user: req.user.id,
+      draft: false,
+    }).select("title createdAt");
+    if (allPostTitle.length) {
+      const allPostTitleObj = JSON.parse(JSON.stringify(allPostTitle));
+      const sortedTitles = allPostTitleObj.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      const sortTIndex = sortedTitles.findIndex(
+        (p) => p.title === updatedPost.title
+      );
+      const nextPost = sortedTitles[sortTIndex + 1]?.title ?? null;
+      const lastPost = sortedTitles[sortTIndex - 1]?.title ?? null;
+      if (nextPost) {
+        pages.push("/posts/" + nextPost);
+      }
+      if (lastPost) {
+        pages.push("/posts/" + lastPost);
+      }
+    }
+
     const pageDoc = await Page.findOne({ user: req.user.id });
     const mergePages = [...pages, ...pageDoc.pages];
     const deDupPages = [...new Set(mergePages)];
@@ -225,6 +271,28 @@ const deletePost = asyncHandler(async (req, res) => {
     post.tags.forEach((tag) => {
       pages.push("/tags/" + tag);
     });
+
+    const allPostTitle = await Post.find({
+      user: req.user.id,
+      draft: false,
+    }).select("title createdAt");
+    if (allPostTitle.length) {
+      const allPostTitleObj = JSON.parse(JSON.stringify(allPostTitle));
+      const sortedTitles = allPostTitleObj.sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
+      const sortTIndex = sortedTitles.findIndex(
+        (p) => p.title === post.title
+      );
+      const nextPost = sortedTitles[sortTIndex + 1]?.title ?? null;
+      const lastPost = sortedTitles[sortTIndex - 1]?.title ?? null;
+      if (nextPost) {
+        pages.push("/posts/" + nextPost);
+      }
+      if (lastPost) {
+        pages.push("/posts/" + lastPost);
+      }
+    }
 
     const pageDoc = await Page.findOne({ user: req.user.id });
     const mergePages = [...pages, ...pageDoc.pages];
@@ -282,7 +350,11 @@ const updateCategory = asyncHandler(async (req, res) => {
       "/categories/" + oldCategory,
       "/categories/" + newCategory,
     ];
-    const posts = await Post.find({ user: req.user.id, draft:false, category: newCategory });
+    const posts = await Post.find({
+      user: req.user.id,
+      draft: false,
+      category: newCategory,
+    });
     posts.forEach((doc) => {
       pages.push("/posts/" + doc.title);
     });
@@ -332,7 +404,11 @@ const updateTag = asyncHandler(async (req, res) => {
     );
 
     const pages = ["/", "/tags", "/tags/" + oldTag, "/tags/" + newTag];
-    const posts = await Post.find({ user: req.user.id, draft:false, tags: newTag });
+    const posts = await Post.find({
+      user: req.user.id,
+      draft: false,
+      tags: newTag,
+    });
     posts.forEach((doc) => {
       pages.push("/posts/" + doc.title);
     });
@@ -367,7 +443,11 @@ const deleteTag = asyncHandler(async (req, res) => {
   const tag = req.body.tag;
   try {
     const pages = ["/", "/tags", "/tags/" + tag];
-    const posts = await Post.find({ user: req.user.id, draft:false, tags: tag });
+    const posts = await Post.find({
+      user: req.user.id,
+      draft: false,
+      tags: tag,
+    });
     posts.forEach((doc) => {
       pages.push("/posts/" + doc.title);
     });
