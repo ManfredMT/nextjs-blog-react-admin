@@ -1,12 +1,12 @@
-
 import styles from "../styles/PostLayout.module.css";
 import Link from "next/link";
-import dynamic from 'next/dynamic';
+import dynamic from "next/dynamic";
 
-
-const MarkDown = dynamic(() => import('./MarkDown'), {
-  loading:()=>{"loading..."}
-})
+const MarkDown = dynamic(() => import("./MarkDown"), {
+  loading: () => {
+    "loading...";
+  },
+});
 
 export default function PostLayout({ post, siteMetadata }) {
   const postCreatedDate = new Date(post.createdAt);
@@ -53,40 +53,53 @@ export default function PostLayout({ post, siteMetadata }) {
                 {post.tags.map((tag) => {
                   return (
                     <Link key={tag} href={`/tags/${tag}`}>
-                    <span className={styles["post-tag"]} key={tag}>
-                      {tag}
-                    </span></Link>
+                      <span className={styles["post-tag"]} key={tag}>
+                        {tag}
+                      </span>
+                    </Link>
                   );
                 })}
               </div>
             ) : null}
-            <time className={styles["time"]}>{`发布时间 : ${formatCreated}`}</time>
-            <time className={styles["time"]}>{`更新时间 : ${formatUpdated}`}</time>
-            <Link href={`/categories/${post.category}`}><p className={styles["post-category"]}>
-              <span className="icon-drawer"></span>
-              {post.category === "default" ? "未分类" : post.category}
-            </p></Link>
+            <time
+              className={styles["time"]}
+            >{`发布时间 : ${formatCreated}`}</time>
+            <time
+              className={styles["time"]}
+            >{`更新时间 : ${formatUpdated}`}</time>
+            <Link href={`/categories/${post.category}`}>
+              <p className={styles["post-category"]}>
+                <span className="icon-drawer"></span>
+                {post.category === "default" ? "未分类" : post.category}
+              </p>
+            </Link>
           </header>
           {/* <Suspense fallback={`Loading...`}> */}
           <MarkDown mdChildren={post.content} />
           {/* </Suspense> */}
         </article>
-        {post.lastPost ? (
-          <Link href={`/posts/${post.lastPost}`}>
-            <div className={styles["last-post-box"]}>
-              <span>上一篇</span>
-              <h3 className={styles["post-nav-title"]}>{post.lastPost}</h3>
-            </div>
-          </Link>
-        ) : <div className={styles["last-post-box"]}></div>}
-        {post.nextPost ? (
-          <Link href={`/posts/${post.nextPost}`}>
-            <div className={styles["next-post-box"]}>
-              <span>下一篇</span>
-              <h3 className={styles["post-nav-title"]}>{post.nextPost}</h3>
-            </div>
-          </Link>
-        ) : null}
+        <div className={styles["post-nav-box"]}>
+          {post.lastPost ? (
+            <Link href={`/posts/${post.lastPost}`}>
+              <div className={styles["last-post-box"]}>
+                <span>上一篇</span>
+                <h3 className={styles["post-nav-title"]}>{post.lastPost}</h3>
+              </div>
+            </Link>
+          ) : (
+            <div className={`${styles["last-post-box"]} ${styles["no-cursor"]}`}></div>
+          )}
+          {post.nextPost ? (
+            <Link href={`/posts/${post.nextPost}`}>
+              <div className={styles["next-post-box"]}>
+                <span>下一篇</span>
+                <h3 className={styles["post-nav-title"]}>{post.nextPost}</h3>
+              </div>
+            </Link>
+          ) : (
+            <div className={`${styles["next-post-box"]} ${styles["no-cursor"]}`}></div>
+          )}
+        </div>
       </div>
     </div>
   );
