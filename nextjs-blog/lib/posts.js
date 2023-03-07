@@ -242,27 +242,6 @@ export async function getPostRelatedPath() {
     const postRelatedPath = [...pageDoc.pages];
     await Page.findOneAndUpdate({user: user.id},{pages:[]});
     return postRelatedPath;
-    
-    // const posts = await Post.find({ user: user.id, draft: false }).select(
-    //   "-content -image"
-    // );
-    // let postRelatedPath = ["/timeline", "/categories", "/tags", "/"];
-    // let categories = [];
-    // let tags = [];
-    // posts.forEach((doc) => {
-    //   if (!categories.includes(doc.category)) {
-    //     postRelatedPath.push(`/categories/${doc.category}`);
-    //     categories.push(doc.category);
-    //   }
-    //   doc.tags.forEach((tag) => {
-    //     if (!tags.includes(tag)) {
-    //       postRelatedPath.push(`/tags/${tag}`);
-    //       tags.push(tag);
-    //     }
-    //   });
-    //   postRelatedPath.push(`/posts/${doc.title}`);
-    // });
-    // return postRelatedPath;
   }
 }
 
