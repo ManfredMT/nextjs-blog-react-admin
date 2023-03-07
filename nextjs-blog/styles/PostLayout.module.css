@@ -100,22 +100,26 @@
     text-align: center;
 }
 
+.post-nav-box {
+    display: flex;
+    margin-top: 3rem;
+    justify-content: space-around;
+}
+
 .last-post-box,
 .next-post-box {
+    width: 20rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 1rem;
+}
 
-    display: inline-block;
-    width: 20vw;
-    margin-top: 3rem;
-    vertical-align: top;
+.no-cursor {
+    cursor: initial;
 }
 
 .next-post-box {
     text-align: right;
-    margin-left: 33vw;
-    cursor: pointer;
-    transition: all 0.3s;
-
-
 }
 
 .next-post-box:hover {
@@ -132,9 +136,7 @@
 }
 
 .last-post-box {
-    cursor: pointer;
-    transition: all 0.3s;
-    margin-left: 3vw;
+
 }
 
 .last-post-box:hover {
@@ -181,7 +183,4 @@
     [data-theme='dark'] .last-post-box:hover .post-nav-title {
         color: inherit;
     }
-
-
-
 }
