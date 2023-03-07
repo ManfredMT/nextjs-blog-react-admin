@@ -73,6 +73,11 @@ export async function getStaticProps({ params }) {
   //   const rss = generateRss(allPosts, siteMetadata);
   //   fs.writeFileSync("./public/feed.xml", rss);
   // }
+  if(!posts.length) {
+    return {
+      notFound: true
+    }
+  }
 
   return {
     props: {

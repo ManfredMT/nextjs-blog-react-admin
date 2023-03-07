@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 
 const Post = require("../models/postModel");
 const Comment = require("../models/commentModel");
+const Page = require("../models/pageModel");
 const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
@@ -83,12 +84,37 @@ const setPosts = asyncHandler(async (req, res) => {
     postObj.content = req.body.content;
   }
   if (req.file) {
-    console.log("image and type: ", req.file, typeof req.file);
+    //console.log("image and type: ", req.file, typeof req.file);
     postObj.image = req.file.buffer;
   }
   try {
     const post = await Post.create(postObj);
     post.image = undefined;
+    // 待构建页面
+    const pages = [
+      "/",
+      "/timeline",
+      "/categories",
+      "/tags",
+      "/categories/" + req.body.category,
+      "/posts/" + req.body.title,
+    ];
+    if (req.body.tags) {
+      const tags = req.body.tags;
+      //console.log("debug tags:", tags, typeof tags === "string");
+      if (typeof tags === "string") {
+        pages.push("/tags/" + tags);
+      } else {
+        tags.forEach((tag) => {
+          pages.push("/tags/" + tag);
+        });
+      }
+    }
+    const pageDoc = await Page.findOne({ user: req.user.id });
+    const mergePages = [...pages, ...pageDoc.pages];
+    const deDupPages = [...new Set(mergePages)];
+    await Page.findOneAndUpdate({ user: req.user.id }, { pages: deDupPages });
+
     res.status(200).json(post);
   } catch (error) {
     res.status(400);
@@ -134,6 +160,29 @@ const updatePost = asyncHandler(async (req, res) => {
       }
     );
     updatedPost.image = undefined;
+
+    const pages = [
+      "/",
+      "/timeline",
+      "/categories",
+      "/tags",
+      "/categories/" + updatedPost.category,
+      "/categories/" + post.category,
+      "/posts/" + updatedPost.title,
+    ];
+    post.tags.forEach((tag) => {
+      pages.push("/tags/" + tag);
+    });
+    updatedPost.tags.forEach((tag) => {
+      pages.push("/tags/" + tag);
+    });
+
+    const pageDoc = await Page.findOne({ user: req.user.id });
+    const mergePages = [...pages, ...pageDoc.pages];
+    const deDupPages = [...new Set(mergePages)];
+    await Page.findOneAndUpdate({ user: req.user.id }, { pages: deDupPages });
+    //console.log("pages: ",deDupPages);
+
     res.status(200).json(updatedPost);
   } catch (error) {
     res.status(400);
@@ -165,8 +214,27 @@ const deletePost = asyncHandler(async (req, res) => {
     throw new Error("User not authorized");
   }
   try {
+    const pages = [
+      "/",
+      "/timeline",
+      "/categories",
+      "/tags",
+      "/categories/" + post.category,
+      "/posts/" + post.title,
+    ];
+    post.tags.forEach((tag) => {
+      pages.push("/tags/" + tag);
+    });
+
+    const pageDoc = await Page.findOne({ user: req.user.id });
+    const mergePages = [...pages, ...pageDoc.pages];
+    const deDupPages = [...new Set(mergePages)];
+    await Page.findOneAndUpdate({ user: req.user.id }, { pages: deDupPages });
+    //console.log("pages: ", deDupPages);
+
     await Comment.deleteMany({ post: req.params.id });
     await post.remove();
+
     res.status(200).json({ id: req.params.id });
   } catch (error) {
     res.status(400);
@@ -208,6 +276,23 @@ const updateCategory = asyncHandler(async (req, res) => {
         category: newCategory,
       }
     );
+
+    const pages = [
+      "/categories",
+      "/categories/" + oldCategory,
+      "/categories/" + newCategory,
+    ];
+    const posts = await Post.find({ user: req.user.id, draft:false, category: newCategory });
+    posts.forEach((doc) => {
+      pages.push("/posts/" + doc.title);
+    });
+
+    const pageDoc = await Page.findOne({ user: req.user.id });
+    const mergePages = [...pages, ...pageDoc.pages];
+    const deDupPages = [...new Set(mergePages)];
+    await Page.findOneAndUpdate({ user: req.user.id }, { pages: deDupPages });
+    //console.log("pages: ", deDupPages);
+
     res.status(200).json(updateManyCategory);
   } catch (error) {
     res.status(400);
@@ -245,6 +330,19 @@ const updateTag = asyncHandler(async (req, res) => {
         "tags.$": newTag,
       }
     );
+
+    const pages = ["/", "/tags", "/tags/" + oldTag, "/tags/" + newTag];
+    const posts = await Post.find({ user: req.user.id, draft:false, tags: newTag });
+    posts.forEach((doc) => {
+      pages.push("/posts/" + doc.title);
+    });
+
+    const pageDoc = await Page.findOne({ user: req.user.id });
+    const mergePages = [...pages, ...pageDoc.pages];
+    const deDupPages = [...new Set(mergePages)];
+    await Page.findOneAndUpdate({ user: req.user.id }, { pages: deDupPages });
+    //console.log("pages: ", deDupPages);
+
     res.status(200).json(updateManyTag);
   } catch (error) {
     res.status(400);
@@ -268,6 +366,18 @@ const deleteTag = asyncHandler(async (req, res) => {
   }
   const tag = req.body.tag;
   try {
+    const pages = ["/", "/tags", "/tags/" + tag];
+    const posts = await Post.find({ user: req.user.id, draft:false, tags: tag });
+    posts.forEach((doc) => {
+      pages.push("/posts/" + doc.title);
+    });
+
+    const pageDoc = await Page.findOne({ user: req.user.id });
+    const mergePages = [...pages, ...pageDoc.pages];
+    const deDupPages = [...new Set(mergePages)];
+    await Page.findOneAndUpdate({ user: req.user.id }, { pages: deDupPages });
+    //console.log("pages: ", deDupPages);
+
     const updateManyTag = await Post.updateMany(
       {
         user: req.user.id,

@@ -6,6 +6,7 @@ const {
   connectDB,
   setDefaultPasswd,
   setDefaultProfile,
+  setDefaultPage,
 } = require("./config/db");
 const { errorHandler } = require("./middleware/errorMiddleware");
 const cors = require("cors");
@@ -13,8 +14,12 @@ const rateLimit = require("express-rate-limit");
 
 connectDB();
 
-//设置管理员默认账号
-setDefaultPasswd().then(() => setDefaultProfile());
+//设置管理员默认账号和其他初始化数据
+setDefaultPasswd().then(() => {
+  setDefaultProfile();
+  setDefaultPage();
+}
+  );
 
 const app = express();
 if (process.env.NODE_ENV === "production") {

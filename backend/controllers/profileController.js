@@ -3,6 +3,8 @@ const fetch = (...args) =>
   import("node-fetch").then(({ default: fetch }) => fetch(...args));
 
 const Profile = require("../models/profileModel");
+const Page = require("../models/pageModel");
+const Post = require("../models/postModel");
 
 // @desc   Get profile
 // @route  GET /api/profile
@@ -49,8 +51,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     newProfileData.socialBannerType = req.files["socialBanner"][0].mimetype;
   }
 
-  const revalidateUrl = 
-  `http://localhost:${process.env.NEXTJS_PORT}/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=post`;
+  const revalidateUrl = `http://localhost:${process.env.NEXTJS_PORT}/api/revalidate?secret=${process.env.MY_SECRET_TOKEN}&change=post`;
 
   try {
     const updatedProfile = await Profile.findByIdAndUpdate(
@@ -60,7 +61,35 @@ const updateProfile = asyncHandler(async (req, res) => {
         new: true,
       }
     );
-    
+
+    const pages = ["/", "/tags", "/timeline", "/categories"];
+    let categories = [];
+    let tags = [];
+    const posts = await Post.find({ user: req.user.id, draft: false });
+
+    posts.forEach((doc) => {
+      pages.push("/posts/" + doc.title);
+    });
+    posts.forEach((doc) => {
+      if (!categories.includes(doc.category)) {
+        pages.push(`/categories/${doc.category}`);
+        categories.push(doc.category);
+      }
+      doc.tags.forEach((tag) => {
+        if (!tags.includes(tag)) {
+          pages.push(`/tags/${tag}`);
+          tags.push(tag);
+        }
+      });
+      pages.push(`/posts/${doc.title}`);
+    });
+
+    const pageDoc = await Page.findOne({ user: req.user.id });
+    const mergePages = [...pages, ...pageDoc.pages];
+    const deDupPages = [...new Set(mergePages)];
+    await Page.findOneAndUpdate({ user: req.user.id }, { pages: deDupPages });
+    console.log("pages: ", deDupPages);
+
     res.status(200).json(updatedProfile);
   } catch (error) {
     res.status(400);

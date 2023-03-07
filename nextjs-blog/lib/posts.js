@@ -1,6 +1,7 @@
-import connectDB from "./utils/db";
+
 import Post from "./utils/postModel";
 import User from "./utils/userModel";
+import Page from "./utils/pageModel";
 import dbConnect from "./utils/dbConnect";
 
 export async function getAllPostsData() {
@@ -213,7 +214,7 @@ export async function getPostByTitle(title) {
       draft: false,
     }).select("title createdAt");
 
-    if (postsResult && allPostTitle) {
+    if (postsResult.length && allPostTitle.length) {
       const allPostTitleObj = JSON.parse(JSON.stringify(allPostTitle));
       const sortedTitles = allPostTitleObj.sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
@@ -237,26 +238,31 @@ export async function getPostRelatedPath() {
     console.error("用户不存在");
     return [];
   } else {
-    const posts = await Post.find({ user: user.id, draft: false }).select(
-      "-content -image"
-    );
-    let postRelatedPath = ["/timeline", "/categories", "/tags", "/"];
-    let categories = [];
-    let tags = [];
-    posts.forEach((doc) => {
-      if (!categories.includes(doc.category)) {
-        postRelatedPath.push(`/categories/${doc.category}`);
-        categories.push(doc.category);
-      }
-      doc.tags.forEach((tag) => {
-        if (!tags.includes(tag)) {
-          postRelatedPath.push(`/tags/${tag}`);
-          tags.push(tag);
-        }
-      });
-      postRelatedPath.push(`/posts/${doc.title}`);
-    });
+    const pageDoc = await Page.findOne({user: user.id});
+    const postRelatedPath = [...pageDoc.pages];
+    await Page.findOneAndUpdate({user: user.id},{pages:[]});
     return postRelatedPath;
+    
+    // const posts = await Post.find({ user: user.id, draft: false }).select(
+    //   "-content -image"
+    // );
+    // let postRelatedPath = ["/timeline", "/categories", "/tags", "/"];
+    // let categories = [];
+    // let tags = [];
+    // posts.forEach((doc) => {
+    //   if (!categories.includes(doc.category)) {
+    //     postRelatedPath.push(`/categories/${doc.category}`);
+    //     categories.push(doc.category);
+    //   }
+    //   doc.tags.forEach((tag) => {
+    //     if (!tags.includes(tag)) {
+    //       postRelatedPath.push(`/tags/${tag}`);
+    //       tags.push(tag);
+    //     }
+    //   });
+    //   postRelatedPath.push(`/posts/${doc.title}`);
+    // });
+    // return postRelatedPath;
   }
 }
 
