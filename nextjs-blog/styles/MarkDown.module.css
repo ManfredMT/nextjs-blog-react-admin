@@ -27,6 +27,10 @@
     background-color: black;
 }
 
+[data-theme='dark'] .preview-post-body table * {
+    background: transparent;
+}
+
 @media (max-width: 1224px) {
     .preview-post-body pre {
         font-size: 0.6rem;
