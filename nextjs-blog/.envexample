@@ -1,0 +1,6 @@
+USER_NAME = admin
+MONGODB_URI = mongodb://localhost:27017
+DB_NAME = blog
+MY_SECRET_TOKEN=replaceWithADifferentValue
+PORT = 5000
+ANALYZE=false
