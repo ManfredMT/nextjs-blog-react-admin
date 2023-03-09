@@ -12,7 +12,7 @@ const ContentSecurityPolicy = `
   font-src 'self';
   media-src 'none';
   object-src 'none';
-  img-src 'self' data:;
+  img-src * data:;
 `
 
 const nextConfig = {
@@ -62,10 +62,14 @@ const nextConfig = {
             key: 'Strict-Transport-Security',
             value: 'max-age=31536000; includeSubDomains',
           },
-          // {
-          //   key: 'Content-Security-Policy',
-          //   value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
-          // }
+          {
+            key: 'X-XSS-Protection',
+            value: '1; mode=block'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim()
+          }
         ],
       },
     ]
