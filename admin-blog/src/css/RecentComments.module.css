@@ -27,7 +27,9 @@
     margin-top: 0rem;
 }
 
-
+.comment-content {
+    word-break: break-all;
+}
 
 @media (min-width:1224px) {
     .recent-comment-box {
@@ -45,7 +47,6 @@
         font: inherit;
         outline: inherit;
         cursor: pointer;
-    
     }
     
     .delete-button:hover {
@@ -71,13 +72,11 @@
     
     
     .comment-content::-webkit-scrollbar-track {
-    
         border-radius: 1rem;
         background-color: #e7e7e7;
     }
     
     .comment-content::-webkit-scrollbar-thumb {
-    
         border-radius: 1rem;
         background-color: rgb(175, 175, 175);
     }
