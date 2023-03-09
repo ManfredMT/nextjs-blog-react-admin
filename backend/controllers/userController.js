@@ -50,8 +50,16 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route  POST /api/users/login
 // @access Public
 const loginUser = asyncHandler(async (req, res) => {
+  if(!req.body.password) {
+    res.status(400);
+    throw new Error("请提供密码");
+  }
+  if(typeof req.body.password !== 'string') {
+    res.status(400);
+    throw new Error("密码类型错误");
+  }
   const { password } = req.body;
-  const name = "admin";
+  const name = process.env.USER_NAME;
   const user = await User.findOne({ name });
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
