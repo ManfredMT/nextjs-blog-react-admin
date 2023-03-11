@@ -50,6 +50,7 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route  POST /api/users/login
 // @access Public
 const loginUser = asyncHandler(async (req, res) => {
+  console.log("login from: ",req.ip);
   if(!req.body.password) {
     res.status(400);
     throw new Error("请提供密码");
