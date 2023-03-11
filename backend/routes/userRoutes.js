@@ -5,8 +5,8 @@ const {protect} = require('../middleware/authMiddleware');
 const rateLimit = require("express-rate-limit");
 
 const limiterLogin = rateLimit({
-    windowMs: 30 * 60 * 1000, // ms
-    max: 5, // Limit each IP to xx requests per `window`
+    windowMs: 2 * 60 * 1000, // ms
+    max: 3, // Limit each IP to xx requests per `window`
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
     legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   });
