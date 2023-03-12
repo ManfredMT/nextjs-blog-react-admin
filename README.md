@@ -4,6 +4,12 @@
 
 个人博客系统.包括博客页面(next.js),博客后台管理(React)和后端(node.js).本项目提供了一个简洁方便的博客方案,可以让发布和管理博客更加轻松.如果对项目有任何建议和想法,欢迎发起issue.
 
+## 演示网站
+
+后台管理演示网站: <https://admin.manfreddemoblog.tk> (密码admin,请勿提交或修改数据)
+
+博客演示网站: <https://manfreddemoblog.tk/>
+
 ## 技术栈
 
 **博客管理**:
