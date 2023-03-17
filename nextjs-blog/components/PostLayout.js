@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 const MarkDown = dynamic(() => import("./MarkDown"), {
   loading: () => {
-    "loading...";
+    return <p>加载中...</p>;
   },
 });
 
