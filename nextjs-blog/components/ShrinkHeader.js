@@ -5,10 +5,16 @@ export default function ShrinkHeader({ siteMetadata, nav, postTitle }) {
   const [shrink, setShrink] = useState(false);
 
   useEffect(() => {
+    function handleScroll() {
+      setShrink(window.pageYOffset > 80);
+    }
     if (typeof window !== "undefined") {
-      window.addEventListener("scroll", () =>
-        setShrink(window.pageYOffset > 80)
-      );
+      window.addEventListener("scroll", handleScroll);
+    }
+    return ()=>{
+      if(typeof window !== "undefined") {
+        window.removeEventListener("scroll", handleScroll);
+      }
     }
   }, []);
 
