@@ -7,7 +7,7 @@
     background-attachment: fixed;
     background-size: cover;
     background-position: top;
-    background-image: url(../images/sun-tornado_light.svg);
+    background-image: url(../images/slanted-gradient_blue.svg);
 }
 
 .blurred-box {
@@ -16,7 +16,7 @@
     background: inherit;
     border-radius: 1.5rem;
     overflow: hidden;
-    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    box-shadow: inset 0 0 0 200px hsla(0,0%,100%,.05);
 }
 
 .blurred-box::after {
@@ -25,12 +25,11 @@
     height: 50vh;
     background: inherit;
     position: absolute;
-    left: -25px;
+    left: -55px;
     right: 0px;
-    top: -25px;
+    top: -55px;
     bottom: 0;
-    border: 1px solid red;
-    filter: blur(15px);
+    filter: blur(25px);
 
 }
 
