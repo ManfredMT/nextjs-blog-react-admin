@@ -86,11 +86,26 @@ app.use(
 );
 
 //博客管理页面的静态服务器
+function setCustomCacheControl (res, path) {
+  if(path.includes("static") || path.endsWith(".woff")) {
+    res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+  }
+  if(path.endsWith(".html")) {
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+  }
+}
+
 if (process.env.NODE_ENV === "production") {
   const expressStaticGzip = require("express-static-gzip");
   app.use(
     limiterStatic,
-    expressStaticGzip(path.join(__dirname, "../admin-blog/build"))
+    expressStaticGzip(path.join(__dirname, "../admin-blog/build"),{
+      enableBrotli: true,
+      orderPreference: ["br"],
+      serveStatic:{
+        setHeaders: setCustomCacheControl
+      }
+    }),
   );
   app.get("/*", limiterStatic, function (req, res) {
     res.sendFile(path.join(__dirname, "../admin-blog/build", "index.html"));
