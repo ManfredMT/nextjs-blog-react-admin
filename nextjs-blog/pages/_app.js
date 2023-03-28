@@ -1,5 +1,7 @@
+import "../styles/globals.scss";
 import "../styles/globals.css";
 import "../styles/icomoonStyle.css";
+
 import { ThemeProvider } from "next-themes";
 
 function MyApp({ Component, pageProps }) {

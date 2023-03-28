@@ -21,9 +21,12 @@
     "react-markdown": "^8.0.3",
     "react-syntax-highlighter": "^15.5.0",
     "rehype-katex": "^6.0.2",
+    "rehype-slug": "^5.1.0",
     "remark-footnotes": "^4.0.1",
     "remark-gfm": "^3.0.1",
-    "remark-math": "^5.1.1"
+    "remark-math": "^5.1.1",
+    "sass": "^1.60.0",
+    "tocbot": "^4.20.1"
   },
   "devDependencies": {
     "eslint": "8.19.0",

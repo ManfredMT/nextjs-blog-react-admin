@@ -1,12 +1,13 @@
+
+
 .article-and-next {
-    width: 55vw;
+    width: 80vw;
     margin: 2rem auto;
 }
 
 .authors-box {
     display: flex;
     justify-content: center;
-
 }
 
 .article-and-next header {
@@ -94,10 +95,33 @@
     cursor: pointer;
 }
 
-
 .post-title {
     font-size: 2.5rem;
     text-align: center;
+}
+
+.toc-and-md {
+    display: flex;
+}
+
+.md-toc { 
+    padding: 1rem;
+    flex:0 0 360px;
+    position: sticky;
+    top: 60px;
+    align-self: flex-start;
+    line-height: 2.2;
+    font-size: 16px;
+}
+
+.menu-head {
+    font-size: large;
+    margin: 4px;
+}
+
+.md-box { 
+    padding: 1rem;
+    flex:1;
 }
 
 .post-nav-box {
@@ -135,9 +159,6 @@
     color: rgb(126, 126, 255);
 }
 
-.last-post-box {
-
-}
 
 .last-post-box:hover {
     transform: scale(1.05);
@@ -159,10 +180,21 @@
         flex-wrap: wrap;
     }
 
+    .md-toc {
+        display: none;
+    } 
+    
+    .toc-and-md {
+        display: initial;
+    }
+
+    .md-box {
+        padding: 0;
+    }
+
     .next-post-box:hover {
         transform: none;
     }
-
 
     .next-post-box:hover .post-nav-title {
         color: inherit;

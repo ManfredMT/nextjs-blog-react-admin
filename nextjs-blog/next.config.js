@@ -2,6 +2,7 @@
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 })
+const path = require('path');
 
 // 设置内容安全策略
 const ContentSecurityPolicy = `
@@ -24,6 +25,9 @@ const nextConfig = {
   swcMinify: true,
   images: {
     domains: ['localhost']
+  },
+  sassOptions: {
+    includePaths: [path.join(__dirname, 'node_modules')],
   },
   async rewrites() {
     return [

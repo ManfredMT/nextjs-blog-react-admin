@@ -20,18 +20,18 @@ a {
   }
 
   body::-webkit-scrollbar {
-    width: 0.6rem;
-    height: 0.6rem;
+    width: 9px;
+    height: 9px;
     background-color: transparent;
 }
 
 body::-webkit-scrollbar-track {
-    border-radius: 1rem;
+    border-radius: 16px;
     background-color: #e7e7e7;
 }
 
 body::-webkit-scrollbar-thumb {
-    border-radius: 1rem;
+    border-radius: 16px;
     background-color: rgb(175, 175, 175);
 }
 
@@ -47,4 +47,8 @@ body::-webkit-scrollbar-thumb:hover {
   left:-3px;
   border-left: 3px solid rgb(197, 135, 235);
 }
-  
+
+/* 改变Tocbot默认颜色 */
+.is-active-link::before {
+  background-color: #894bbc;
+}

@@ -1,6 +1,9 @@
 import styles from "../styles/PostLayout.module.css";
 import Link from "next/link";
 import dynamic from "next/dynamic";
+import { useEffect } from 'react';
+import * as tocbot from 'tocbot';
+
 
 const MarkDown = dynamic(() => import("./MarkDown"), {
   loading: () => {
@@ -17,6 +20,25 @@ export default function PostLayout({ post, siteMetadata }) {
   const formatUpdated = `${postUpdatedDate.getFullYear()}年${
     postUpdatedDate.getMonth() + 1
   }月${postUpdatedDate.getDate()}日`;
+
+  useEffect(()=>{
+    tocbot.init({
+      // Where to render the table of contents.
+      tocSelector: '.toc',
+      // Where to grab the headings to build the table of contents.
+      contentSelector: '.toc-content',
+      // Which headings to grab inside of the contentSelector element.
+      headingSelector: 'h1, h2, h3',
+      // For headings inside relative or absolute positioned containers within content.
+      hasInnerContainers: true,
+      headingsOffset: 60,
+      scrollSmoothOffset: -60
+    });
+    return ()=>{
+      tocbot.destroy();
+    }
+  },[])
+
   return (
     <div className={styles["layout-wrap"]}>
       <div className={styles["article-and-next"]}>
@@ -74,9 +96,18 @@ export default function PostLayout({ post, siteMetadata }) {
               </p>
             </Link>
           </header>
-          {/* <Suspense fallback={`Loading...`}> */}
-          <MarkDown mdChildren={post.content} />
-          {/* </Suspense> */}
+          <div className={styles["toc-and-md"]}>
+            <div className={styles["md-toc"]}>
+              <p className={styles["menu-head"]}>目录: </p>
+              <div className="toc"></div>
+            </div>
+            <div className={`${styles["md-box"]} toc-content`}>
+            {/* <Suspense fallback={`Loading...`}> */}
+            <MarkDown mdChildren={post.content} />
+            {/* </Suspense> */}
+            </div>
+          </div> 
+          
         </article>
         <div className={styles["post-nav-box"]}>
           {post.lastPost ? (

@@ -44,5 +44,6 @@
 
     .preview-post-body {
         overflow-x: auto;
+        overflow-y: hidden;
     }
 }
