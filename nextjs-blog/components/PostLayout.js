@@ -1,15 +1,15 @@
 import styles from "../styles/PostLayout.module.css";
 import Link from "next/link";
-import dynamic from "next/dynamic";
+//import dynamic from "next/dynamic";
 import { useEffect } from 'react';
 import * as tocbot from 'tocbot';
+import MarkDown from "./MarkDown";
 
-
-const MarkDown = dynamic(() => import("./MarkDown"), {
-  loading: () => {
-    return <p>加载中...</p>;
-  },
-});
+// const MarkDown = dynamic(() => import("./MarkDown"), {
+//   loading: () => {
+//     return <p>加载中...</p>;
+//   },
+// });
 
 export default function PostLayout({ post, siteMetadata }) {
   const postCreatedDate = new Date(post.createdAt);
