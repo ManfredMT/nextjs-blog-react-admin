@@ -20,15 +20,15 @@ export default function Categories({ allCategories, siteMetadata }) {
       <Header siteMetadata={siteMetadata} nav="categories" />
 
       <main className={`${styles["categories-page-main"]} ${styleAni["fade-in-top"]}`}>
-        <label
+        {/* <label
           className={styles["total-num-label"]}
-        >{`共${allCategories.length}个分类`}</label>
+        >{`共${allCategories.length}个分类`}</label> */}
         <div className={styles["all-category-box"]}>
           {allCategories.map((category) => {
             return (
               <p key={category} className={styles["category"]}>
                 <Link href={`/categories/${category}`}>
-                  {`\u00A0\u00A0/ ${category === "default" ? "未分类" : category}`}
+                  {`\u00A0\u00A0${category === "default" ? "未分类" : category}\u00A0\u00A0`}
                 </Link>
               </p>
             );

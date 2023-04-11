@@ -20,7 +20,7 @@ export default function Tags({ allTags, siteMetadata }) {
       />
       <Header siteMetadata={siteMetadata} nav="tags" />
       <main className={`${styles["tags-page-main"]} ${styleAni["fade-in-top"]}`}>
-        <label className={styles["tag-label"]}>{`标签 : `}</label>
+        {/* <label className={styles["tag-label"]}>{`标签 : `}</label> */}
         <div className={styles["tags-box"]}>
         {allTags.map((tag) => {
           return (

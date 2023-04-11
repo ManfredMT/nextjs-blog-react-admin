@@ -1,52 +1,50 @@
-.tags-page-main {
-    line-height: 3.5;
-    
-}
 .tags-box {
-    text-align: center;
-    max-width: 70vw;
-    margin:0 auto;
+  text-align: center;
+  max-width: 90vw;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .tag-label {
-    font-size: 1.5rem;
-    display: block;
-    text-align: center;
+  font-size: 1.5rem;
+  display: block;
+  text-align: center;
 }
 .tag {
-    margin: 1rem;
-    background-color: rgb(244, 244, 244);
-    border-radius: 1.5rem;
-    padding: 0.5rem 1.5rem;
-    cursor: pointer;
-    white-space: nowrap;
-    position: relative;
+  margin: 1rem;
+  background-color: rgb(244, 244, 244);
+  border-radius: 1.5rem;
+  padding: 0.5rem 1.5rem;
+  cursor: pointer;
+  /* white-space: nowrap; */
+  position: relative;
 }
-[data-theme='dark'] .tag {
-    background-color: rgb(100, 100, 100);
+[data-theme="dark"] .tag {
+  background-color: rgb(100, 100, 100);
 }
 
 .tag:hover {
-    background-color: dodgerblue;
-    color: white;
+  background-color: rgb(138, 55, 168);
+  color: white;
 }
 
 .post-number {
-    position: absolute;
-    right:-0.5rem;
-    top:-0.5rem;
-    line-height: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 1.3rem;
-    width: 1.3rem;
-    border-radius: 0.7rem;
-    background-color: rgba(221, 160, 221, 0.516);
-    color: gray;
- 
+  position: absolute;
+  right: -0.5rem;
+  top: -0.5rem;
+  line-height: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 1.3rem;
+  width: 1.3rem;
+  border-radius: 0.7rem;
+  background-color: rgba(221, 160, 221, 0.516);
+  color: gray;
 }
 
-[data-theme='dark'] .post-number {
-    background-color: rgba(221, 160, 221, 0.93);
-    color: rgb(230, 230, 230);
+[data-theme="dark"] .post-number {
+  background-color: rgba(221, 160, 221, 0.93);
+  color: rgb(230, 230, 230);
 }
