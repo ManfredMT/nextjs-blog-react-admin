@@ -1,6 +1,6 @@
 .tags-box {
   text-align: center;
-  max-width: 90vw;
+  max-width: 65vw;
   margin: 0 auto;
   display: flex;
   flex-wrap: wrap;
@@ -47,4 +47,10 @@
 [data-theme="dark"] .post-number {
   background-color: rgba(221, 160, 221, 0.93);
   color: rgb(230, 230, 230);
+}
+
+@media (max-width: 1224px) {
+  .tags-box {
+    max-width: 90vw;
+  }
 }

@@ -44,6 +44,9 @@ export async function getAllTags() {
           }
         });
       });
+      allTags.sort((a,b)=>{
+        return b.value - a.value;
+      })
       return allTags;
     } else {
       return [];
