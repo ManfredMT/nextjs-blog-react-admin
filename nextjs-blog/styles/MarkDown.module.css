@@ -28,7 +28,7 @@
 }
 
 [data-theme='dark'] .preview-post-body table * {
-    background: transparent;
+    background: black;
 }
 
 @media (max-width: 1224px) {
