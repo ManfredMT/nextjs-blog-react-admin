@@ -212,8 +212,8 @@ function BlogDashboard() {
           <hr />
           <ul className={style["comment-ul-wrap"]}>
             {comments
-              .slice(0, 5)
               .sort((a, b) => b.time - a.time)
+              .slice(0, 5)
               .map((comment, i) => {
                 return (
                   <li key={i}>
