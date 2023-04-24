@@ -3,6 +3,7 @@ import "github-markdown-css";
 import "katex/dist/katex.min.css";
 import { useMemo } from "react";
 import ReactDOMServer from "react-dom/server";
+import "font-awesome/css/font-awesome.min.css";
 import SimpleMDE from "react-simplemde-editor";
 import style from "../css/MarkDownEditor.module.css";
 import MDComponent from "./MDComponent";
@@ -15,6 +16,7 @@ function MarkDownEditor({
 }) {
   const mdeOptions = useMemo(() => {
     return {
+      autoDownloadFontAwesome: false,
       autofocus: false,
       spellChecker: false,
       sideBySideFullscreen: false,
