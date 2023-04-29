@@ -27,6 +27,7 @@ const getBase64 = (img, callback) => {
 };
 
 function BlogSetting() {
+  //console.log("===渲染BlogSetting组件===");
   const [imageUrl, setImageUrl] = useState();
   const [imageAvatarUrl, setImageAvatarUrl] = useState();
   const [imageBannerUrl, setImageBannerUrl] = useState();
@@ -447,6 +448,7 @@ function BlogSetting() {
           }
         >
           <Button
+            disabled
             //className={style["submit-button"]}
             type="primary"
             htmlType="submit"
