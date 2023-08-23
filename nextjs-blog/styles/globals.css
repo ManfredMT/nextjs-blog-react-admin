@@ -63,7 +63,7 @@ body::-webkit-scrollbar-thumb:hover {
 
 /* 使目录可以滚动,需要取消目录折叠 */
 .toc > .toc-list {
-  height: 70vh;
+  max-height: 70vh;
   overflow: auto;
 }
 
