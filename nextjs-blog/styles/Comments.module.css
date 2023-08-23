@@ -20,10 +20,10 @@
     color:gray;
 }
 .comment {
-    word-break: break-all;
     padding: 1.5rem;
     font-weight: 400;
     color:rgb(7, 0, 53);
+    overflow-x: auto;
 }
 
 [data-theme='dark'] .comment {
