@@ -1,0 +1,38 @@
+.toc-and-md {
+  display: flex;
+}
+
+.md-toc {
+  padding: 1rem;
+  flex: 0 0 360px;
+  order: 1;
+  margin-left: 32px;
+  position: sticky;
+  top: 60px;
+  align-self: flex-start;
+  font-size: 16px;
+}
+
+.menu-head {
+  font-size: large;
+  margin: 4px;
+}
+
+.md-box {
+  padding: 1rem;
+  flex: 1;
+}
+
+@media (max-width: 1224px) {
+  .md-toc {
+    display: none;
+  }
+
+  .toc-and-md {
+    display: initial;
+  }
+
+  .md-box {
+    padding: 0;
+  }
+}

@@ -1,14 +1,16 @@
 import styles from "../styles/PostLayout.module.css";
 import Link from "next/link";
 //import dynamic from "next/dynamic";
-import { useEffect } from 'react';
-import * as tocbot from 'tocbot';
-import MarkDown from "./MarkDown";
+//import PostLoading from "./PostLoading";
 
-// const MarkDown = dynamic(() => import("./MarkDown"), {
+import TocAndMD from "./TocAndMD";
+
+
+//懒加载TocAndMD组件
+// const TocAndMD = dynamic(()=>import("./TocAndMD"), {
 //   loading: () => {
-//     return <p>加载中...</p>;
-//   },
+//         return <PostLoading />;
+//       },
 // });
 
 export default function PostLayout({ post, siteMetadata }) {
@@ -21,23 +23,6 @@ export default function PostLayout({ post, siteMetadata }) {
     postUpdatedDate.getMonth() + 1
   }月${postUpdatedDate.getDate()}日`;
 
-  useEffect(()=>{
-    tocbot.init({
-      // Where to render the table of contents.
-      tocSelector: '.toc',
-      // Where to grab the headings to build the table of contents.
-      contentSelector: '.toc-content',
-      // Which headings to grab inside of the contentSelector element.
-      headingSelector: 'h1, h2, h3',
-      // For headings inside relative or absolute positioned containers within content.
-      hasInnerContainers: true,
-      headingsOffset: 60,
-      scrollSmoothOffset: -60
-    });
-    return ()=>{
-      tocbot.destroy();
-    }
-  },[])
 
   return (
     <div className={styles["layout-wrap"]}>
@@ -96,18 +81,16 @@ export default function PostLayout({ post, siteMetadata }) {
               </p>
             </Link>
           </header>
-          <div className={styles["toc-and-md"]}>
+          {/* <div className={styles["toc-and-md"]}>
             <div className={styles["md-toc"]}>
               <p className={styles["menu-head"]}>目录: </p>
               <div className="toc"></div>
             </div>
             <div className={`${styles["md-box"]} toc-content`}>
-            {/* <Suspense fallback={`Loading...`}> */}
-            <MarkDown mdChildren={post.content} />
-            {/* </Suspense> */}
+              <MarkDown mdChildren={post.content} />
             </div>
-          </div> 
-          
+          </div> */}
+          <TocAndMD mdChildren={post.content} />
         </article>
         <div className={styles["post-nav-box"]}>
           {post.lastPost ? (
@@ -118,7 +101,9 @@ export default function PostLayout({ post, siteMetadata }) {
               </div>
             </Link>
           ) : (
-            <div className={`${styles["last-post-box"]} ${styles["no-cursor"]}`}></div>
+            <div
+              className={`${styles["last-post-box"]} ${styles["no-cursor"]}`}
+            ></div>
           )}
           {post.nextPost ? (
             <Link href={`/posts/${post.nextPost}`}>
@@ -128,7 +113,9 @@ export default function PostLayout({ post, siteMetadata }) {
               </div>
             </Link>
           ) : (
-            <div className={`${styles["next-post-box"]} ${styles["no-cursor"]}`}></div>
+            <div
+              className={`${styles["next-post-box"]} ${styles["no-cursor"]}`}
+            ></div>
           )}
         </div>
       </div>
