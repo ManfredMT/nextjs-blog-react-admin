@@ -24,6 +24,7 @@
     font-weight: 400;
     color:rgb(7, 0, 53);
     overflow-x: auto;
+    white-space: pre-wrap;
 }
 
 [data-theme='dark'] .comment {
