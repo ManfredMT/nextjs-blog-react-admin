@@ -6,9 +6,9 @@
 
 ## 演示网站
 
-后台管理演示网站: <https://admin.manfreddemoblog.tk> (密码admin,请勿提交或修改数据)
+后台管理演示网站: <https://admin.manfreddemoblog.top> (密码admin,请勿提交或修改数据)
 
-博客演示网站: <https://www.manfreddemoblog.tk/>
+博客演示网站: <https://www.manfreddemoblog.top/>
 
 ## 技术栈
 
