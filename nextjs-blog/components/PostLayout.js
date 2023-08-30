@@ -1,17 +1,17 @@
 import styles from "../styles/PostLayout.module.css";
 import Link from "next/link";
-//import dynamic from "next/dynamic";
-//import PostLoading from "./PostLoading";
+import dynamic from "next/dynamic";
+import PostLoading from "./PostLoading";
 
-import TocAndMD from "./TocAndMD";
+//import TocAndMD from "./TocAndMD";
 
 
 //懒加载TocAndMD组件
-// const TocAndMD = dynamic(()=>import("./TocAndMD"), {
-//   loading: () => {
-//         return <PostLoading />;
-//       },
-// });
+const TocAndMD = dynamic(()=>import("./TocAndMD"), {
+  loading: () => {
+        return <PostLoading />;
+      },
+});
 
 export default function PostLayout({ post, siteMetadata }) {
   const postCreatedDate = new Date(post.createdAt);
