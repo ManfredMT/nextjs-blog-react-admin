@@ -89,6 +89,7 @@ export default function Footer({ siteMetadata }) {
             href={siteMetadata.github}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="github link"
           >
             <svg
               className={styles["svg-logo"]}
@@ -108,6 +109,7 @@ export default function Footer({ siteMetadata }) {
             href={siteMetadata.juejin}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="juejin link"
           >
             <svg
               className={styles["svg-logo"]}
@@ -131,6 +133,7 @@ export default function Footer({ siteMetadata }) {
             href={siteMetadata.zhihu}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="zhihu link"
           >
             <svg
               className={styles["svg-logo"]}
