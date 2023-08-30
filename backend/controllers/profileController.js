@@ -88,7 +88,7 @@ const updateProfile = asyncHandler(async (req, res) => {
     const mergePages = [...pages, ...pageDoc.pages];
     const deDupPages = [...new Set(mergePages)];
     await Page.findOneAndUpdate({ user: req.user.id }, { pages: deDupPages });
-    console.log("pages: ", deDupPages);
+    //console.log("pages: ", deDupPages);
 
     res.status(200).json(updatedProfile);
   } catch (error) {
