@@ -22,7 +22,6 @@
 - axios
 - echarts
 - react-three-fiber
-- echarts
 - react-simplemde-editor
 - react-markdown
 - CSS Modules
