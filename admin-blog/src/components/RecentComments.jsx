@@ -2,11 +2,15 @@ import { DeleteOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Card,
-  Comment,
+  //Comment,
   Divider, Empty, message as antMessage, Modal,
   Tooltip
 } from "antd";
-import moment from "moment";
+import CommentBox from "./CommentBox";
+
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import style from "../css/RecentComments.module.css";
@@ -15,6 +19,8 @@ import {
 } from "../features/comments/commentSlice";
 import useGetData from "../hooks/useGetData";
 import HCenterSpin from "./HCenterSpin";
+
+dayjs.extend(relativeTime);
 
 function RecentComments() {
   const dispatch = useDispatch();
@@ -82,7 +88,7 @@ function RecentComments() {
                 key={id}
                 className={style["card-box"]}
               >
-                <Comment
+                <CommentBox
                   className={style["comment-box"]}
                   author={author}
                   avatar={
@@ -102,11 +108,11 @@ function RecentComments() {
                     <p className={style["comment-content"]}>{commentContent}</p>
                   }
                   datetime={
-                    <Tooltip title={moment(time).format("YYYY-MM-DD HH:mm:ss")}>
-                      <span>{moment(time).fromNow()}</span>
+                    <Tooltip title={dayjs(time).format("YYYY-MM-DD HH:mm:ss")}>
+                      <span>{dayjs(time).fromNow()}</span>
                     </Tooltip>
                   }
-                ></Comment>
+                ></CommentBox>
                 <Divider className={style["divider"]} />
                 <div className={style["source-delete-box"]}>
                   <span>{`来源: ${source}`}</span>
@@ -126,7 +132,7 @@ function RecentComments() {
       </div>}
       <Modal
         title="删除评论"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="确定"

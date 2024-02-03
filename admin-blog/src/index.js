@@ -4,10 +4,16 @@ import { Provider } from "react-redux";
 import { store } from "./app/store";
 import App from "./App";
 import "./index.css";
-//通过babel-plugin-import导入antd的styles
-//import "./App.less";
-import zhCN from "antd/lib/locale/zh_CN";
+
+import { App as AntdApp } from "antd";
+
+import zhCN from "antd/locale/zh_CN";
 import { ConfigProvider } from "antd";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-cn";
+dayjs.locale("zh-cn");
+
+
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -16,7 +22,9 @@ root.render(
   <React.StrictMode>
     <Provider store={store}>
       <ConfigProvider locale={zhCN}>
-        <App />
+        <AntdApp>
+          <App />
+        </AntdApp>
       </ConfigProvider>
     </Provider>
   </React.StrictMode>

@@ -16,7 +16,9 @@ import {
   Select
 } from "antd";
 import fileDownload from "js-file-download";
-import moment from "moment";
+
+import dayjs from 'dayjs';
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,6 +28,7 @@ import style from "../css/PostSearch.module.css";
 import { deletePost, getPosts, reset, resetError } from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import HCenterSpin from "./HCenterSpin";
+import usePrevious from "../hooks/usePrevious";
 
 const { Option } = Select;
 
@@ -140,12 +143,13 @@ function checkDateParams(dateParams) {
 }
 
 function PostSearch() {
+  //console.log("===渲染PostSearch组件===");
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 1224px)" });
   const dispatch = useDispatch();
   const defaultPageSize = 10;
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { posts, isSuccess, isError, isLoading, message } = useSelector(
+  const { posts, isSuccess, isError, isLoadEnd, message } = useSelector(
     (state) => state.posts
   );
 
@@ -563,8 +567,8 @@ function PostSearch() {
             checkDateParams(searchParams.get("date"))
           ) {
             const dateParams = searchParams.get("date");
-            const startDay = moment(dateParams.split("_")[0]);
-            const endDay = moment(dateParams.split("_")[1]);
+            const startDay = dayjs(dateParams.split("_")[0]);
+            const endDay = dayjs(dateParams.split("_")[1]);
             return [startDay, endDay];
           } else {
             return null;
@@ -694,7 +698,9 @@ tags:${tagsString}
     fileDownload(mdBlob, currentPost.title + ".md");
   };
 
-  return !isLoading ? (
+  const preIsLoadEnd = usePrevious(isLoadEnd);
+
+  return isLoadEnd && preIsLoadEnd ? (
     <>
       <div className={style["select-list-box"]}>
         <div className={style["filter-header"]}>
@@ -839,7 +845,7 @@ tags:${tagsString}
       </div>
       <Modal
         title="删除文章"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="确定"

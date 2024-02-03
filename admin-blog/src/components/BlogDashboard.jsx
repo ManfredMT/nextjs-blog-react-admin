@@ -11,7 +11,6 @@ import {
 import * as echarts from "echarts/core";
 import { LabelLayout, UniversalTransition } from "echarts/features";
 import { SVGRenderer } from "echarts/renderers";
-import "moment/locale/zh-cn";
 import { useEffect, useMemo, useRef, lazy, Suspense } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";

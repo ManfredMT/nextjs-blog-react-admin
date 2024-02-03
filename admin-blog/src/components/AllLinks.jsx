@@ -2,7 +2,7 @@ import { LinkOutlined, MoreOutlined } from "@ant-design/icons";
 import {
   Avatar,
   Card,
-  Dropdown, Empty, Menu,
+  Dropdown, Empty, 
   message as antMessage,
   Modal
 } from "antd";
@@ -77,21 +77,19 @@ function AllLinks() {
   };
 
   const getMenu = ({ _id, linkName, description, linkAddress }) => {
-    return (
-      <Menu
-        items={[
-          { label: "进入链接", key: "open-link" },
-          { label: "修改友链", key: "update-link" },
-          { label: "删除友链", key: "delete-link" },
-        ]}
-        onClick={handleLinkMenuClick({
-          _id,
-          linkName,
-          description,
-          linkAddress,
-        })}
-      ></Menu>
-    );
+    return {
+      items:[
+        { label: "进入链接", key: "open-link" },
+        { label: "修改友链", key: "update-link" },
+        { label: "删除友链", key: "delete-link" },
+      ],
+      onClick:handleLinkMenuClick({
+        _id,
+        linkName,
+        description,
+        linkAddress,
+      })
+    };
   };
 
   return !isLoading ? (
@@ -121,7 +119,8 @@ function AllLinks() {
                   title={linkName}
                   extra={
                     <Dropdown
-                      overlay={getMenu({
+                      menu={
+                        getMenu({
                         _id,
                         linkName,
                         description,
@@ -162,7 +161,7 @@ function AllLinks() {
       )}
       <Modal
         title="删除友链"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="确定"

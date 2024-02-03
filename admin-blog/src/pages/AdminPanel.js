@@ -125,13 +125,13 @@ function AdminPanel() {
       if (collapsed) {
         //菜单折叠状态
         // console.log("collapsed");
-        if (openKeys === [] || openKeys[0] !== key) {
+        if (openKeys.length === 0 || openKeys[0] !== key) {
           setOpenKeys([key]);
         }
       } else {
         //菜单展开状态
         // console.log("not collapsed");
-        if (openKeys === [] || openKeys[0] !== key) {
+        if (openKeys.length === 0 || openKeys[0] !== key) {
           setOpenKeys([key]);
         } else if (openKeys[0] === key) {
           setOpenKeys([]);
@@ -221,10 +221,10 @@ function AdminPanel() {
       <Drawer
         placement="left"
         onClose={onClose}
-        visible={visible}
+        open={visible}
         closable={false}
         width="60vw"
-        bodyStyle={{ padding: 0, backgroundColor: "#001529" }}
+        styles={{body: {padding: 0, backgroundColor: "#001529"} }}
       >
         <Menu
           theme="dark"

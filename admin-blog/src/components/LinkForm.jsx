@@ -185,7 +185,7 @@ function LinkForm({
         </Form.Item>
       </Form.Item>
       <Modal
-        visible={previewVisible}
+        open={previewVisible}
         title={previewTitle}
         footer={null}
         onCancel={() => setPreviewVisible(false)}

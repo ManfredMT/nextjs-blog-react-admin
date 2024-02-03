@@ -20,7 +20,7 @@
 
 .post-number {
     color: #9f9f9f;
-    font-size: 0.5rem;
+    font-size: 0.8rem;
     margin-left: 2rem;
     margin-top: 1rem;
 
@@ -170,10 +170,13 @@
 .post-title-draft {
     font-style: italic;
     color: rgb(94, 94, 94);
+    font-size: 1.1rem;
 }
 
 .post-title-draft::before {
     content: "(草稿)";
+    font-size: 1.1rem;
+    color: #aaaaaa;
 }
 .date-range-picker input {
     border-radius: 0px;

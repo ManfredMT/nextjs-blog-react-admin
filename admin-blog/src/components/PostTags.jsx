@@ -353,7 +353,7 @@ function PostTags() {
       </div>
       <Modal
         title="更改标签"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="确定"

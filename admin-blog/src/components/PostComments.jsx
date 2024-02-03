@@ -3,12 +3,13 @@ import {
   Avatar,
   Button,
   Checkbox,
-  Comment,
+  //Comment,
   Divider,
   Empty, message as antMessage, Modal,
   Pagination,
   Select
 } from "antd";
+import CommentBox from "./CommentBox";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useMediaQuery } from "react-responsive";
@@ -267,7 +268,7 @@ function PostComments() {
                 <div key={comment.id}>
                   <div className={style["comment-wrap"]}>
                     <Checkbox className={style["checkbox"]} value={comment.id}>
-                      <Comment
+                      <CommentBox
                         className={style["comment-box"]}
                         author={comment.author}
                         avatar={
@@ -282,8 +283,8 @@ function PostComments() {
                           </Avatar>
                         }
                         content={<p>{comment.commentContent}</p>}
-                        datetime={<p>{comment.time.toLocaleString()}</p>}
-                      ></Comment>
+                        datetime={<span>{comment.time.toLocaleString()}</span>}
+                      ></CommentBox>
                     </Checkbox>
                     {isTabletOrMobile ? (
                       <button
@@ -329,7 +330,7 @@ function PostComments() {
       </div>
       <Modal
         title="删除评论"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="确定"

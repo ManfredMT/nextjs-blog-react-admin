@@ -33,22 +33,6 @@ function PanelHeader({ setVisible }) {
     }
   };
 
-  //用户下拉菜单
-  const userMenu = (
-    <Menu
-      items={[
-        {
-          label: "修改密码",
-          key: "change-password",
-        },
-        {
-          label: "退出登录",
-          key: "logout",
-        },
-      ]}
-      onClick={handleUserMenuClick}
-    />
-  );
   return (
     <Header
       className="site-layout-sub-header-background"
@@ -59,7 +43,21 @@ function PanelHeader({ setVisible }) {
       ) : null}
 
       <Dropdown
-        overlay={userMenu}
+        menu={
+          {
+            items:[
+        {
+          label: "修改密码",
+          key: "change-password",
+        },
+        {
+          label: "退出登录",
+          key: "logout",
+        },
+      ],
+      onClick:handleUserMenuClick
+          }
+        }
         trigger={["click"]}
         getPopupContainer={(triggerNode) => triggerNode.parentNode}
       >

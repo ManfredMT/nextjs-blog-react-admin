@@ -448,7 +448,6 @@ function BlogSetting() {
           }
         >
           <Button
-            disabled
             //className={style["submit-button"]}
             type="primary"
             htmlType="submit"

@@ -3,21 +3,20 @@
   "sideEffects": [
     "*.css"
   ],
-  "version": "0.1.0",
+  "version": "0.2.1",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
-    "@craco/craco": "^6.4.3",
-    "@react-three/drei": "^9.14.3",
+    "@react-three/drei": "^9.73.0",
     "@react-three/fiber": "^8.0.27",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^14.2.0",
-    "antd": "^4.20.4",
+    "antd": "^5.13.2",
     "axios": "^0.27.2",
     "copy-to-clipboard": "^3.3.1",
-    "craco-less": "^2.0.0",
+    "dayjs": "^1.11.10",
     "easymde": "^2.16.1",
     "echarts": "^5.3.3",
     "font-awesome": "^4.7.0",
@@ -69,6 +68,7 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^7.1.0",
     "babel-plugin-import": "^1.13.5",
     "compression-webpack-plugin": "^10.0.0",
     "speed-measure-webpack-plugin": "^1.5.0",

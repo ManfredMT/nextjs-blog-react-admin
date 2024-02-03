@@ -1,4 +1,4 @@
-const CracoLessPlugin = require("craco-less");
+
 const { whenProd } = require("@craco/craco");
 const zlib = require("zlib");
 // const BundleAnalyzerPlugin =
@@ -11,31 +11,11 @@ const CompressionWebpackPlugin = require("compression-webpack-plugin");
 
 const overrideConfig = {
   plugins: [
-    {
-      plugin: CracoLessPlugin,
-      options: {
-        lessLoaderOptions: {
-          lessOptions: {
-            modifyVars: {
-              "@primary-color": "#457fca",
-              "border-radius-base": "15px",
-            },
-            javascriptEnabled: true,
-          },
-        },
-      },
-    },
+    
   ],
   babel: {
     plugins: [
-      [
-        "import",
-        {
-          libraryName: "antd",
-          libraryDirectory: "lib",
-          style: true,
-        },
-      ],
+      
     ],
   },
   webpack: {

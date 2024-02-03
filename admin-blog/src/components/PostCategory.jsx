@@ -4,13 +4,18 @@ import {
   Empty,
   message as antMessage,
   Modal,
-  Pagination
+  Pagination,
 } from "antd";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import style from "../css/PostTC.module.css";
-import { getPosts, reset, resetError, updatePost } from "../features/posts/postSlice";
+import {
+  getPosts,
+  reset,
+  resetError,
+  updatePost,
+} from "../features/posts/postSlice";
 import useGetData from "../hooks/useGetData";
 import usePrevious from "../hooks/usePrevious";
 import ArticleInfo from "./ArticleInfo";
@@ -25,7 +30,7 @@ function getAllCategories(posts) {
     }
   });
   //如果没有default,加上default分类
-  if(!AllCategories.includes("default")) {
+  if (!AllCategories.includes("default")) {
     AllCategories.push("default");
   }
   return AllCategories.sort();
@@ -41,11 +46,10 @@ function PostCategory() {
   const defaultPageSize = 10;
 
   const dispatch = useDispatch();
-  const { posts, isSuccess, isError,isLoadEnd, message } = useSelector(
+  const { posts, isSuccess, isError, isLoadEnd, message } = useSelector(
     (state) => state.posts
   );
 
-  //console.log("PostCategory");
   useGetData(getPosts, reset, isError, message, resetError);
 
   useEffect(() => {
@@ -79,7 +83,6 @@ function PostCategory() {
         selectedPosts.current.length > defaultPageSize
           ? defaultPageSize
           : selectedPosts.current.length;
-      //console.log("fire setCurrentPagePosts");
       setCurrentPagePosts(selectedPosts.current.slice(0, end));
       setPaginationTotal(selectedPosts.current.length);
     },
@@ -100,21 +103,24 @@ function PostCategory() {
   let selectedPosts = useRef();
 
   useEffect(() => {
-    //console.log("useEffect 设置URL ");
     setPostUpdatedCategories(defaultPostCategories);
-    if (allCategories.length > 0) {
+    //allCategories数组肯定包含"default",当存在其他分类时再判断
+    if (allCategories.length > 1) {
       if (!searchParams.get("category")) {
+        //如果URL中category参数不存在
         //设置URL参数
         setSearchParams({ category: "default" }, { replace: true });
         //设置选中的分类
         setSelectValue("default");
       } else if (!allCategories.includes(searchParams.get("category"))) {
+        //如果URL中category参数不属于任何文章,即无效参数
         //设置URL参数
         setSearchParams({ category: "default" }, { replace: true });
         //设置选中的分类
         setSelectValue("default");
       } else {
-        //console.log("刷新页面");
+        //如果URL中category参数有效,显示对应分类的文章
+
         //刷新页面
         changeFilter(searchParams.get("category"));
         //设置选中的分类
@@ -130,8 +136,6 @@ function PostCategory() {
     searchParams,
     setSearchParams,
   ]);
-
-  //console.log("currentPagePosts: ", currentPagePosts);
 
   const onChangePage = (page, pageSize) => {
     const start = (page - 1) * defaultPageSize;
@@ -289,7 +293,7 @@ function PostCategory() {
       </div>
       <Modal
         title="更改分类"
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="确定"

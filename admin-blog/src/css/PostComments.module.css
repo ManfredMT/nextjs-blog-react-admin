@@ -21,6 +21,11 @@
     width: 100%;
 }
 
+/* antd5中Checkbox Group为inline-flex而antd4为inline-block,为了使.source-right的marginLeft auto生效 */
+.checkbox-group > div {
+    width: 100%;
+}
+
 .delete-selected-icon-button {
     display: inline-block;
     border: none;
