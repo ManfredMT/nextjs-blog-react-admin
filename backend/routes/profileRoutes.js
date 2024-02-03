@@ -6,6 +6,7 @@ const {
   updateProfile,
 } = require("../controllers/profileController");
 const { protect } = require("../middleware/authMiddleware");
+const { handleDemoReq } = require("../middleware/demoMiddleware");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -37,6 +38,7 @@ const upload = multer({
 router.route("/").get(protect, getProfile);
 router.route("/:id").put(
   protect,
+  handleDemoReq,
   upload.fields([
     { name: "avatar", maxCount: 1 },
     { name: "logo", maxCount: 1 },

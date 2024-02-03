@@ -8,6 +8,7 @@ const {
   deleteLink,
 } = require("../controllers/linkController");
 const { protect } = require("../middleware/authMiddleware");
+const { handleDemoReq } = require("../middleware/demoMiddleware");
 const multer = require("multer");
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -34,10 +35,10 @@ const upload = multer({
 router
   .route("/")
   .get(protect, getLinks)
-  .post(protect, upload.single("picture"), setLinks);
+  .post(protect, handleDemoReq, upload.single("picture"), setLinks);
 router
   .route("/:id")
-  .put(protect, upload.single("picture"), updateLink)
-  .delete(protect, deleteLink);
+  .put(protect, handleDemoReq, upload.single("picture"), updateLink)
+  .delete(protect, handleDemoReq, deleteLink);
 
 module.exports = router;

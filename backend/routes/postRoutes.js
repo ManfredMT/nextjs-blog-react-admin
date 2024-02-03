@@ -13,20 +13,23 @@ const {
 const { protect } = require("../middleware/authMiddleware");
 const multer = require("multer");
 const upload = multer();
+const { handleDemoReq } = require("../middleware/demoMiddleware");
 
 router
   .route("/")
   .get(protect, getPosts)
-  .post(protect, upload.single("image"), setPosts);
-router.route("/category").put(protect, upload.none(), updateCategory);
+  .post(protect, handleDemoReq, upload.single("image"), setPosts);
+router
+  .route("/category")
+  .put(protect, handleDemoReq, upload.none(), updateCategory);
 router
   .route("/tag")
-  .put(protect, upload.none(), updateTag)
-  .delete(protect, upload.none(), deleteTag);
+  .put(protect, handleDemoReq, upload.none(), updateTag)
+  .delete(protect, handleDemoReq, upload.none(), deleteTag);
 router
   .route("/:id")
-  .put(protect, upload.single("image"), updatePost)
-  .delete(protect, deletePost)
+  .put(protect, handleDemoReq, upload.single("image"), updatePost)
+  .delete(protect, handleDemoReq, deletePost)
   .get(protect, getPostById);
 
 module.exports = router;
