@@ -141,7 +141,7 @@ const setPosts = asyncHandler(async (req, res) => {
 
     res.status(200).json(post);
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   } finally {
     await fetch(revalidateUrl);
@@ -231,7 +231,7 @@ const updatePost = asyncHandler(async (req, res) => {
 
     res.status(200).json(updatedPost);
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   } finally {
     await fetch(revalidateUrl);
@@ -305,7 +305,7 @@ const deletePost = asyncHandler(async (req, res) => {
 
     res.status(200).json({ id: req.params.id });
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   } finally {
     await fetch(revalidateUrl);
@@ -367,7 +367,7 @@ const updateCategory = asyncHandler(async (req, res) => {
 
     res.status(200).json(updateManyCategory);
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   } finally {
     await fetch(revalidateUrl);
@@ -421,7 +421,7 @@ const updateTag = asyncHandler(async (req, res) => {
 
     res.status(200).json(updateManyTag);
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   } finally {
     await fetch(revalidateUrl);
@@ -469,7 +469,7 @@ const deleteTag = asyncHandler(async (req, res) => {
     );
     res.status(200).json(updateManyTag);
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   } finally {
     await fetch(revalidateUrl);

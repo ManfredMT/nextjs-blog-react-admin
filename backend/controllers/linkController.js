@@ -55,7 +55,7 @@ const setLinks = asyncHandler(async (req, res) => {
     link.picture = undefined;
     res.status(200).json(link);
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   } finally {
     await fetch(revalidateUrl);
@@ -133,7 +133,7 @@ const deleteLink = asyncHandler(async (req, res) => {
     await link.remove();
     res.status(200).json({ id: req.params.id });
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   } finally {
     await fetch(revalidateUrl);

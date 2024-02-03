@@ -92,7 +92,7 @@ const updateProfile = asyncHandler(async (req, res) => {
 
     res.status(200).json(updatedProfile);
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   } finally {
     await fetch(revalidateUrl);

@@ -10,7 +10,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const { name, password } = req.body;
 
   if (!name || !password) {
-    res.status(400);
+    res.status(500);
     throw new Error("请填写完整信息");
   }
 
@@ -21,25 +21,25 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error("用户已存在");
   }
 
-  console.log(`申请注册新用户：用户名：(${name})`);
+  //console.log(`申请注册新用户：用户名：(${name})`);
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
-  console.log(`申请注册新用户：用户名：(${name}),密码哈希成功`);
+  //console.log(`申请注册新用户：用户名：(${name}),密码哈希成功`);
 
   const user = await User.create({
     name,
     password: hashedPassword,
   });
 
-  console.log(`用户名：(${name})，user：${user}`);
+  //console.log(`用户名：(${name}),user:${user}`);
   if (user) {
     res.status(201).json({
       _id: user.id,
       name: user.name,
       token: generateToken(user._id),
     });
-    console.log(`新用户注册成功，用户名为${user.name}`);
+    //console.log(`新用户注册成功，用户名为${user.name}`);
   } else {
     res.status(400);
     throw new Error("用户注册失败");
@@ -52,11 +52,11 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
   //console.log("login from: ",req.ip);
   if(!req.body.password) {
-    res.status(400);
+    res.status(500);
     throw new Error("请提供密码");
   }
   if(typeof req.body.password !== 'string') {
-    res.status(400);
+    res.status(500);
     throw new Error("密码类型错误");
   }
   const { password } = req.body;
@@ -123,7 +123,7 @@ const updatePassword = asyncHandler(async (req, res) => {
       token: generateToken(updatedUser._id),
     });
   } else {
-    res.status(400);
+    res.status(500);
     throw new Error("密码更改失败");
   }
 });

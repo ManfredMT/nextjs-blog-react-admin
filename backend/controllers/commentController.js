@@ -61,7 +61,7 @@ const setComments = asyncHandler(async (req, res) => {
     comment.adminUser = undefined;
     res.status(200).json(comment);
   } catch (error) {
-    res.status(400);
+    res.status(500);
     throw new Error(error);
   }
 });
