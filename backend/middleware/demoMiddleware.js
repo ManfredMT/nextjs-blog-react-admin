@@ -1,7 +1,7 @@
 const asyncHandler = require("express-async-handler");
 
 const handleDemoReq = asyncHandler(async (req, res, next) => {
-  if (process.env.DEMO === 0) {
+  if (parseInt(process.env.DEMO,10) === 0) {
     next();
   } else {
     res.status(403);
