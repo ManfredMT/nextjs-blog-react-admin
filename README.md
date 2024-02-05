@@ -16,7 +16,7 @@
 
 - React 18.1.0
 - React Router v6
-- Ant Design 4.20.4
+- Ant Design 5.13.2
 - Redux Toolkit
 - redux-thunk
 - axios
@@ -72,7 +72,7 @@
 git clone https://github.com/ManfredMT/nextjs-blog-react-admin.git
 
 cd nextjs-blog-react-admin/admin-blog
-npm install --legacy-peer-deps
+npm install
 
 cd ../backend
 npm install
@@ -80,8 +80,6 @@ npm install
 cd ../nextjs-blog
 npm install
 ```
-
-react项目是用CRA5创建的,admin-blog目录下的craco暂且不支持CRA5,所以直接npm install会报错.目前只能用`npm install --legacy-peer-deps`安装依赖包.项目运行没有问题.
 
 - **安装mongoDB**
 
@@ -190,6 +188,7 @@ react项目是用CRA5创建的,admin-blog目录下的craco暂且不支持CRA5,�
 - `USER_PASSWORD`代表初始的管理用户密码,如果没有修改,请在管理UI界面修改密码,**注意只有在第一次启动后端之前有用**.
 - `MY_SECRET_TOKEN`代表next.js中revalidate api需要的令牌.**请修改成其他字符串,并且在nextjs-blog目录下.env.local里设置成一样的.**
 - `NEXTJS_PORT`代表next.js运行的端口,不建议更改.
+- `DEMO`代表是否为演示环境,数字0代表非演示环境,其他数字代表演示环境.搭建博客设置为0就可以,不需要修改.
 
 /nextjs-blog目录下的.env.local文件
 

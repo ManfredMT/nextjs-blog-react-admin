@@ -7,3 +7,4 @@ USER_PASSWORD = admin
 MY_SECRET_TOKEN=replaceWithADifferentValue
 DB_NAME = blog
 NEXTJS_PORT = 3001
+DEMO = 0
