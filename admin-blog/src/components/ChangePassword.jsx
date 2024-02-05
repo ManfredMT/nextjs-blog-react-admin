@@ -33,7 +33,7 @@ const ChangePassword = () => {
       //console.log(message);
       antMessage.error(message);
     }
-    if (isSuccess && message !== "") {
+    if (isSuccess && !isChangePWError && message !== "") {
       antMessage.success(message);
       //navigate("/");
     }
