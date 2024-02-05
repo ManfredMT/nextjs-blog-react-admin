@@ -1,5 +1,5 @@
 import { DownOutlined, MenuOutlined } from "@ant-design/icons";
-import { Avatar, Dropdown, Layout, Menu } from "antd";
+import { Avatar, Dropdown, Layout } from "antd";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useMediaQuery } from "react-responsive";
