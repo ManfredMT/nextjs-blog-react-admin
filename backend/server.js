@@ -68,6 +68,7 @@ app.use("/api/links", limiter, require("./routes/linkRoutes"));
 app.use("/api/posts", limiter, require("./routes/postRoutes"));
 app.use("/api/profile", limiter, require("./routes/profileRoutes"));
 app.use("/api/comments", limiterComment, require("./routes/commentRoutes"));
+app.use("/api/images", limiter, require("./routes/imageRoutes"));
 
 app.use(errorHandler);
 
@@ -83,6 +84,11 @@ app.use(
   "/api/image",
   limiterStatic,
   express.static(path.join(__dirname, "uploads/image"))
+);
+app.use(
+  "/api/cloud_photo",
+  limiterStatic,
+  express.static(path.join(__dirname, "uploads/cloud_photo"))
 );
 
 //博客管理页面的静态服务器
