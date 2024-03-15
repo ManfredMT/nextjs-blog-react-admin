@@ -12,6 +12,8 @@ import TagNav from "./components/TagNav";
 import Loading from "./pages/Loading";
 import HCenterSpin from "./components/HCenterSpin";
 import Login from "./pages/Login";
+import MediaNav from "./components/MediaNav.jsx";
+import AllImages from "./components/AllImages.jsx";
 const AdminPanel = lazy(() => import("./pages/AdminPanel"));
 const AllPosts = lazy(() => import("./components/AllPosts.jsx"));
 const NewPost = lazy(() => import("./components/NewPost"));
@@ -54,7 +56,6 @@ function App() {
                   </Suspense>
                 }
               />
-
               <Route path="post" element={<PostNav />}>
                 <Route
                   path="all-posts"
@@ -105,6 +106,16 @@ function App() {
                   element={
                     <Suspense fallback={<HCenterSpin />}>
                       <PostCategory />
+                    </Suspense>
+                  }
+                />
+              </Route>
+              <Route path="media" element={<MediaNav from="/manage/media" />}>
+                <Route
+                  path="all-images"
+                  element={
+                    <Suspense fallback={<HCenterSpin />}>
+                      <AllImages />
                     </Suspense>
                   }
                 />

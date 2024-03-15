@@ -8,6 +8,7 @@ import {
   MessageOutlined,
   SettingOutlined,
   TagsOutlined,
+  CloudOutlined
 } from "@ant-design/icons";
 import { Drawer, Layout, Menu } from "antd";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -86,6 +87,9 @@ function AdminPanel() {
         break;
       case "post-category":
         navigate("category/post-category");
+        break;
+      case "all-images":
+        navigate("media/all-images");
         break;
       case "all-links":
         navigate("link/all-links");
@@ -177,6 +181,15 @@ function AdminPanel() {
         children: [
           { label: "分类列表", key: "all-categories" },
           { label: "文章分类", key: "post-category" },
+        ],
+      },
+      {
+        label: "多媒体",
+        key: "media",
+        icon: <CloudOutlined />,
+        onTitleClick: handleTitleClick,
+        children: [
+          { label: "图床", key: "all-images" }
         ],
       },
       {
